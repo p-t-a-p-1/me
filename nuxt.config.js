@@ -126,10 +126,6 @@ export default {
     token: TOKEN,
     apiType: 'cdn',
     blogAppModelId: BLOG_APP_ARTICLE_MODEL_ID,
-    // articleModelUid: 'article',
-    // tagModelUid: 'tag',
-    // authorModelUid: 'author',
-    // pageLimit: 12,
   },
 
   dayjs: {
@@ -139,7 +135,7 @@ export default {
     plugins: [
       'utc', // import 'dayjs/plugin/utc'
       'timezone', // import 'dayjs/plugin/timezone'
-    ], // Your Day.js plugin
+    ],
   },
 
   generate: {
@@ -178,7 +174,6 @@ export default {
             ...blogRoutes,
           ]
         })
-      // return data
     },
   },
 
@@ -200,7 +195,7 @@ export default {
           const blogData = response.items
           const blogRoutes = blogData.map((item) => {
             return {
-              url: `/blog/posts/${item._id}`,
+              url: `/blog/posts/${item.slug}`,
               priority: 0.8,
               lastmod: item._sys.updatedAt,
             }
