@@ -204,6 +204,6 @@ export default {
         })
     },
     gzip: true,
-    trailingSlash: true,
+    trailingSlash: false,
   },
 }
