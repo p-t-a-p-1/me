@@ -23,7 +23,8 @@
       "@nuxtjs/dayjs",
       "dayjs/plugin/relativeTime",
       "@types/cheerio"
-    ]
+    ],
+    "resolveJsonModule": true
   },
   "exclude": ["node_modules", ".nuxt", "dist"]
 }

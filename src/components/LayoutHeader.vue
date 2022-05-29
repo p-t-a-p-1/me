@@ -63,6 +63,12 @@ export default Vue.extend({
           isExternal: false,
         },
         {
+          label: 'Contact',
+          path: '/contact',
+          icon: '',
+          isExternal: false,
+        },
+        {
           label: 'Twitter',
           path: 'https://twitter.com/hako_mavs',
           icon: 'IconTwitter',

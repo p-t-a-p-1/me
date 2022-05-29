@@ -60,7 +60,11 @@ export default {
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: ['~/plugins/repository.ts', '~/plugins/dateFilter.ts'],
+  plugins: [
+    '~/plugins/repository.ts',
+    '~/plugins/dateFilter.ts',
+    '~/plugins/veeValidate.ts',
+  ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -105,7 +109,9 @@ export default {
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {},
+  build: {
+    transpile: ['vee-validate'],
+  },
 
   styleResources: {
     scss: ['~/assets/scss/_variables.scss'],
@@ -160,7 +166,6 @@ export default {
               $(elm).html(result.value)
               $(elm).addClass('hljs')
             })
-            item.body = $.html()
             return {
               route: `/blog/posts/${item.slug}`,
               payload: { main: item, body: $.html() },
