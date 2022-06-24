@@ -45,18 +45,43 @@ import cheerio from 'cheerio'
 import hljs from 'highlight.js'
 export default Vue.extend({
   name: 'BlogDetailPage',
-  async asyncData({ app, route, payload }) {
+  async asyncData({ app, payload, route, error }) {
     const postSlug = route.params.slug
 
     // 記事情報取得
     const article =
-      payload.main ||
+      payload ||
       (await app
         .$repositories('blog')
         .findOne(postSlug)
         .then((response: any) => {
+          if (response.total === 0) {
+            error({
+              statusCode: 404,
+              message: 'not found',
+            })
+            return {}
+          }
           return response.items[0]
+        })
+        .catch(() => {
+          // 取得できない場合はエラーページへ遷移
+          error({
+            statusCode: 404,
+            message: 'not found',
+          })
         }))
+
+    console.log(article)
+
+    if (article === undefined || Object.keys(article).length === 0) {
+      error({
+        statusCode: 404,
+        message: 'not found',
+      })
+      return
+    }
+
     const title = article.meta.title
     const pageDescription = article.meta.description
 
@@ -71,7 +96,7 @@ export default Vue.extend({
       return $.html()
     }
 
-    const articleBody = payload.body || bodyHighlight(article.body)
+    const articleBody = payload ? payload.body : bodyHighlight(article.body)
 
     return {
       article,

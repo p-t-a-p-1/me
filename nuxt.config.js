@@ -151,21 +151,23 @@ export default {
           appUid: BLOG_APP_U_ID,
           modelUid: BLOG_APP_ARTICLE_MODEL_ID,
         })
-        .then((response) => {
+        .then(async (response) => {
           const blogData = response.items
-          const blogRoutes = blogData.map(async (item) => {
-            const $ = cheerio.load(item.body)
-            await $('pre code').each((_, elm) => {
-              const result = hljs.highlightAuto($(elm).text())
-              $(elm).html(result.value)
-              $(elm).addClass('hljs')
+          const blogRoutes = await Promise.all(
+            blogData.map(async (item) => {
+              const $ = cheerio.load(item.body)
+              await $('pre code').each((_, elm) => {
+                const result = hljs.highlightAuto($(elm).text())
+                $(elm).html(result.value)
+                $(elm).addClass('hljs')
+              })
+              item.body = $.html()
+              return {
+                route: `/blog/${item.slug}`,
+                payload: item,
+              }
             })
-            item.body = $.html()
-            return {
-              route: `/blog/posts/${item.slug}`,
-              payload: { main: item, body: $.html() },
-            }
-          })
+          )
           return [
             {
               route: '/blog',
@@ -195,7 +197,7 @@ export default {
           const blogData = response.items
           const blogRoutes = blogData.map((item) => {
             return {
-              url: `/blog/posts/${item.slug}`,
+              url: `/blog/${item.slug}`,
               priority: 0.8,
               lastmod: item._sys.updatedAt,
             }

@@ -7,7 +7,7 @@
         :key="`article-${articleIndex}`"
         class="card"
       >
-        <nuxt-link :to="`/blog/posts/${article.slug}`" class="card__link">
+        <nuxt-link :to="`/blog/${article.slug}`" class="card__link">
           <div v-if="article.emoji" class="card__emoji">
             {{ article.emoji.value }}
           </div>
