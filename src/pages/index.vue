@@ -39,6 +39,8 @@ export default Vue.extend({
     return {
       meta: {
         title: '北海道札幌市のフロントエンドエンジニア｜ptap1',
+        description:
+          '札幌市在住のフロントエンドエンジニアのブログサイトです。主にVue.jsやNuxtの記事を書いております。',
         isTitleTemplate: true,
         ogUrl: `https://www.ptap1.com/`,
       },

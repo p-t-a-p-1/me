@@ -29,7 +29,7 @@ export default {
           name: 'description',
           content:
             this.meta.description ??
-            '札幌市在住のフロントエンドエンジニアのブログサイトです。主にVue.jsやNuxtJSの記事を書いております。',
+            '札幌市在住のフロントエンドエンジニアのブログサイトです。主にVue.jsやNuxtの記事を書いております。',
         },
         {
           hid: 'og:title',
@@ -41,7 +41,7 @@ export default {
           property: 'og:description',
           content:
             this.meta.description ??
-            '札幌市在住のフロントエンドエンジニアのブログサイトです。主にVue.jsやNuxtJSの記事を書いております。',
+            '札幌市在住のフロントエンドエンジニアのブログサイトです。主にVue.jsやNuxtの記事を書いております。',
         },
         {
           hid: 'og:image',
@@ -68,7 +68,7 @@ export default {
           property: 'twitter:description',
           content:
             this.meta.description ??
-            '札幌市在住のフロントエンドエンジニアのブログサイトです。主にVue.jsやNuxtJSの記事を書いております。',
+            '札幌市在住のフロントエンドエンジニアのブログサイトです。主にVue.jsやNuxtの記事を書いております。',
         },
         {
           hid: 'twitter:card',
