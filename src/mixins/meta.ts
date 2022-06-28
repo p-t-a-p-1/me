@@ -39,7 +39,9 @@ export default {
         {
           hid: 'og:description',
           property: 'og:description',
-          content: this.meta.description,
+          content:
+            this.meta.description ??
+            '札幌市在住のフロントエンドエンジニアのブログサイトです。主にVue.jsやNuxtJSの記事を書いております。',
         },
         {
           hid: 'og:image',
@@ -64,7 +66,9 @@ export default {
         {
           hid: 'twitter:description',
           property: 'twitter:description',
-          content: this.meta.description,
+          content:
+            this.meta.description ??
+            '札幌市在住のフロントエンドエンジニアのブログサイトです。主にVue.jsやNuxtJSの記事を書いております。',
         },
         {
           hid: 'twitter:card',
