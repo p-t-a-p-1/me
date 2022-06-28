@@ -72,8 +72,6 @@ export default Vue.extend({
           })
         }))
 
-    console.log(article)
-
     if (article === undefined || Object.keys(article).length === 0) {
       error({
         statusCode: 404,

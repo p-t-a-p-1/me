@@ -5,6 +5,7 @@
       <Nuxt />
     </main>
     <layout-footer class="wrapper__footer" />
+    <TransitionOverlay />
   </div>
 </template>
 
