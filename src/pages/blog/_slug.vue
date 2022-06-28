@@ -209,6 +209,9 @@ export default Vue.extend({
         background-color: $colorWhite;
       }
     }
+    ul {
+      list-style-type: disc;
+    }
   }
 }
 </style>
