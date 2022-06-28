@@ -23,31 +23,7 @@ export default {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      {
-        hid: 'description',
-        name: 'description',
-        content:
-          '札幌市在住のフロントエンドエンジニアのブログサイトです。主にVue.jsやNuxtJSの記事を書いております。',
-      },
-      {
-        hid: 'og:site_name',
-        property: 'og:site_name',
-        content: 'ptap1',
-      },
-      { hid: 'og:type', property: 'og:type', content: 'website' },
-      {
-        hid: 'og:url',
-        property: 'og:url',
-        content: 'https://www.ptap1.com',
-      },
-      { hid: 'og:title', property: 'og:title', content: 'ptap1' },
-      {
-        hid: 'og:image',
-        property: 'og:image',
-        content: '',
-      },
-
-      { name: 'twitter:card', content: 'summary_large_image' },
+      { name: 'format-detection', content: 'telephone=no' },
       { name: 'twitter:site', content: '@mavs_hako' },
     ],
   },
@@ -202,7 +178,6 @@ export default {
           const blogRoutes = blogData.map((item) => {
             return {
               url: `/blog/${item.slug}`,
-              priority: 0.8,
               lastmod: item._sys.updatedAt,
             }
           })

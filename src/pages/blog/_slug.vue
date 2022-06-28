@@ -43,8 +43,10 @@
 import Vue from 'vue'
 import cheerio from 'cheerio'
 import hljs from 'highlight.js'
+import HeaderMeta from '../../mixins/meta'
 export default Vue.extend({
   name: 'BlogDetailPage',
+  mixins: [HeaderMeta],
   async asyncData({ app, payload, route, error }) {
     const postSlug = route.params.slug
 
@@ -101,24 +103,11 @@ export default Vue.extend({
       articleBody,
       title,
       pageDescription,
-    }
-  },
-  data() {
-    return {
-      title: '',
-      pageDescription: '',
-    }
-  },
-  head(this: { title: string; pageDescription: string }) {
-    return {
-      title: this.title,
-      meta: [
-        {
-          hid: 'description',
-          name: 'description',
-          content: this.pageDescription,
-        },
-      ],
+      meta: {
+        title,
+        description: pageDescription,
+        ogUrl: `https://www.ptap1.com/blog/${postSlug}`,
+      },
     }
   },
 })

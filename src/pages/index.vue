@@ -31,13 +31,17 @@
 
 <script lang="ts">
 import Vue from 'vue'
-
+import HeaderMeta from '../mixins/meta'
 export default Vue.extend({
   name: 'IndexPage',
-  head() {
+  mixins: [HeaderMeta],
+  data() {
     return {
-      titleTemplate: '',
-      title: 'ptap1',
+      meta: {
+        title: '北海道札幌市のフロントエンドエンジニア｜ptap1',
+        isTitleTemplate: true,
+        ogUrl: `https://www.ptap1.com/`,
+      },
     }
   },
 })

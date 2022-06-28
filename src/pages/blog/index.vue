@@ -40,9 +40,10 @@
 
 <script lang="ts">
 import Vue from 'vue'
-
+import HeaderMeta from '../../mixins/meta'
 export default Vue.extend({
-  name: 'IndexPage',
+  name: 'BlogIndexPage',
+  mixins: [HeaderMeta],
   async asyncData({ app, payload }) {
     const result = payload || (await app.$repositories('blog').findList())
 
@@ -50,17 +51,14 @@ export default Vue.extend({
       articles: result.items,
     }
   },
-  head() {
+  data() {
     return {
-      title: '記事一覧',
-      meta: [
-        {
-          hid: 'description',
-          name: 'description',
-          content:
-            '札幌市在住のフロントエンドエンジニアのブログサイトです。主にVue.jsやNuxtJSの記事を書いております。',
-        },
-      ],
+      meta: {
+        title: '記事一覧',
+        description:
+          '札幌市在住のフロントエンドエンジニアのブログサイトです。主にVue.jsやNuxtの記事を書いております。',
+        ogUrl: `https://www.ptap1.com/blog`,
+      },
     }
   },
 })
