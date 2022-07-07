@@ -26,7 +26,7 @@ export default {
   font-weight: bold;
   letter-spacing: 0.08em;
   @media #{$sp} {
-    padding: 80px 0 40px;
+    padding: 16px 0 8px;
   }
 }
 </style>

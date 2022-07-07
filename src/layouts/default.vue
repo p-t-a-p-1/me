@@ -36,6 +36,7 @@ export default Vue.extend({
     padding: 0 40px;
     flex: 1 0 auto;
     @media #{$sp} {
+      margin-top: 64px;
       padding: 0px 4.3%;
     }
   }

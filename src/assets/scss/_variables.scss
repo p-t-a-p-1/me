@@ -12,10 +12,9 @@ $colorDarkWhite: #ededed;
 $colorTwitter: #55acee;
 
 // メインフォント
-$baseFontFamily: 'Noto Sans JP', 'ヒラギノ角ゴ Pro W3',
-  'Hiragino Kaku Gothic Pro', 'Osaka', 'メイリオ', 'Meiryo', 'ＭＳ Ｐゴシック',
-  'MS P Gothic', sans-serif;
-$enFont: 'Montserrat', sans-serif;
+$baseFontFamily: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN',
+  'Hiragino Sans', Meiryo, sans-serif;
+$enFont: 'Helvetica Neue', sans-serif;
 // @include flex(center, center);
 @mixin flex($justify-content: unset, $align-items: unset) {
   display: flex;

@@ -17,7 +17,7 @@
               target="_blank"
               class="headerNav__link"
             >
-              <span class="headerNav__link__text">
+              <span class="headerNav__link__text onlyPC">
                 {{ item.label }}
               </span>
               <component
@@ -94,7 +94,6 @@ export default Vue.extend({
     flex-wrap: wrap;
     @media #{$sp} {
       row-gap: 8px;
-      justify-content: center;
     }
   }
 }
@@ -116,6 +115,10 @@ export default Vue.extend({
   &__links {
     display: flex;
     column-gap: 32px;
+    align-items: center;
+    @media #{$sp} {
+      column-gap: 16px;
+    }
   }
   &__item {
   }

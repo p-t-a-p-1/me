@@ -1,7 +1,7 @@
 <template>
   <div>
     <page-title label="POSTS" />
-    <div>
+    <div class="list">
       <div
         v-for="(article, articleIndex) in articles"
         :key="`article-${articleIndex}`"
@@ -65,6 +65,11 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
+.list {
+  @media #{$sp} {
+    margin-top: 16px;
+  }
+}
 .card {
   & + & {
     margin-top: 32px;
@@ -99,11 +104,18 @@ export default Vue.extend({
     align-items: center;
     font-size: 32px;
     transition: 0.3s;
+    @media #{$sp} {
+      width: 64px;
+      height: 64px;
+    }
   }
   &__info {
     display: flex;
     flex-direction: column;
     width: calc(100% - 100px);
+    @media #{$sp} {
+      width: calc(100% - 64px);
+    }
   }
   &__title {
     font-size: 1.8rem;
@@ -116,6 +128,9 @@ export default Vue.extend({
     display: flex;
     justify-content: space-between;
     column-gap: 40px;
+    @media #{$sp} {
+      margin-top: 16px;
+    }
   }
   &__date {
     font-family: $enFont;

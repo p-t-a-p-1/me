@@ -50,15 +50,6 @@ export default {
     // https://go.nuxtjs.dev/typescript
     '@nuxt/typescript-build',
     '@nuxtjs/eslint-module',
-    [
-      '@nuxtjs/google-fonts',
-      {
-        families: {
-          Montserrat: [400, 700],
-          'Noto Sans JP': [400, 700],
-        },
-      },
-    ],
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules

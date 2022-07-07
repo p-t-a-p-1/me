@@ -115,6 +115,9 @@ export default Vue.extend({
 
 <style lang="scss" scoped>
 .article {
+  @media #{$sp} {
+    margin-top: 32px;
+  }
   &__header {
     &__emoji {
       font-size: 75px;
@@ -122,6 +125,9 @@ export default Vue.extend({
       align-items: center;
       justify-content: center;
       line-height: 1;
+      @media #{$sp} {
+        font-size: 40px;
+      }
     }
     &__title {
       margin-top: 32px;
@@ -129,6 +135,9 @@ export default Vue.extend({
       letter-spacing: 0.04em;
       color: $colorCorporateMain;
       text-align: center;
+      @media #{$sp} {
+        font-size: 2rem;
+      }
     }
     &__date {
       margin-top: 16px;
@@ -150,6 +159,9 @@ export default Vue.extend({
     background-color: $colorWhite;
     padding: 3rem;
     border-radius: 8px;
+    @media #{$sp} {
+      padding: 2rem;
+    }
   }
   &__footer {
     margin-top: 32px;

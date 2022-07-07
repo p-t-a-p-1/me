@@ -100,3 +100,14 @@ textarea {
 .fade-fast-leave-to {
   opacity: 0;
 }
+
+@media #{$pc} {
+  .onlySP {
+    display: none !important;
+  }
+}
+@media #{$sp} {
+  .onlyPC {
+    display: none !important;
+  }
+}
