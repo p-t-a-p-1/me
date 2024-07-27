@@ -12,8 +12,8 @@ export default async function Home() {
   const articles = await getArticles()
 
   return (
-    <main>
-      <h1 className="text-2xl font-bold underline">記事一覧</h1>
+    <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
+      <h1 className="text-2xl font-bold">記事一覧</h1>
       <Button>ボタン</Button>
       <ul>
         {articles.map((article) => {
@@ -28,6 +28,6 @@ export default async function Home() {
           )
         })}
       </ul>
-    </main>
+    </section>
   )
 }
