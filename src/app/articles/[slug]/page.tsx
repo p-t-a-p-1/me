@@ -1,5 +1,5 @@
+// import styles from '@/app/page.module.css'
 import { getArticleBySlug, getArticles } from '@/lib/newt'
-import styles from '@/app/page.module.css'
 
 type Props = {
   params: {
@@ -35,7 +35,7 @@ export default async function Article({ params }: Props) {
   }
 
   return (
-    <main className={styles.main}>
+    <main>
       <h1>{article.title}</h1>
       {/* biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation> */}
       <div dangerouslySetInnerHTML={{ __html: article.body }} />

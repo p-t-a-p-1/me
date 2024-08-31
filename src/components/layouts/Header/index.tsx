@@ -1,9 +1,9 @@
 import { Icons } from '@/components/elements/Icons'
+import { ThemeToggle } from '@/components/elements/ThemeToggle'
 import { buttonVariants } from '@/components/ui/button'
 import { siteConfig } from '@/config/site'
 import Link from 'next/link'
 import { MainNav } from '../MainNav'
-import { ThemeToggle } from '@/components/elements/ThemeToggle'
 
 export default function Header() {
   return (

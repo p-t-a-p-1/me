@@ -1,11 +1,11 @@
 import type { Metadata } from 'next'
 import { Inter as FontSans } from 'next/font/google'
 import '@/styles/globals.css'
-import { cn } from '@/lib/utils'
-import Header from '@/components/layouts/Header'
-import { siteConfig } from '@/config/site'
-import { ThemeProvider } from '@/components/theme-provider'
 import TailwindIndicator from '@/components/elements/TailwindIndicator'
+import Header from '@/components/layouts/Header'
+import { ThemeProvider } from '@/components/theme-provider'
+import { siteConfig } from '@/config/site'
+import { cn } from '@/lib/utils'
 
 const fontSans = FontSans({
   subsets: ['latin'],
