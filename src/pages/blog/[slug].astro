@@ -1,0 +1,450 @@
+---
+import { date } from "astro:schema";
+import * as cheerio from "cheerio";
+import BlogSidebar from "../../components/BlogSidebar.astro";
+import TableOfContents from "../../components/TableOfContents.astro";
+import Layout from "../../layouts/Layout.astro";
+import { getAllBlogs, getBlogBySlug } from "../../lib/blog";
+import { Article, newtClient } from "../../lib/newt";
+import { formatDate } from "../../lib/utils";
+const { slug } = Astro.params;
+export const getStaticPaths = async () => {
+	const { items: articles } = await newtClient.getContents<Article>({
+		appUid: "meBlog",
+		modelUid: "article",
+		query: {
+			select: ["title", "slug", "body", "emoji", "pDate", "url"],
+		},
+	});
+	return articles.map((article) => ({
+		params: { slug: article.slug },
+		props: { blog: article },
+	}));
+};
+
+const { blog } = Astro.props;
+
+const $ = cheerio.load(blog.body);
+const headings = $("h1, h2, h3").toArray();
+
+// 各見出しレベルのカウンターを初期化
+const counters = {
+	h1: 0,
+	h2: 0,
+	h3: 0,
+};
+
+// 各見出しレベルごとに連番を振る
+const toc = headings.map((data) => {
+	const level = data.name;
+	counters[level]++;
+
+	// idを割当て
+	$(data).attr("id", `toc-${level}-${counters[level]}`);
+
+	return {
+		text: $(data).text(),
+		id: `toc-${level}-${counters[level]}`,
+		level,
+	};
+});
+
+blog.body = $.html();
+---
+
+<Layout title={blog.title}>
+	<main class="blog-detail">
+		<div class="blog-detail__content">
+			<div class="blog-detail__main">
+				<article class="blog-detail__article">
+					<header class="blog-detail__header">
+						<div class="blog-detail__emoji">{blog.emoji.value}</div>
+						<h1 class="blog-detail__title">{blog.title}</h1>
+						<div class="blog-detail__meta">
+							<div class="blog-detail__dates">
+								<time datetime={blog.pDate} class="blog-detail__date">
+									公開日: {formatDate(blog.pDate)}
+								</time>
+							</div>
+							<!-- <div class="blog-detail__tags">
+								{
+									blog.tags.map((tag) => (
+										<a href={`/blog/tags/${tag}`} class="blog-detail__tag">
+											{tag}
+										</a>
+									))
+								}
+							</div> -->
+						</div>
+					</header>
+					<div class="blog-detail__body" set:html={blog.body}>
+						<!-- {
+							blog.content.map((block) => {
+								if (block.type === "code") {
+									return (
+										<div class="blog-detail__code">
+											<pre>
+												<code class={`language-${block.language}`}>
+													{block.content}
+												</code>
+											</pre>
+										</div>
+									);
+								} else if (block.type === "image") {
+									return (
+										<figure class="blog-detail__figure">
+											<img
+												src={block.content}
+												alt={block.alt}
+												class="blog-detail__image"
+											/>
+											{block.alt && (
+												<figcaption class="blog-detail__caption">
+													{block.alt}
+												</figcaption>
+											)}
+										</figure>
+									);
+								}
+								return <p class="blog-detail__text">{block.content}</p>;
+							})
+						} -->
+					</div>
+					<div class="blog-detail__back">
+						<a href="/blog" class="blog-detail__back-link">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								width="24"
+								height="24"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+							>
+								<path d="M19 12H5M5 12L12 19M5 12L12 5"></path>
+							</svg>
+							<span>ブログ一覧へ戻る</span>
+						</a>
+					</div>
+				</article>
+			</div>
+			<div class="blog-detail__sidebar">
+				<BlogSidebar tags={[]} />
+				{
+					toc && (
+						<div class="blog-detail__toc-sticky">
+							<TableOfContents items={toc} />
+						</div>
+					)
+				}
+			</div>
+		</div>
+	</main>
+</Layout>
+<style>
+	.blog-detail {
+		padding: 40px 20px;
+		background-color: #ffffff;
+	}
+
+	.blog-detail__content {
+		display: flex;
+		gap: 86px;
+		max-width: 1200px;
+		margin: 0 auto;
+	}
+
+	.blog-detail__main {
+		flex: 1;
+		max-width: 754px;
+		background-color: #ffffff;
+		border-radius: 12px;
+		padding: 40px;
+	}
+
+	.blog-detail__back {
+		margin: 32px 0;
+	}
+
+	.blog-detail__back-link {
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+		color: #595959;
+		text-decoration: none;
+		transition: all 0.2s ease;
+		padding: 8px 16px;
+		border-radius: 6px;
+		background-color: #f5f5f5;
+	}
+
+	.blog-detail__back-link:hover {
+		color: #262626;
+		background-color: #e5e5e5;
+		transform: translateX(-4px);
+	}
+
+	.blog-detail__header {
+		margin-bottom: 48px;
+		padding-bottom: 32px;
+		border-bottom: 1px solid #e5e5e5;
+	}
+
+	.blog-detail__emoji {
+		font-size: 72px;
+		line-height: 1;
+		margin-bottom: 24px;
+		text-align: center;
+	}
+
+	.blog-detail__title {
+		font-family: "Noto Sans JP", sans-serif;
+		font-size: 40px;
+		font-weight: 700;
+		line-height: 1.4;
+		letter-spacing: -0.02em;
+		color: #262626;
+		margin: 0 0 24px;
+		text-align: center;
+	}
+
+	.blog-detail__meta {
+		display: flex;
+		flex-direction: column;
+		gap: 16px;
+		align-items: center;
+	}
+
+	.blog-detail__dates {
+		display: flex;
+		gap: 16px;
+		color: #8c8c8c;
+		font-size: 14px;
+	}
+
+	.blog-detail__body {
+		margin-top: 48px;
+		font-size: 16px;
+		line-height: 1.8;
+		color: #262626;
+	}
+
+	.blog-detail__body :global(h2) {
+		font-size: 28px;
+		font-weight: 700;
+		margin: 48px 0 24px;
+		padding-bottom: 12px;
+		border-bottom: 2px solid #e5e5e5;
+	}
+
+	.blog-detail__body :global(h3) {
+		font-size: 24px;
+		font-weight: 600;
+		margin: 32px 0 16px;
+	}
+
+	.blog-detail__body :global(p) {
+		margin: 24px 0;
+	}
+
+	.blog-detail__body ul,
+	.blog-detail__body ol {
+		margin: 24px 0;
+		padding-left: 24px;
+	}
+
+	.blog-detail__body :global(li) {
+		margin: 8px 0;
+	}
+
+	.blog-detail__body :global(a) {
+		color: #0066cc;
+		text-decoration: none;
+		transition: color 0.2s ease;
+	}
+
+	.blog-detail__body :global(a):hover {
+		color: #004499;
+		text-decoration: underline;
+	}
+
+	.blog-detail__body :global(blockquote) {
+		margin: 32px 0;
+		padding: 16px 24px;
+		border-left: 4px solid #e5e5e5;
+		background-color: #f9f9f9;
+		color: #595959;
+		font-style: italic;
+	}
+
+	.blog-detail__body :global(pre) {
+		margin: 32px 0;
+		padding: 20px;
+		background: #1a1a1a;
+		color: #ffffff;
+		font-family: "Fira Code", monospace;
+		font-size: 14px;
+		line-height: 1.6;
+		border-radius: 8px;
+		overflow-x: auto;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+	}
+
+	.blog-detail__body :global(code) {
+		font-family: "Fira Code", monospace;
+		font-size: 0.9em;
+		padding: 0.2em 0.4em;
+		background-color: #f5f5f5;
+		border-radius: 4px;
+	}
+
+	.blog-detail__body :global(pre) :global(code) {
+		padding: 0;
+		background-color: transparent;
+		color: inherit;
+	}
+
+	.blog-detail__body :global(img) {
+		width: 100%;
+		height: auto;
+		border-radius: 12px;
+		margin: 40px 0;
+		max-width: 100%;
+	}
+
+	.blog-detail__body :global(video) {
+		width: 100%;
+		height: auto;
+		border-radius: 12px;
+		margin: 40px 0;
+	}
+
+	.blog-detail__body :global(figure) {
+		margin: 40px 0;
+	}
+
+	.blog-detail__body :global(figcaption) {
+		margin-top: 12px;
+		text-align: center;
+		color: #8c8c8c;
+		font-size: 14px;
+	}
+
+	.blog-detail__body :global(hr) {
+		margin: 48px 0;
+		border: none;
+		border-top: 1px solid #e5e5e5;
+	}
+
+	.blog-detail__body :global(table) {
+		width: 100%;
+		margin: 32px 0;
+		border-collapse: collapse;
+	}
+
+	.blog-detail__body :global(th),
+	.blog-detail__body :global(td) {
+		padding: 12px 16px;
+		border: 1px solid #e5e5e5;
+		text-align: left;
+	}
+
+	.blog-detail__body :global(th) {
+		background-color: #f5f5f5;
+		font-weight: 600;
+	}
+
+	.blog-detail__body :global(tr):nth-child(even) {
+		background-color: #f9f9f9;
+	}
+
+	.blog-detail__sidebar {
+		width: 280px;
+		flex-shrink: 0;
+	}
+
+	.blog-detail__toc-sticky {
+		position: sticky;
+		top: 128px;
+		z-index: 1;
+		margin-top: 16px;
+	}
+
+	@media (max-width: 1200px) {
+		.blog-detail__content {
+			max-width: 1000px;
+			gap: 40px;
+		}
+	}
+
+	@media (max-width: 1024px) {
+		.blog-detail__content {
+			flex-direction: column;
+			gap: 40px;
+		}
+
+		.blog-detail__main {
+			padding: 32px;
+		}
+
+		.blog-detail__sidebar {
+			width: 100%;
+		}
+
+		.blog-detail__title {
+			font-size: 32px;
+		}
+
+		.blog-detail__emoji {
+			font-size: 56px;
+		}
+	}
+
+	@media (max-width: 768px) {
+		.blog-detail {
+			padding: 20px 16px;
+		}
+
+		.blog-detail__main {
+			padding: 24px;
+		}
+
+		.blog-detail__title {
+			font-size: 28px;
+		}
+
+		.blog-detail__emoji {
+			font-size: 48px;
+		}
+
+		.blog-detail__body h2 {
+			font-size: 24px;
+		}
+
+		.blog-detail__body h3 {
+			font-size: 20px;
+		}
+
+		.blog-detail__body pre {
+			padding: 16px;
+			font-size: 13px;
+		}
+
+		.blog-detail__body blockquote {
+			padding: 12px 16px;
+		}
+
+		.blog-detail__meta {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 12px;
+		}
+
+		.blog-detail__dates {
+			flex-direction: column;
+			gap: 4px;
+		}
+	}
+</style>

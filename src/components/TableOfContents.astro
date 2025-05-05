@@ -1,0 +1,99 @@
+---
+interface TocItem {
+	text: string;
+	id: string;
+	level: string;
+}
+
+interface Props {
+	items: TocItem[];
+}
+
+const { items } = Astro.props;
+---
+
+<nav class="toc">
+	<div class="toc__title">目次</div>
+	<ul class="toc__list">
+		{
+			items.map((item) => (
+				<li class:list={["toc__item", `toc__item--level-${item.level}`]}>
+					<a href={`#${item.id}`} class="toc__link">
+						{item.text}
+					</a>
+				</li>
+			))
+		}
+	</ul>
+</nav>
+
+<style>
+	.toc {
+		background-color: #ffffff;
+		border-radius: 0;
+		margin-top: 8px;
+		box-shadow: none;
+		border: 1px solid #262626;
+	}
+
+	.toc__title {
+		display: flex;
+		align-items: center;
+		padding: 8px 10px;
+		background-color: #f5f5f5;
+		font-family: "Noto Sans JP", sans-serif;
+		font-size: 14px;
+		line-height: 1.3;
+		letter-spacing: 0.02em;
+		color: #8c8c8c;
+		border-radius: 0;
+		border-bottom: 1px solid #262626;
+	}
+
+	.toc__list {
+		list-style: none;
+		padding: 4px;
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 0;
+	}
+
+	.toc__item {
+		transition: opacity 0.2s ease;
+	}
+
+	.toc__item--level-1 {
+		margin-left: 0;
+	}
+
+	.toc__item--level-2 {
+		margin-left: 16px;
+	}
+
+	.toc__item--level-3 {
+		margin-left: 32px;
+	}
+
+	.toc__link {
+		display: flex;
+		align-items: center;
+		font-family: "Noto Sans JP", sans-serif;
+		font-size: 14px;
+		line-height: 1.5;
+		color: #595959;
+		text-decoration: none;
+		padding: 6px 12px 6px 6px;
+		border-radius: 0;
+		background: #fff;
+		box-shadow: inset 0px -1px 0px 0px rgba(196, 196, 196, 1);
+		transition:
+			background-color 0.2s,
+			color 0.2s;
+	}
+
+	.toc__link:hover {
+		background-color: #f5f5f5;
+		color: #262626;
+	}
+</style>

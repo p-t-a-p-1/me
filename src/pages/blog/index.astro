@@ -1,0 +1,124 @@
+---
+import BlogCard from "../../components/BlogCard.astro";
+import BlogSidebar from "../../components/BlogSidebar.astro";
+import Pager from "../../components/Pager.astro";
+import Layout from "../../layouts/Layout.astro";
+import { Article, Tag, newtClient } from "../../lib/newt";
+
+const { items: blogs } = await newtClient.getContents<Article>({
+	appUid: "meBlog",
+	modelUid: "article",
+	query: {
+		select: [
+			"title",
+			"slug",
+			"body",
+			"emoji",
+			"pDate",
+			"url",
+			"thumbnail",
+			"tags",
+		],
+		order: ["-pDate"],
+	},
+});
+
+const { items: tags } = await newtClient.getContents<Tag>({
+	appUid: "meBlog",
+	modelUid: "tag",
+});
+
+// const totalPages = Math.ceil(total / 10);
+---
+
+<Layout title="BLOG">
+	<main class="blog-list">
+		<div class="blog-list__content">
+			<div class="blog-list__main">
+				<div class="blog-list__grid">
+					{
+						blogs.map((blog) => (
+							<BlogCard
+								title={blog.title}
+								emoji={blog.emoji.value}
+								tags={blog.tags}
+								slug={blog.slug}
+								url={blog.url ?? ""}
+								thumbnail={blog.thumbnail?.src ?? ""}
+							/>
+						))
+					}
+				</div>
+				<!-- <div class="blog-list__pager">
+					<Pager
+						currentPage={currentPage}
+						totalPages={totalPages}
+						onPrevious={currentPage > 1
+							? `/blog/page/${currentPage - 1}`
+							: undefined}
+						onNext={currentPage < totalPages
+							? `/blog/page/${currentPage + 1}`
+							: undefined}
+					/>
+				</div> -->
+			</div>
+			<div class="blog-list__sidebar">
+				<BlogSidebar tags={tags} />
+			</div>
+		</div>
+	</main>
+</Layout>
+
+<style>
+	.blog-list {
+		padding: 40px 20px;
+	}
+
+	.blog-list__content {
+		max-width: 1080px;
+		margin: 0 auto;
+		display: grid;
+		grid-template-columns: 1fr 240px;
+		gap: 86px;
+	}
+
+	.blog-list__main {
+		display: flex;
+		flex-direction: column;
+		gap: 40px;
+	}
+
+	.blog-list__grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+		gap: 20px;
+	}
+
+	.blog-list__pager {
+		margin-top: 20px;
+	}
+
+	@media (max-width: 1024px) {
+		.blog-list__content {
+			grid-template-columns: 1fr;
+		}
+
+		.blog-list__sidebar {
+			order: -1;
+		}
+	}
+
+	@media (max-width: 768px) {
+		.blog-list {
+			padding: 20px 10px;
+		}
+
+		.blog-list__main {
+			gap: 20px;
+		}
+
+		.blog-list__grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

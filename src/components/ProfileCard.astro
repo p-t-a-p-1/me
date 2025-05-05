@@ -1,0 +1,145 @@
+<div class="profile-card">
+	<div class="profile-card__image">
+		<img src="/profile-image.png" alt="Profile" />
+	</div>
+	<div class="profile-card__content">
+		<div class="profile-card__header">
+			<h2 class="profile-card__title">PROFILE</h2>
+			<h3 class="profile-card__name">p-t-a-p-1</h3>
+		</div>
+		<p class="profile-card__description">
+			札幌市在住のWebエンジニアです。<br />
+			古着が好きで毎月Tシャツ買ってます。
+		</p>
+		<!-- <a href="/" class="profile-card__link">
+			<span>View More</span>
+			<svg
+				width="24"
+				height="24"
+				viewBox="0 0 24 24"
+				fill="none"
+				xmlns="http://www.w3.org/2000/svg"
+			>
+				<path
+					d="M5 12H19M19 12L12 5M19 12L12 19"
+					stroke="#595959"
+					stroke-width="2"
+					stroke-linecap="round"
+					stroke-linejoin="round"></path>
+			</svg>
+		</a> -->
+	</div>
+</div>
+
+<style>
+	.profile-card {
+		background-color: #ffffff;
+		border: 2px solid #000000;
+		padding: 24px;
+		display: flex;
+		gap: 24px;
+		align-items: center;
+		max-width: 640px;
+		width: 100%;
+	}
+
+	.profile-card__image {
+		width: 120px;
+		height: 120px;
+		overflow: hidden;
+		flex-shrink: 0;
+		border: 2px solid #000000;
+	}
+
+	.profile-card__image img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.profile-card__content {
+		flex: 1;
+	}
+
+	.profile-card__header {
+		margin-bottom: 16px;
+	}
+
+	/* 白抜き文字 */
+	.profile-card__title {
+		font-family: "Rowdies", sans-serif;
+		font-weight: 700;
+		font-size: 24px;
+		line-height: 1.55;
+		letter-spacing: 0.02em;
+		color: #ffffff;
+		margin: 0 0 8px 0;
+		text-shadow:
+			-1px -1px 0 #000,
+			1px -1px 0 #000,
+			-1px 1px 0 #000,
+			1px 1px 0 #000;
+		-webkit-text-stroke: 2px #000000;
+		position: relative;
+	}
+
+	.profile-card__name {
+		font-family: "Rubik Glitch", sans-serif;
+		font-weight: 400;
+		font-size: 24px;
+		line-height: 1.55;
+		letter-spacing: 0.02em;
+		color: #000000;
+		margin: 0;
+	}
+
+	.profile-card__description {
+		font-family: "Noto Sans JP", sans-serif;
+		font-weight: 700;
+		font-size: 16px;
+		line-height: 1.55;
+		letter-spacing: 0.02em;
+		color: #000000;
+		margin: 0 0 16px 0;
+	}
+
+	.profile-card__link {
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+		font-family: "Noto Sans JP", sans-serif;
+		font-weight: 700;
+		font-size: 16px;
+		line-height: 1.55;
+		letter-spacing: 0.02em;
+		color: #000000;
+		text-decoration: none;
+		transition: opacity 0.2s;
+	}
+
+	.profile-card__link:hover {
+		opacity: 0.7;
+	}
+
+	@media (max-width: 768px) {
+		.profile-card {
+			flex-direction: column;
+			padding: 16px;
+			gap: 16px;
+		}
+
+		.profile-card__image {
+			width: 100px;
+			height: 100px;
+		}
+
+		.profile-card__title,
+		.profile-card__name {
+			font-size: 20px;
+		}
+
+		.profile-card__description {
+			font-size: 14px;
+		}
+	}
+</style>

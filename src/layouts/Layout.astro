@@ -1,14 +1,34 @@
+---
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+
+const { title, description } = Astro.props;
+---
+
 <!doctype html>
-<html lang="en">
+<html lang="ja">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
+		<title>{title}</title>
+		<meta name="description" content={description} />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@700&family=Rubik+Glitch&display=swap&family=Rowdies:wght@700&display=swap"
+			rel="stylesheet"
+		/>
 	</head>
 	<body>
-		<slot />
+		<div class="wrapper">
+			<Header />
+			<main>
+				<slot />
+			</main>
+			<Footer />
+		</div>
 	</body>
 </html>
 
@@ -16,7 +36,43 @@
 	html,
 	body {
 		margin: 0;
+		padding: 0;
 		width: 100%;
 		height: 100%;
+	}
+
+	html {
+		scroll-padding-top: 120px;
+	}
+
+	body {
+		display: flex;
+		flex-direction: column;
+		min-height: 100vh;
+	}
+
+	.wrapper {
+		display: flex;
+		flex-direction: column;
+		min-height: 100vh;
+	}
+
+	main {
+		flex: 1;
+		max-width: 1280px;
+		width: 100%;
+		margin: 110px auto 0;
+		/* padding: 2rem; */
+		display: flex;
+		flex-direction: column;
+		border-left: 1px solid #262626;
+		border-right: 1px solid #262626;
+	}
+
+	.footer {
+		background-color: #ffffff;
+		width: 100%;
+		border-top: 1px solid #000000;
+		margin-top: auto;
 	}
 </style>

@@ -1,0 +1,170 @@
+---
+interface Props {
+	currentPage: number;
+	totalPages: number;
+	itemsPerPage?: number;
+	onPrevious?: string;
+	onNext?: string;
+}
+
+const {
+	currentPage,
+	totalPages,
+	itemsPerPage = 12,
+	onPrevious = "#",
+	onNext = "#",
+} = Astro.props;
+
+// 表示するページ番号を計算
+const getVisiblePages = () => {
+	const pages: (number | string)[] = [];
+	const maxVisiblePages = 7; // 最大表示数（省略記号を除く）
+
+	if (totalPages <= maxVisiblePages) {
+		// 全ページ数が表示上限以下の場合は全て表示
+		return Array.from({ length: totalPages }, (_, i) => i + 1);
+	}
+
+	// 常に表示する要素: 最初のページ、現在のページとその前後、最後のページ
+	pages.push(1);
+	if (currentPage > 3) pages.push("...");
+
+	for (
+		let i = Math.max(2, currentPage - 1);
+		i <= Math.min(totalPages - 1, currentPage + 1);
+		i++
+	) {
+		pages.push(i);
+	}
+
+	if (currentPage < totalPages - 2) pages.push("...");
+	pages.push(totalPages);
+
+	return pages;
+};
+
+const visiblePages = getVisiblePages();
+---
+
+<div class="pager">
+	<div class="pager__items">
+		{
+			visiblePages.map((page) => {
+				if (page === "...") {
+					return <span class="pager__ellipsis">...</span>;
+				}
+				return (
+					<a
+						href={`?page=${page}`}
+						class:list={[
+							"pager__page",
+							{ "pager__page--current": page === currentPage },
+						]}
+					>
+						{page}
+					</a>
+				);
+			})
+		}
+	</div>
+	{
+		currentPage < totalPages && (
+			<a href={onNext} class="pager__next">
+				次の{itemsPerPage}件
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					width="24"
+					height="24"
+					viewBox="0 0 24 24"
+					fill="currentColor"
+				>
+					<path d="M8.59 16.59L13.17 12L8.59 7.41L10 6L16 12L10 18L8.59 16.59Z" />
+				</svg>
+			</a>
+		)
+	}
+</div>
+
+<style>
+	.pager {
+		display: flex;
+		align-items: stretch;
+		gap: 1px;
+		padding: 1px;
+		width: fit-content;
+		background-color: #000000;
+	}
+
+	.pager__items {
+		display: flex;
+		align-items: stretch;
+		gap: 1px;
+		background-color: #000000;
+	}
+
+	.pager__page {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		min-width: 40px;
+		background-color: #ffffff;
+		color: #262626;
+		text-decoration: none;
+		font-family: "Noto Sans JP", sans-serif;
+		font-weight: 700;
+		font-size: 14px;
+		line-height: 1.55;
+		letter-spacing: 0.02em;
+		transition: background-color 0.2s ease;
+	}
+
+	.pager__page:hover {
+		background-color: #f5f5f5;
+	}
+
+	.pager__page--current {
+		background-color: #000000;
+		color: #ffffff;
+	}
+
+	.pager__ellipsis {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		min-width: 40px;
+		background-color: #ffffff;
+		color: #8c8c8c;
+		font-family: "Noto Sans JP", sans-serif;
+		font-weight: 700;
+		font-size: 14px;
+		line-height: 1.55;
+		letter-spacing: 0.02em;
+	}
+
+	.pager__next {
+		display: flex;
+		align-items: center;
+		gap: 4px;
+		padding: 10px;
+		background-color: #ffffff;
+		color: #262626;
+		text-decoration: none;
+		font-family: "Noto Sans JP", sans-serif;
+		font-weight: 700;
+		font-size: 14px;
+		line-height: 1.55;
+		letter-spacing: 0.02em;
+		transition: background-color 0.2s ease;
+		white-space: nowrap;
+	}
+
+	.pager__next:hover {
+		background-color: #f5f5f5;
+	}
+
+	.pager__next svg {
+		width: 20px;
+		height: 20px;
+		color: #595959;
+	}
+</style>

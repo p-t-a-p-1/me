@@ -1,0 +1,79 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import { Tag, newtClient } from "../../../lib/newt";
+
+const { items: tags } = await newtClient.getContents<Tag>({
+	appUid: "meBlog",
+	modelUid: "tag",
+});
+---
+
+<Layout title="Tags">
+	<main class="tags">
+		<div class="tags__content">
+			<h1 class="tags__title">Tags</h1>
+			<div class="tags__grid">
+				{
+					tags.map((tag) => (
+						<a href={`/blog/tags/${tag.slug}`} class="tag-card">
+							<span class="tag-card__name">{tag.name}</span>
+						</a>
+					))
+				}
+			</div>
+		</div>
+	</main>
+</Layout>
+
+<style>
+	.tags {
+		padding: 40px 20px;
+	}
+
+	.tags__content {
+		max-width: 840px;
+		margin: 0 auto;
+	}
+
+	.tags__title {
+		font-size: 2rem;
+		font-weight: bold;
+		margin-bottom: 40px;
+	}
+
+	.tags__grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+		gap: 20px;
+	}
+
+	.tag-card {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: #262626;
+		text-decoration: none;
+		font-weight: 700;
+	}
+
+	.tag-card__name {
+		font-weight: 500;
+		border: 1px solid #262626;
+		padding: 4px 8px;
+	}
+
+	@media (max-width: 768px) {
+		.tags {
+			padding: 20px 10px;
+		}
+
+		.tags__title {
+			font-size: 1.5rem;
+			margin-bottom: 20px;
+		}
+
+		.tags__grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

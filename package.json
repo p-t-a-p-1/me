@@ -9,6 +9,16 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^5.5.5"
+    "@types/react-syntax-highlighter": "^15.5.13",
+    "astro": "^5.5.5",
+    "cheerio": "^1.0.0",
+    "gsap": "^3.12.7",
+    "newt-client-js": "^3.3.8",
+    "react-syntax-highlighter": "^15.6.1"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.9.4",
+    "prettier": "^3.5.3",
+    "prettier-plugin-astro": "^0.14.1"
   }
 }

@@ -1,0 +1,100 @@
+---
+
+---
+
+<form
+	id="contact-form"
+	class="contact-form"
+	action="https://ssgform.com/s/AbcDeFgHiJkL"
+	method="post"
+	novalidate
+>
+	<div class="contact-form__row">
+		<label
+			>お名前 <span class="required">*</span>
+			<input type="text" name="name" placeholder="例) 山田 太郎" required />
+		</label>
+		<label
+			>フリガナ <span class="required">*</span>
+			<input
+				type="text"
+				name="furigana"
+				placeholder="例) ヤマダ タロウ"
+				required
+			/>
+		</label>
+	</div>
+	<label
+		>メールアドレス <span class="required">*</span>
+		<input
+			type="email"
+			name="email"
+			placeholder="例) sample@mail.co.jp"
+			required
+		/>
+	</label>
+	<div class="contact-form__row">
+		<label
+			>所属企業・団体
+			<input type="text" name="company" />
+		</label>
+		<label
+			>電話番号 <span class="required">*</span>
+			<input
+				type="tel"
+				name="tel"
+				placeholder="ハイフン無し11桁"
+				required
+				pattern="[0-9]{11}"
+			/>
+		</label>
+	</div>
+	<label
+		>お問い合わせ内容 <span class="required">*</span>
+		<textarea
+			name="message"
+			placeholder="お問い合わせしたい内容について、詳細をご記入下さい。"
+			required
+			rows="6"></textarea>
+	</label>
+	<div class="contact-form__notes">
+		<ul>
+			<li>* は必須入力項目です。</li>
+			<li>
+				※お問い合わせ内容によっては、回答までに数日ほどお時間をいただく場合があります。
+			</li>
+			<li>
+				※ご入力いただいた個人情報はご回答のみに利用し、第三者に提供しません。
+			</li>
+			<li>
+				※迷惑メールフィルタやドメイン指定受信をご利用の場合は「@chizaizukan.com」からのメールを受信できるようご設定ください。
+			</li>
+		</ul>
+	</div>
+	<div id="form-error" class="contact-form__error" style="display:none"></div>
+	<div id="form-step-input">
+		<button type="button" class="contact-form__submit" id="to-confirm"
+			>この入力内容で確認する</button
+		>
+	</div>
+	<div id="form-step-confirm" style="display:none">
+		<div class="contact-form__confirm" id="confirm-fields"></div>
+		<div class="contact-form__actions">
+			<button type="button" class="contact-form__back" id="to-edit"
+				>修正する</button
+			>
+			<button type="submit" class="contact-form__submit" id="submit-btn"
+				>送信する</button
+			>
+		</div>
+	</div>
+	<div id="form-step-done" style="display:none">
+		<div class="contact-form__done">
+			<p>
+				お問い合わせありがとうございました。<br
+				/>内容を確認のうえ、担当よりご連絡いたします。
+			</p>
+			<a href="/" class="contact-form__tohome">トップページへ戻る</a>
+		</div>
+	</div>
+</form>
