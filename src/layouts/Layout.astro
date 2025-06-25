@@ -17,9 +17,30 @@ const { title, description } = Astro.props;
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 		<link
-			href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@700&family=Rubik+Glitch&display=swap&family=Rowdies:wght@700&display=swap"
+			href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&family=Rubik+Glitch&display=swap&family=Rowdies:wght@700&family=Fira+Code:wght@400;500&display=swap"
 			rel="stylesheet"
 		/>
+		<link
+			href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css"
+			rel="stylesheet"
+		/>
+		<style>
+			/* Prismテーマの微調整（marked-highlight対応） */
+			pre:has(code[class*="language-"]),
+			pre[class*="language-"] {
+				background: #2d3748 !important;
+			}
+			code[class*="language-"], 
+			pre[class*="language-"],
+			pre:has(code[class*="language-"]) {
+				text-shadow: none !important;
+			}
+			/* フォールバック：:has()セレクターが対応していないブラウザ用 */
+			pre {
+				background: #2d3748 !important;
+				text-shadow: none !important;
+			}
+		</style>
 	</head>
 	<body>
 		<div class="wrapper">

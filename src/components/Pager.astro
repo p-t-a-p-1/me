@@ -1,46 +1,46 @@
 ---
 interface Props {
-	currentPage: number;
-	totalPages: number;
-	itemsPerPage?: number;
-	onPrevious?: string;
-	onNext?: string;
+  currentPage: number;
+  totalPages: number;
+  itemsPerPage?: number;
+  onPrevious?: string;
+  onNext?: string;
 }
 
 const {
-	currentPage,
-	totalPages,
-	itemsPerPage = 12,
-	onPrevious = "#",
-	onNext = "#",
+  currentPage,
+  totalPages,
+  itemsPerPage = 12,
+  onPrevious = "#",
+  onNext = "#",
 } = Astro.props;
 
 // 表示するページ番号を計算
 const getVisiblePages = () => {
-	const pages: (number | string)[] = [];
-	const maxVisiblePages = 7; // 最大表示数（省略記号を除く）
+  const pages: (number | string)[] = [];
+  const maxVisiblePages = 7; // 最大表示数（省略記号を除く）
 
-	if (totalPages <= maxVisiblePages) {
-		// 全ページ数が表示上限以下の場合は全て表示
-		return Array.from({ length: totalPages }, (_, i) => i + 1);
-	}
+  if (totalPages <= maxVisiblePages) {
+    // 全ページ数が表示上限以下の場合は全て表示
+    return Array.from({ length: totalPages }, (_, i) => i + 1);
+  }
 
-	// 常に表示する要素: 最初のページ、現在のページとその前後、最後のページ
-	pages.push(1);
-	if (currentPage > 3) pages.push("...");
+  // 常に表示する要素: 最初のページ、現在のページとその前後、最後のページ
+  pages.push(1);
+  if (currentPage > 3) pages.push("...");
 
-	for (
-		let i = Math.max(2, currentPage - 1);
-		i <= Math.min(totalPages - 1, currentPage + 1);
-		i++
-	) {
-		pages.push(i);
-	}
+  for (
+    let i = Math.max(2, currentPage - 1);
+    i <= Math.min(totalPages - 1, currentPage + 1);
+    i++
+  ) {
+    pages.push(i);
+  }
 
-	if (currentPage < totalPages - 2) pages.push("...");
-	pages.push(totalPages);
+  if (currentPage < totalPages - 2) pages.push("...");
+  pages.push(totalPages);
 
-	return pages;
+  return pages;
 };
 
 const visiblePages = getVisiblePages();

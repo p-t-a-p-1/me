@@ -3,30 +3,17 @@ import BlogCard from "../../components/BlogCard.astro";
 import BlogSidebar from "../../components/BlogSidebar.astro";
 import Pager from "../../components/Pager.astro";
 import Layout from "../../layouts/Layout.astro";
-import { Article, Tag, newtClient } from "../../lib/newt";
+import {
+  getAllLocalArticles,
+  getAllLocalTags,
+  mapToNewtArticle,
+} from "../../lib/content";
 
-const { items: blogs } = await newtClient.getContents<Article>({
-	appUid: "meBlog",
-	modelUid: "article",
-	query: {
-		select: [
-			"title",
-			"slug",
-			"body",
-			"emoji",
-			"pDate",
-			"url",
-			"thumbnail",
-			"tags",
-		],
-		order: ["-pDate"],
-	},
-});
+const localBlogs = await getAllLocalArticles();
+const blogs = localBlogs.map(mapToNewtArticle);
 
-const { items: tags } = await newtClient.getContents<Tag>({
-	appUid: "meBlog",
-	modelUid: "tag",
-});
+const localTags = await getAllLocalTags();
+const tags = localTags;
 
 // const totalPages = Math.ceil(total / 10);
 ---

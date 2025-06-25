@@ -1,79 +1,322 @@
 ---
+import TagListItem from "../../../components/TagListItem.astro";
 import Layout from "../../../layouts/Layout.astro";
-import { Tag, newtClient } from "../../../lib/newt";
+import { getAllLocalTags, getAllLocalArticles } from "../../../lib/content";
 
-const { items: tags } = await newtClient.getContents<Tag>({
-	appUid: "meBlog",
-	modelUid: "tag",
+// タグとそれに関連する記事数を取得
+const tags = await getAllLocalTags();
+const articles = await getAllLocalArticles();
+
+// タグごとの記事数をカウント
+const tagCounts: Record<string, number> = {};
+for (const article of articles) {
+  if (article.tags) {
+    for (const tagName of article.tags) {
+      tagCounts[tagName] = (tagCounts[tagName] || 0) + 1;
+    }
+  }
+}
+
+// カラーバリエーション用の配列
+const colorVariants = [
+  "#4299E1", // ブルー
+  "#48BB78", // グリーン
+  "#ED8936", // オレンジ
+  "#9F7AEA", // パープル
+  "#F56565", // レッド
+  "#38B2AC", // ティール
+  "#ECC94B", // イエロー
+  "#667EEA", // インディゴ
+  "#ED64A6", // ピンク
+];
+
+// タグに色を割り当て
+const tagColors: Record<string, string> = {};
+tags.forEach((tag, index) => {
+  if (tag.name) {
+    tagColors[tag.name] = colorVariants[index % colorVariants.length];
+  }
 });
 ---
 
-<Layout title="Tags">
+<Layout title="タグ一覧">
 	<main class="tags">
 		<div class="tags__content">
-			<h1 class="tags__title">Tags</h1>
-			<div class="tags__grid">
-				{
-					tags.map((tag) => (
-						<a href={`/blog/tags/${tag.slug}`} class="tag-card">
-							<span class="tag-card__name">{tag.name}</span>
-						</a>
-					))
-				}
+			<h1 class="tags__title">タグ一覧</h1>
+			<p class="tags__description">
+				ブログの記事は以下のタグで分類されています
+			</p>
+
+			<div class="tags__box">
+				<div class="tags__header">
+					<div class="tags__header-title">
+						<span>タグ</span>
+					</div>
+					<div class="tags__search">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							width="24"
+							height="24"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="1"
+						>
+							<path
+								d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z"
+							></path>
+							<path d="M21 21L16.65 16.65"></path>
+						</svg>
+						<input
+							type="text"
+							class="tags__search-input"
+							placeholder="タグを検索"
+							id="tagSearchInput"
+						/>
+					</div>
+				</div>
+
+				<div class="tags__list" id="tagList">
+					{
+						tags.map((tag) => (
+							<div
+								class="tag-list-wrapper"
+								data-tag-name={tag.name.toLowerCase()}
+							>
+								<a href={`/blog/tags/${tag.slug}`} class="tag-list-item">
+									<span class="tag-list-item__name">{tag.name}</span>
+									<span class="tag-list-item__count">
+										{tagCounts[tag.name] || 0}{" "}
+										記事
+									</span>
+								</a>
+							</div>
+						))
+					}
+				</div>
+				<a href="/blog" class="tags__back">
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						width="24"
+						height="24"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+					>
+						<path d="M19 12H5M5 12L12 19M5 12L12 5"></path>
+					</svg>
+					<span>ブログ一覧へ戻る</span>
+				</a>
 			</div>
 		</div>
 	</main>
 </Layout>
 
+<script>
+	const searchInput = document.getElementById(
+		"tagSearchInput"
+	) as HTMLInputElement;
+	const tagList = document.getElementById("tagList");
+	const tagItems = tagList?.querySelectorAll(".tag-list-wrapper") ?? [];
+
+	let searchTimeout: number | undefined;
+
+	searchInput?.addEventListener("input", (e) => {
+		// Clear previous timeout
+		if (searchTimeout) {
+			clearTimeout(searchTimeout);
+		}
+
+		// Debounce search to improve performance
+		searchTimeout = setTimeout(() => {
+			const searchTerm = searchInput.value.toLowerCase().trim();
+
+			tagItems.forEach((item) => {
+				const tagName = item.getAttribute("data-tag-name") || "";
+				if (tagName.includes(searchTerm)) {
+					(item as HTMLElement).style.display = "block";
+				} else {
+					(item as HTMLElement).style.display = "none";
+				}
+			});
+		}, 150) as unknown as number;
+	});
+</script>
+
 <style>
 	.tags {
-		padding: 40px 20px;
+		padding: 60px 20px;
+		background-color: #fafafa;
 	}
 
 	.tags__content {
-		max-width: 840px;
+		max-width: 800px;
 		margin: 0 auto;
 	}
 
 	.tags__title {
-		font-size: 2rem;
-		font-weight: bold;
-		margin-bottom: 40px;
+		font-size: 2.5rem;
+		font-weight: 700;
+		margin-bottom: 16px;
+		color: #262626;
+		text-align: center;
 	}
 
-	.tags__grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-		gap: 20px;
+	.tags__description {
+		text-align: center;
+		color: #595959;
+		margin-bottom: 48px;
+		font-size: 1.1rem;
 	}
 
-	.tag-card {
+	.tags__box {
+		display: flex;
+		flex-direction: column;
+		gap: 1px;
+		padding: 1px;
+		background-color: #000000;
+		border-radius: 4px;
+		overflow: hidden;
+	}
+
+	.tags__header {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.tags__header-title {
 		display: flex;
 		align-items: center;
-		justify-content: center;
-		color: #262626;
-		text-decoration: none;
-		font-weight: 700;
+		padding: 8px 10px;
+		background-color: #f5f5f5;
+		font-family: "Noto Sans JP", sans-serif;
+		font-size: 14px;
+		line-height: 1.3;
+		letter-spacing: 0.02em;
+		color: #8c8c8c;
 	}
 
-	.tag-card__name {
-		font-weight: 500;
-		border: 1px solid #262626;
-		padding: 4px 8px;
+	.tags__search {
+		display: flex;
+		align-items: center;
+		gap: 4px;
+		padding: 10px;
+		background-color: #ffffff;
+		color: #bfbfbf;
+	}
+
+	.tags__search-input {
+		flex: 1;
+		border: none;
+		background: none;
+		font-family: "Noto Sans JP", sans-serif;
+		font-weight: 700;
+		font-size: 14px;
+		line-height: 1.55;
+		letter-spacing: 0.02em;
+		color: #262626;
+	}
+
+	.tags__search-input::placeholder {
+		color: #bfbfbf;
+	}
+
+	.tags__search-input:focus {
+		outline: none;
+	}
+
+	.tags__list {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+		padding: 4px;
+		background-color: #ffffff;
+		max-height: 600px;
+		overflow-y: auto;
+	}
+
+	.tag-list-wrapper {
+		transition: opacity 0.2s ease;
+	}
+
+	.tag-list-item {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 10px 12px;
+		text-decoration: none;
+		box-shadow: inset 0px -1px 0px 0px rgba(196, 196, 196, 0.3);
+		transition: background-color 0.2s ease;
+	}
+
+	.tag-list-item:hover {
+		background-color: #f5f5f5;
+	}
+
+	.tag-list-item__name {
+		font-family: "Noto Sans JP", sans-serif;
+		font-weight: 700;
+		font-size: 14px;
+		line-height: 1.55;
+		letter-spacing: 0.02em;
+		color: #262626;
+	}
+
+	.tag-list-item__count {
+		font-family: "Noto Sans JP", sans-serif;
+		font-weight: 700;
+		font-size: 12px;
+		line-height: 1.45;
+		letter-spacing: 0.03em;
+		color: #bfbfbf;
+		text-align: right;
+	}
+
+	.tags__back {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		padding: 10px;
+		background-color: #ffffff;
+		text-decoration: none;
+		font-family: "Noto Sans JP", sans-serif;
+		font-weight: 700;
+		font-size: 14px;
+		line-height: 1.55;
+		letter-spacing: 0.02em;
+		color: #262626;
+		transition: background-color 0.2s ease;
+	}
+
+	.tags__back:hover {
+		background-color: #f5f5f5;
 	}
 
 	@media (max-width: 768px) {
 		.tags {
-			padding: 20px 10px;
+			padding: 40px 16px;
 		}
 
 		.tags__title {
-			font-size: 1.5rem;
-			margin-bottom: 20px;
+			font-size: 2rem;
+			margin-bottom: 12px;
 		}
 
-		.tags__grid {
-			grid-template-columns: 1fr;
+		.tags__description {
+			margin-bottom: 32px;
+		}
+	}
+
+	@media (max-width: 480px) {
+		.tags__title {
+			font-size: 1.5rem;
+		}
+
+		.tags__description {
+			font-size: 1rem;
 		}
 	}
 </style>

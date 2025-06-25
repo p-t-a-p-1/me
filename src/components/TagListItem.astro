@@ -2,14 +2,16 @@
 import { Tag } from "../lib/newt";
 
 interface Props {
-	tag: Tag;
+  tag: Tag;
+  count?: number;
 }
 
-const { tag } = Astro.props;
+const { tag, count = 0 } = Astro.props;
 ---
 
 <a href={`/blog/tags/${tag.slug}`} class="tag-list-item">
 	<span class="tag-list-item__name">{tag.name}</span>
+	<span class="tag-list-item__count">{count} 記事</span>
 </a>
 
 <style>

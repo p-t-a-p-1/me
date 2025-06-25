@@ -3,53 +3,38 @@ import BlogCard from "../../../components/BlogCard.astro";
 import BlogSidebar from "../../../components/BlogSidebar.astro";
 import Pager from "../../../components/Pager.astro";
 import Layout from "../../../layouts/Layout.astro";
-import { getAllBlogs } from "../../../lib/blog";
-import { Article, newtClient } from "../../../lib/newt";
-import type { Tag } from "../../../lib/newt";
+import {
+  getAllLocalTags,
+  getArticlesByTag,
+  mapToNewtArticle,
+} from "../../../lib/content";
 
 export async function getStaticPaths() {
-	const { items: tags } = await newtClient.getContents<Tag>({
-		appUid: "meBlog",
-		modelUid: "tag",
-	});
+  const tags = await getAllLocalTags();
 
-	return tags.map((tag) => ({
-		params: { tag: tag.slug },
-		props: { tag },
-	}));
+  return tags.map((tag) => ({
+    params: { tag: tag.slug },
+    props: { tag },
+  }));
 }
 
 const { tag } = Astro.props;
 
-const { items: blogs } = await newtClient.getContents<Article>({
-	appUid: "meBlog",
-	modelUid: "article",
-	query: {
-		select: [
-			"title",
-			"slug",
-			"body",
-			"emoji",
-			"pDate",
-			"url",
-			"thumbnail",
-			"tags",
-		],
-		tags: [tag._id],
-	},
-});
+const localBlogs = await getArticlesByTag(tag.name);
+const blogs = localBlogs.map(mapToNewtArticle);
 
-const { items: tags } = await newtClient.getContents<Tag>({
-	appUid: "meBlog",
-	modelUid: "tag",
-});
+// 空の配列を渡す（BlogSidebar内で全タグを取得する）
+const sidebarTags = [];
 ---
 
-<Layout title={`${tag} | Tags`}>
+<Layout title={`${tag.name} | タグ`}>
 	<main class="tag-blogs">
 		<div class="tag-blogs__content">
 			<div class="tag-blogs__main">
-				<h1 class="tag-blogs__title">#{tag.name}</h1>
+				<h1 class="tag-blogs__title">
+					<span class="tag-blogs__tag-name">#{tag.name}</span>
+					<span class="tag-blogs__tag-count">{blogs.length}記事</span>
+				</h1>
 				<div class="tag-blogs__grid">
 					{
 						blogs.map((blog) => (
@@ -64,6 +49,13 @@ const { items: tags } = await newtClient.getContents<Tag>({
 						))
 					}
 				</div>
+				{
+					blogs.length === 0 && (
+						<div class="tag-blogs__empty">
+							<p>このタグの記事はまだありません。</p>
+						</div>
+					)
+				}
 				<div class="tag-blogs__pager">
 					<!-- <Pager
 						currentPage={currentPage}
@@ -76,9 +68,27 @@ const { items: tags } = await newtClient.getContents<Tag>({
 							: undefined}
 					/> -->
 				</div>
+				<div class="tag-blogs__back">
+					<a href="/blog/tags" class="tag-blogs__back-link">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							width="24"
+							height="24"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						>
+							<path d="M19 12H5M5 12L12 19M5 12L12 5"></path>
+						</svg>
+						<span>タグ一覧へ戻る</span>
+					</a>
+				</div>
 			</div>
 			<div class="tag-blogs__sidebar">
-				<BlogSidebar tags={tags} />
+				<BlogSidebar tags={sidebarTags} />
 			</div>
 		</div>
 	</main>
@@ -87,14 +97,15 @@ const { items: tags } = await newtClient.getContents<Tag>({
 <style>
 	.tag-blogs {
 		padding: 40px 20px;
+		background-color: #fafafa;
 	}
 
 	.tag-blogs__content {
 		max-width: 1080px;
 		margin: 0 auto;
 		display: grid;
-		grid-template-columns: 1fr 240px;
-		gap: 86px;
+		grid-template-columns: 1fr 280px;
+		gap: 40px;
 	}
 
 	.tag-blogs__main {
@@ -109,9 +120,27 @@ const { items: tags } = await newtClient.getContents<Tag>({
 		position: sticky;
 		top: 0;
 		background-color: #ffffff;
-		padding: 20px 0;
+		padding: 20px;
 		z-index: 10;
 		margin: 0;
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		border-radius: 8px;
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+	}
+
+	.tag-blogs__tag-name {
+		color: #262626;
+	}
+
+	.tag-blogs__tag-count {
+		font-size: 1rem;
+		font-weight: 500;
+		color: #8c8c8c;
+		background-color: #f5f5f5;
+		padding: 4px 12px;
+		border-radius: 50px;
 	}
 
 	.tag-blogs__grid {
@@ -120,8 +149,43 @@ const { items: tags } = await newtClient.getContents<Tag>({
 		gap: 20px;
 	}
 
+	.tag-blogs__empty {
+		background-color: #ffffff;
+		padding: 40px;
+		text-align: center;
+		border-radius: 8px;
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+	}
+
+	.tag-blogs__empty p {
+		color: #595959;
+		font-size: 1.1rem;
+	}
+
 	.tag-blogs__pager {
 		margin-top: 20px;
+	}
+
+	.tag-blogs__back {
+		margin: 20px 0;
+	}
+
+	.tag-blogs__back-link {
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+		color: #595959;
+		text-decoration: none;
+		transition: all 0.2s ease;
+		padding: 8px 16px;
+		border-radius: 6px;
+		background-color: #f5f5f5;
+	}
+
+	.tag-blogs__back-link:hover {
+		color: #262626;
+		background-color: #e5e5e5;
+		transform: translateX(-4px);
 	}
 
 	.tag-blogs__sidebar {
@@ -156,6 +220,11 @@ const { items: tags } = await newtClient.getContents<Tag>({
 
 		.tag-blogs__grid {
 			grid-template-columns: 1fr;
+		}
+
+		.tag-blogs__title {
+			font-size: 1.5rem;
+			padding: 16px;
 		}
 	}
 </style>

@@ -1,0 +1,17 @@
+[
+  {"id": "aws-amplify", "name": "AWS Amplify", "slug": "aws-amplify"},
+  {"id": "chakra-ui", "name": "Chakra UI", "slug": "chakra-ui"},
+  {"id": "docker", "name": "Docker", "slug": "docker"},
+  {"id": "heroku", "name": "Heroku", "slug": "heroku"},
+  {"id": "jamstack", "name": "JamStack", "slug": "jamstack"},
+  {"id": "nextjs", "name": "Next.js", "slug": "nextjs"},
+  {"id": "nuxtjs", "name": "Nuxt.js", "slug": "nuxtjs"},
+  {"id": "postgresql", "name": "PostgreSQL", "slug": "postgresql"},
+  {"id": "python", "name": "Python", "slug": "python"},
+  {"id": "reactjs", "name": "React.js", "slug": "reactjs"},
+  {"id": "typescript", "name": "TypeScript", "slug": "typescript"},
+  {"id": "vuejs", "name": "Vue.js", "slug": "vuejs"},
+  {"id": "wsl2", "name": "WSL2", "slug": "wsl2"},
+  {"id": "wordpress", "name": "WordPress", "slug": "wordpress"},
+  {"id": "reading-memo", "name": "読書メモ", "slug": "reading-memo"}
+]
