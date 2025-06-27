@@ -1,57 +1,58 @@
 ---
+import { getCollection } from "astro:content";
+import type { CollectionEntry } from "astro:content";
 import BlogCard from "../../components/BlogCard.astro";
 import BlogSidebar from "../../components/BlogSidebar.astro";
 import Pager from "../../components/Pager.astro";
 import Layout from "../../layouts/Layout.astro";
-import {
-  getAllLocalArticles,
-  getAllLocalTags,
-  mapToNewtArticle,
-} from "../../lib/content";
 
-const localBlogs = await getAllLocalArticles();
-const blogs = localBlogs.map(mapToNewtArticle);
+// コンテンツコレクションから記事を取得
+const allPosts = await getCollection("blog");
 
-const localTags = await getAllLocalTags();
-const tags = localTags;
+// 公開済みの記事のみをフィルタリングし、日付順にソート
+const publishedPosts = allPosts
+	.filter((post) => post.data.publishedAt)
+	.sort((a, b) => {
+		const dateA = new Date(a.data.publishedAt || 0);
+		const dateB = new Date(b.data.publishedAt || 0);
+		return dateB.getTime() - dateA.getTime();
+	});
 
-// const totalPages = Math.ceil(total / 10);
+// 記事をBlogCardで必要な形式に変換
+const blogs = publishedPosts.map((post) => ({
+	title: post.data.title,
+	emoji: { value: post.data.emoji || "📝" },
+	tags: post.data.tags || [],
+	slug: post.slug,
+	url: `/blog/${post.slug}`,
+	thumbnail: post.data.thumbnail || "",
+}));
 ---
 
 <Layout title="BLOG">
 	<main class="blog-list">
-		<div class="blog-list__content">
-			<div class="blog-list__main">
-				<div class="blog-list__grid">
-					{
-						blogs.map((blog) => (
-							<BlogCard
-								title={blog.title}
-								emoji={blog.emoji.value}
-								tags={blog.tags}
-								slug={blog.slug}
-								url={blog.url ?? ""}
-								thumbnail={blog.thumbnail?.src ?? ""}
-							/>
-						))
-					}
+		<div class="blog-list__container">
+			<div class="blog-list__content">
+				<div class="blog-list__main">
+					<div class="blog-list__grid">
+						{
+							blogs.map((blog) => (
+								<BlogCard
+									title={blog.title}
+									emoji={blog.emoji.value}
+									tags={blog.tags}
+									slug={blog.slug}
+									url={blog.url}
+									thumbnail={blog.thumbnail}
+								/>
+							))
+						}
+					</div>
 				</div>
-				<!-- <div class="blog-list__pager">
-					<Pager
-						currentPage={currentPage}
-						totalPages={totalPages}
-						onPrevious={currentPage > 1
-							? `/blog/page/${currentPage - 1}`
-							: undefined}
-						onNext={currentPage < totalPages
-							? `/blog/page/${currentPage + 1}`
-							: undefined}
-					/>
-				</div> -->
 			</div>
-			<div class="blog-list__sidebar">
-				<BlogSidebar tags={tags} />
-			</div>
+			<aside class="blog-list__sidebar">
+				<BlogSidebar />
+			</aside>
 		</div>
 	</main>
 </Layout>
@@ -61,12 +62,16 @@ const tags = localTags;
 		padding: 40px 20px;
 	}
 
-	.blog-list__content {
-		max-width: 1080px;
+	.blog-list__container {
+		max-width: 1200px;
 		margin: 0 auto;
 		display: grid;
-		grid-template-columns: 1fr 240px;
-		gap: 86px;
+		grid-template-columns: 1fr 300px;
+		gap: 40px;
+	}
+
+	.blog-list__content {
+		overflow: hidden;
 	}
 
 	.blog-list__main {
@@ -81,23 +86,22 @@ const tags = localTags;
 		gap: 20px;
 	}
 
-	.blog-list__pager {
-		margin-top: 20px;
-	}
-
-	@media (max-width: 1024px) {
-		.blog-list__content {
-			grid-template-columns: 1fr;
-		}
-
-		.blog-list__sidebar {
-			order: -1;
-		}
+	.blog-list__sidebar {
+		position: relative;
 	}
 
 	@media (max-width: 768px) {
 		.blog-list {
 			padding: 20px 10px;
+		}
+
+		.blog-list__container {
+			grid-template-columns: 1fr;
+			gap: 20px;
+		}
+
+		.blog-list__sidebar {
+			order: -1;
 		}
 
 		.blog-list__main {

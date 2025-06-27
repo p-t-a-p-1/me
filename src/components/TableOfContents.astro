@@ -1,173 +1,155 @@
 ---
-interface TocItem {
-  text: string;
-  id: string;
-  level: string;
+export interface Props {
+	headings: Array<{
+		depth: number;
+		text: string;
+		slug: string;
+	}>;
 }
 
-interface Props {
-  items: TocItem[];
-}
+const { headings } = Astro.props;
 
-const { items } = Astro.props;
+// 深度2と3のヘッディングのみを表示
+const filteredHeadings = headings.filter((heading) => heading.depth <= 3);
 ---
 
-<nav class="toc">
-	<div class="toc__title">目次</div>
-	<ul class="toc__list">
-		{
-			items.map((item) => (
-				<li class:list={["toc__item", `toc__item--level-${item.level}`]}>
-					<a href={`#${item.id}`} class="toc__link">
-						{item.text}
-					</a>
-				</li>
-			))
-		}
-	</ul>
-</nav>
+{
+	filteredHeadings.length > 0 && (
+		<nav class="table-of-contents">
+			<h3 class="table-of-contents__title">目次</h3>
+			<ul class="table-of-contents__list">
+				{filteredHeadings.map((heading) => (
+					<li
+						class={`table-of-contents__item table-of-contents__item--depth-${heading.depth}`}
+					>
+						<a href={`#${heading.slug}`} class="table-of-contents__link">
+							{heading.text}
+						</a>
+					</li>
+				))}
+			</ul>
+		</nav>
+	)
+}
 
 <style>
-	.toc {
-		background-color: #ffffff;
-		border-radius: 0;
-		margin-top: 8px;
-		box-shadow: none;
-		border: 1px solid #262626;
+	.table-of-contents {
+		background-color: #f8f9fa;
+		border: 1px solid #e5e5e5;
+		border-radius: 8px;
+		padding: 20px;
+		margin-bottom: 32px;
 	}
 
-	.toc__title {
-		display: flex;
-		align-items: center;
-		padding: 8px 10px;
-		background-color: #f5f5f5;
+	.table-of-contents__title {
 		font-family: "Noto Sans JP", sans-serif;
-		font-size: 14px;
-		line-height: 1.3;
-		letter-spacing: 0.02em;
-		color: #8c8c8c;
-		border-radius: 0;
-		border-bottom: 1px solid #262626;
+		font-size: 16px;
+		font-weight: 700;
+		color: #262626;
+		margin: 0 0 16px;
+		padding-bottom: 8px;
+		border-bottom: 1px solid #e5e5e5;
 	}
 
-	.toc__list {
+	.table-of-contents__list {
 		list-style: none;
-		padding: 4px;
+		padding: 0;
 		margin: 0;
-		display: flex;
-		flex-direction: column;
-		gap: 0;
 	}
 
-	.toc__item {
-		transition: opacity 0.2s ease;
+	.table-of-contents__item {
+		margin-bottom: 8px;
 	}
 
-	.toc__item--level-h1 {
-		margin-left: 0;
+	.table-of-contents__item--depth-2 {
+		padding-left: 0;
 	}
 
-	.toc__item--level-h1 .toc__link {
-		font-weight: 600;
-		font-size: 15px;
-		color: #1e40af;
+	.table-of-contents__item--depth-3 {
+		padding-left: 16px;
 	}
 
-	.toc__item--level-h2 {
-		margin-left: 20px;
-		position: relative;
-	}
-
-	.toc__item--level-h2::before {
-		content: "";
-		position: absolute;
-		left: -8px;
-		top: 50%;
-		transform: translateY(-50%);
-		width: 2px;
-		height: 20px;
-		background-color: #10b981;
-		opacity: 0.3;
-	}
-
-	.toc__item--level-h2 .toc__link {
-		font-weight: 500;
-		font-size: 14px;
-		color: #065f46;
-	}
-
-	.toc__item--level-h3 {
-		margin-left: 40px;
-		position: relative;
-	}
-
-	.toc__item--level-h3::before {
-		content: "";
-		position: absolute;
-		left: -8px;
-		top: 50%;
-		transform: translateY(-50%);
-		width: 1px;
-		height: 16px;
-		background-color: #f59e0b;
-		opacity: 0.4;
-	}
-
-	.toc__item--level-h3 .toc__link {
-		font-weight: 400;
-		font-size: 13px;
-		color: #92400e;
-	}
-
-	.toc__item--level-h4 {
-		margin-left: 60px;
-	}
-
-	.toc__item--level-h4 .toc__link {
-		font-weight: 400;
-		font-size: 13px;
-		color: #6b7280;
-	}
-
-	.toc__item--level-h5 {
-		margin-left: 80px;
-	}
-
-	.toc__item--level-h5 .toc__link {
-		font-weight: 400;
-		font-size: 12px;
-		color: #6b7280;
-	}
-
-	.toc__item--level-h6 {
-		margin-left: 100px;
-	}
-
-	.toc__item--level-h6 .toc__link {
-		font-weight: 400;
-		font-size: 12px;
-		color: #6b7280;
-	}
-
-	.toc__link {
-		display: flex;
-		align-items: center;
-		font-family: "Noto Sans JP", sans-serif;
+	.table-of-contents__link {
+		display: block;
+		color: #666;
+		text-decoration: none;
 		font-size: 14px;
 		line-height: 1.5;
-		color: #595959;
-		text-decoration: none;
-		padding: 6px 12px 6px 6px;
-		border-radius: 0;
-		background: #fff;
-		box-shadow: inset 0px -1px 0px 0px rgba(196, 196, 196, 1);
-		transition:
-			background-color 0.2s,
-			color 0.2s;
+		padding: 4px 8px;
+		border-radius: 4px;
+		transition: all 0.2s ease;
 	}
 
-	.toc__link:hover {
-		background-color: #f5f5f5;
+	.table-of-contents__link:hover {
+		background-color: #e5e5e5;
 		color: #262626;
+	}
+
+	@media (max-width: 768px) {
+		.table-of-contents {
+			margin-bottom: 20px;
+		}
+	}
+</style>
+
+<script>
+	// スムーススクロールとアクティブリンクの設定
+	document.addEventListener("DOMContentLoaded", function () {
+		const tocLinks = document.querySelectorAll(".table-of-contents__link");
+		const headings = document.querySelectorAll("h1, h2, h3");
+
+		// スムーススクロール
+		tocLinks.forEach((link) => {
+			link.addEventListener("click", function (e) {
+				e.preventDefault();
+				const targetId = this.getAttribute("href")?.substring(1);
+				if (targetId) {
+					const targetElement = document.getElementById(targetId);
+					if (targetElement) {
+						targetElement.scrollIntoView({
+							behavior: "smooth",
+							block: "start",
+						});
+					}
+				}
+			});
+		});
+
+		// アクティブリンクのハイライト
+		function highlightActiveLink() {
+			let activeHeading: Element | null = null;
+			const scrollPosition = window.scrollY + 100;
+
+			headings.forEach((heading) => {
+				const rect = heading.getBoundingClientRect();
+				const top = rect.top + window.scrollY;
+
+				if (top <= scrollPosition) {
+					activeHeading = heading;
+				}
+			});
+
+			tocLinks.forEach((link) => {
+				link.classList.remove("active");
+				if (
+					activeHeading &&
+					(activeHeading as HTMLElement).id &&
+					link.getAttribute("href") === `#${(activeHeading as HTMLElement).id}`
+				) {
+					link.classList.add("active");
+				}
+			});
+		}
+
+		window.addEventListener("scroll", highlightActiveLink);
+		highlightActiveLink(); // 初期実行
+	});
+</script>
+
+<style is:global>
+	.table-of-contents__link.active {
+		background-color: #262626;
+		color: #ffffff;
+		font-weight: 600;
 	}
 </style>

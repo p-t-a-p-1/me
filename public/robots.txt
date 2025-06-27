@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+
+# サイトマップの場所
+Sitemap: https://hakozaki.dev/sitemap.xml
+
+# 除外するディレクトリ（将来的に必要に応じて追加）
+# Disallow: /admin/
+# Disallow: /private/
+
+# 検索エンジンのクロール頻度調整
+# Crawl-delay: 1 

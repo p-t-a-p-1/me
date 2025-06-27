@@ -1,220 +1,213 @@
 ---
-import type { ComponentProps } from "astro/types";
-import { Article, Tag, newtClient } from "../lib/newt";
-import TagListItem from "./TagListItem.astro";
+import { getCollection } from "astro:content";
 
-interface Props {
-  tags: Tag[];
-}
+// すべての記事を取得
+const allPosts = await getCollection("blog");
 
-const { tags } = Astro.props;
+// 公開済みの記事のみをフィルタリング
+const publishedPosts = allPosts
+	.filter((post) => post.data.publishedAt)
+	.sort((a, b) => {
+		const dateA = new Date(a.data.publishedAt || 0);
+		const dateB = new Date(b.data.publishedAt || 0);
+		return dateB.getTime() - dateA.getTime();
+	});
 
-// サイドバー用に全タグを取得
-const { items: allTags } = await newtClient.getContents<Tag>({
-  appUid: "meBlog",
-  modelUid: "tag",
-});
+// 最新記事（上位5件）
+const recentPosts = publishedPosts.slice(0, 5);
 
-// 記事一覧を取得してタグごとのカウントを計算
-const { items: articles } = await newtClient.getContents<Article>({
-  appUid: "meBlog",
-  modelUid: "article",
-  query: {
-    select: ["tags"],
-  },
-});
-
-// タグごとの記事数をカウント
-const tagCounts: Record<string, number> = {};
-for (const article of articles) {
-  if (article.tags) {
-    for (const tag of article.tags) {
-      if (tag._id) {
-        tagCounts[tag._id] = (tagCounts[tag._id] || 0) + 1;
-      }
-    }
-  }
-}
+// タグ一覧を取得
+const allTags = [
+	...new Set(allPosts.flatMap((post) => post.data.tags || [])),
+].sort();
 ---
 
 <aside class="blog-sidebar">
 	<div class="blog-sidebar__section">
-		<div class="blog-sidebar__title">
-			<span>タグ</span>
-		</div>
-		<div class="blog-sidebar__search">
-			<svg
-				xmlns="http://www.w3.org/2000/svg"
-				width="24"
-				height="24"
-				viewBox="0 0 24 24"
-				fill="none"
-				stroke="currentColor"
-				stroke-width="1"
-			>
-				<path
-					d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z"
-				></path>
-				<path d="M21 21L16.65 16.65"></path>
-			</svg>
-			<input
-				type="text"
-				class="blog-sidebar__search-input"
-				placeholder="タグを検索"
-				id="tagSearchInput"
-			/>
-		</div>
-		<div class="blog-sidebar__tag-list" id="tagList">
+		<h3 class="blog-sidebar__title">最新記事</h3>
+		<ul class="blog-sidebar__list">
 			{
-				allTags.map((tag: Tag) => (
-					<div class="tag-list-wrapper" data-tag-name={tag.name.toLowerCase()}>
-						<TagListItem
-							tag={tag}
-							count={tag._id && tagCounts[tag._id] ? tagCounts[tag._id] : 0}
-						/>
-					</div>
+				recentPosts.map((post) => (
+					<li class="blog-sidebar__item">
+						<a href={`/blog/${post.slug}`} class="blog-sidebar__link">
+							<span class="blog-sidebar__emoji">{post.data.emoji || "📝"}</span>
+							<span class="blog-sidebar__text">{post.data.title}</span>
+						</a>
+					</li>
+				))
+			}
+		</ul>
+	</div>
+
+	<div class="blog-sidebar__section">
+		<h3 class="blog-sidebar__title">タグ</h3>
+		<div class="blog-sidebar__tags">
+			{
+				allTags.map((tag) => (
+					<a href={`/blog/tags/${tag}`} class="blog-sidebar__tag">
+						#{tag}
+					</a>
 				))
 			}
 		</div>
-		<a href="/blog/tags" class="blog-sidebar__more">
-			<span>タグ一覧を見る</span>
-			<svg
-				xmlns="http://www.w3.org/2000/svg"
-				width="24"
-				height="24"
-				viewBox="0 0 24 24"
-				fill="currentColor"
-			>
-				<path d="M8.59 16.59L13.17 12L8.59 7.41L10 6L16 12L10 18L8.59 16.59Z"
-				></path>
-			</svg>
-		</a>
+	</div>
+
+	<div class="blog-sidebar__section">
+		<h3 class="blog-sidebar__title">検索</h3>
+		<form class="blog-sidebar__search" action="/search" method="get">
+			<input
+				type="text"
+				name="q"
+				placeholder="記事を検索..."
+				class="blog-sidebar__search-input"
+			/>
+			<button type="submit" class="blog-sidebar__search-button">
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					width="16"
+					height="16"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+				>
+					<circle cx="11" cy="11" r="8"></circle>
+					<path d="M21 21L16.5 16.5"></path>
+				</svg>
+			</button>
+		</form>
 	</div>
 </aside>
 
-<script>
-	const searchInput = document.getElementById(
-		"tagSearchInput"
-	) as HTMLInputElement;
-	const tagList = document.getElementById("tagList");
-	const tagItems = tagList?.querySelectorAll(".tag-list-wrapper") ?? [];
-
-	let searchTimeout: number | undefined;
-
-	searchInput?.addEventListener("input", (e) => {
-		// Clear previous timeout
-		if (searchTimeout) {
-			clearTimeout(searchTimeout);
-		}
-
-		// Debounce search to improve performance
-		searchTimeout = setTimeout(() => {
-			const searchTerm = searchInput.value.toLowerCase().trim();
-
-			tagItems.forEach((item) => {
-				const tagName = item.getAttribute("data-tag-name") || "";
-				if (tagName.includes(searchTerm)) {
-					(item as HTMLElement).style.display = "block";
-				} else {
-					(item as HTMLElement).style.display = "none";
-				}
-			});
-		}, 150) as unknown as number;
-	});
-</script>
-
 <style>
 	.blog-sidebar {
-		display: flex;
-		flex-direction: column;
-		gap: 20px;
-		width: 100%;
+		background-color: #ffffff;
+		border: 1px solid #e5e5e5;
+		padding: 24px;
+		position: sticky;
+		top: 20px;
+		height: fit-content;
 	}
 
 	.blog-sidebar__section {
-		display: flex;
-		flex-direction: column;
-		gap: 1px;
-		padding: 1px;
-		background-color: #000000;
+		margin-bottom: 32px;
+	}
+
+	.blog-sidebar__section:last-child {
+		margin-bottom: 0;
 	}
 
 	.blog-sidebar__title {
+		font-family: "Noto Sans JP", sans-serif;
+		font-size: 18px;
+		font-weight: 700;
+		color: #262626;
+		margin-bottom: 16px;
+		padding-bottom: 8px;
+		border-bottom: 2px solid #262626;
+	}
+
+	.blog-sidebar__list {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+	}
+
+	.blog-sidebar__item {
+		margin-bottom: 12px;
+	}
+
+	.blog-sidebar__link {
 		display: flex;
 		align-items: center;
-		padding: 8px 10px;
+		gap: 8px;
+		text-decoration: none;
+		color: #262626;
+		padding: 8px;
+		border-radius: 4px;
+		transition: background-color 0.2s ease;
+	}
+
+	.blog-sidebar__link:hover {
 		background-color: #f5f5f5;
-		font-family: "Noto Sans JP", sans-serif;
+	}
+
+	.blog-sidebar__emoji {
+		font-size: 16px;
+		flex-shrink: 0;
+	}
+
+	.blog-sidebar__text {
 		font-size: 14px;
-		line-height: 1.3;
-		letter-spacing: 0.02em;
-		color: #8c8c8c;
+		line-height: 1.4;
+		overflow: hidden;
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+	}
+
+	.blog-sidebar__tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px;
+	}
+
+	.blog-sidebar__tag {
+		background-color: #f5f5f5;
+		color: #262626;
+		padding: 4px 8px;
+		border-radius: 4px;
+		font-size: 12px;
+		font-weight: 500;
+		text-decoration: none;
+		transition: background-color 0.2s ease;
+	}
+
+	.blog-sidebar__tag:hover {
+		background-color: #e5e5e5;
 	}
 
 	.blog-sidebar__search {
 		display: flex;
-		align-items: center;
-		gap: 4px;
-		padding: 10px;
-		background-color: #ffffff;
-		color: #bfbfbf;
+		gap: 8px;
 	}
 
 	.blog-sidebar__search-input {
 		flex: 1;
-		border: none;
-		background: none;
-		font-family: "Noto Sans JP", sans-serif;
-		font-weight: 700;
+		padding: 8px 12px;
+		border: 1px solid #e5e5e5;
+		border-radius: 4px;
 		font-size: 14px;
-		line-height: 1.55;
-		letter-spacing: 0.02em;
-		color: #262626;
-	}
-
-	.blog-sidebar__search-input::placeholder {
-		color: #bfbfbf;
+		outline: none;
+		transition: border-color 0.2s ease;
 	}
 
 	.blog-sidebar__search-input:focus {
-		outline: none;
+		border-color: #262626;
 	}
 
-	.blog-sidebar__tag-list {
-		display: flex;
-		flex-direction: column;
-		gap: 2px;
-		padding: 4px;
-		background-color: #ffffff;
-		max-height: 335px;
-		overflow-y: auto;
-	}
-
-	.tag-list-wrapper {
-		transition: opacity 0.2s ease;
-	}
-
-	.blog-sidebar__more {
+	.blog-sidebar__search-button {
+		background-color: #262626;
+		color: #ffffff;
+		border: none;
+		border-radius: 4px;
+		padding: 8px;
+		cursor: pointer;
 		display: flex;
 		align-items: center;
-		gap: 4px;
-		padding: 10px;
-		background-color: #ffffff;
-		text-decoration: none;
-		font-family: "Noto Sans JP", sans-serif;
-		font-weight: 700;
-		font-size: 14px;
-		line-height: 1.55;
-		letter-spacing: 0.02em;
-		color: #262626;
+		justify-content: center;
 		transition: background-color 0.2s ease;
 	}
 
-	.blog-sidebar__more:hover {
-		background-color: #f5f5f5;
+	.blog-sidebar__search-button:hover {
+		background-color: #404040;
 	}
 
-	.blog-sidebar__more svg {
-		color: #595959;
+	@media (max-width: 768px) {
+		.blog-sidebar {
+			margin-bottom: 20px;
+		}
 	}
 </style>

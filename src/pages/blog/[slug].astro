@@ -1,73 +1,81 @@
 ---
-import { date } from "astro:schema";
-import * as cheerio from "cheerio";
+import { getCollection } from "astro:content";
+import type { CollectionEntry } from "astro:content";
 import BlogSidebar from "../../components/BlogSidebar.astro";
 import TableOfContents from "../../components/TableOfContents.astro";
 import Layout from "../../layouts/Layout.astro";
-import {
-  getAllLocalArticles,
-  getLocalArticleBySlug,
-  mapToNewtArticle,
-} from "../../lib/content";
 import { formatDate } from "../../lib/utils";
 
-const { slug } = Astro.params;
+export async function getStaticPaths() {
+	const posts = await getCollection("blog");
+	return posts.map((post) => ({
+		params: { slug: post.slug },
+		props: { post },
+	}));
+}
 
-export const getStaticPaths = async () => {
-  const articles = await getAllLocalArticles();
-  return articles.map((article) => ({
-    params: { slug: article.slug },
-    props: { blog: mapToNewtArticle(article) },
-  }));
+type Props = {
+	post: CollectionEntry<"blog">;
 };
 
-const { blog } = Astro.props;
+const { post } = Astro.props;
+const { Content, headings } = await post.render();
 
-const $ = cheerio.load(blog.body);
-const headings = $("h1, h2, h3").toArray();
+// 読了時間の計算
+function calculateReadingTime(wordCount?: number): number {
+	if (!wordCount || wordCount <= 0) {
+		return 1; // デフォルト値
+	}
+	const wordsPerMinute = 200; // 平均読書速度
+	return Math.ceil(wordCount / wordsPerMinute);
+}
 
-// 各見出しレベルのカウンターを初期化
-const counters = {
-  h1: 0,
-  h2: 0,
-  h3: 0,
-};
-
-// 各見出しレベルごとに連番を振る
-const toc = headings.map((data) => {
-  const level = data.name;
-  counters[level]++;
-
-  // idを割当て
-  $(data).attr("id", `toc-${level}-${counters[level]}`);
-
-  return {
-    text: $(data).text(),
-    id: `toc-${level}-${counters[level]}`,
-    level,
-  };
-});
-
-blog.body = $.html();
+const readingTime =
+	post.data.readingTime || calculateReadingTime(post.data.wordCount);
 ---
 
-<Layout title={blog.title}>
+<Layout title={post.data.title}>
 	<main class="blog-detail">
-		<div class="blog-detail__content">
-			<div class="blog-detail__main">
+		<div class="blog-detail__container">
+			<div class="blog-detail__content">
 				<article class="blog-detail__article">
 					<header class="blog-detail__header">
-						<div class="blog-detail__emoji">{blog.emoji.value}</div>
-						<h1 class="blog-detail__title">{blog.title}</h1>
+						<div class="blog-detail__emoji">{post.data.emoji || "📝"}</div>
+						<h1 class="blog-detail__title">{post.data.title}</h1>
 						<div class="blog-detail__meta">
 							<div class="blog-detail__dates">
-								<time datetime={blog.pDate} class="blog-detail__date">
-									公開日: {formatDate(blog.pDate)}
-								</time>
+								{
+									post.data.publishedAt && (
+										<time
+											datetime={post.data.publishedAt.toISOString()}
+											class="blog-detail__date"
+										>
+											公開日: {formatDate(post.data.publishedAt.toISOString())}
+										</time>
+									)
+								}
+								{
+									readingTime && (
+										<span class="blog-detail__reading-time">
+											読了時間: 約{readingTime}分
+										</span>
+									)
+								}
 							</div>
+							{
+								post.data.tags && post.data.tags.length > 0 && (
+									<div class="blog-detail__tags">
+										{post.data.tags.map((tag) => (
+											<span class="blog-detail__tag">#{tag}</span>
+										))}
+									</div>
+								)
+							}
 						</div>
 					</header>
-					<div class="blog-detail__body" set:html={blog.body}>
+					<TableOfContents headings={headings} />
+					<div class="blog-detail__body">
+						<Content />
 					</div>
 					<div class="blog-detail__back">
 						<a href="/blog" class="blog-detail__back-link">
@@ -89,105 +97,67 @@ blog.body = $.html();
 					</div>
 				</article>
 			</div>
-			<div class="blog-detail__sidebar">
-				<BlogSidebar tags={[]} />
-				{
-					toc && (
-						<div class="blog-detail__toc-sticky">
-							<TableOfContents items={toc} />
-						</div>
-					)
-				}
-			</div>
+			<aside class="blog-detail__sidebar">
+				<BlogSidebar />
+			</aside>
 		</div>
 	</main>
 </Layout>
+
 <style>
 	.blog-detail {
 		padding: 40px 20px;
-		background: linear-gradient(135deg, #fafafa 0%, #ffffff 100%);
-		min-height: 100vh;
+	}
+
+	.blog-detail__container {
+		max-width: 1200px;
+		margin: 0 auto;
+		display: grid;
+		grid-template-columns: 1fr 300px;
+		gap: 40px;
 	}
 
 	.blog-detail__content {
-		display: flex;
-		gap: 86px;
-		max-width: 1200px;
-		margin: 0 auto;
-	}
-
-	.blog-detail__main {
-		flex: 1;
-		max-width: 754px;
-		background-color: #ffffff;
-		border-radius: 16px;
-		padding: 48px;
-		box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-		border: 1px solid rgba(229, 231, 235, 0.8);
-		position: relative;
 		overflow: hidden;
 	}
 
-	.blog-detail__main:before {
-		content: "";
-		position: absolute;
-		top: 0;
-		left: 0;
-		right: 0;
-		height: 4px;
-		background: linear-gradient(90deg, #3b82f6 0%, #10b981 50%, #f59e0b 100%);
+	.blog-detail__article {
+		background-color: #ffffff;
+		padding: 40px;
+		border: 1px solid #262626;
 	}
 
-	.blog-detail__back {
-		margin: 32px 0;
-	}
-
-	.blog-detail__back-link {
-		display: inline-flex;
-		align-items: center;
-		gap: 8px;
-		color: #595959;
-		text-decoration: none;
-		transition: all 0.2s ease;
-		padding: 8px 16px;
-		border-radius: 6px;
-		background-color: #f5f5f5;
-	}
-
-	.blog-detail__back-link:hover {
-		color: #262626;
-		background-color: #e5e5e5;
-		transform: translateX(-4px);
+	.blog-detail__sidebar {
+		position: relative;
 	}
 
 	.blog-detail__header {
-		margin-bottom: 48px;
-		padding-bottom: 32px;
+		margin-bottom: 40px;
+		padding-bottom: 20px;
 		border-bottom: 1px solid #e5e5e5;
 	}
 
 	.blog-detail__emoji {
-		font-size: 72px;
+		font-size: 48px;
 		line-height: 1;
-		margin-bottom: 24px;
+		margin-bottom: 16px;
 		text-align: center;
 	}
 
 	.blog-detail__title {
 		font-family: "Noto Sans JP", sans-serif;
-		font-size: 40px;
+		font-size: 32px;
 		font-weight: 700;
 		line-height: 1.4;
-		letter-spacing: -0.02em;
 		color: #262626;
-		margin: 0 0 24px;
+		margin: 0 0 16px;
 		text-align: center;
 	}
 
 	.blog-detail__meta {
 		display: flex;
 		flex-direction: column;
-		gap: 16px;
+		gap: 12px;
 		align-items: center;
 	}
 
@@ -198,738 +168,155 @@ blog.body = $.html();
 		font-size: 14px;
 	}
 
+	.blog-detail__tags {
+		display: flex;
+		gap: 8px;
+		flex-wrap: wrap;
+		justify-content: center;
+	}
+
+	.blog-detail__tag {
+		background-color: #f5f5f5;
+		color: #262626;
+		padding: 4px 8px;
+		border-radius: 4px;
+		font-size: 12px;
+		font-weight: 500;
+	}
+
 	.blog-detail__body {
-		margin-top: 48px;
-		font-size: 16px;
 		line-height: 1.8;
 		color: #262626;
-		font-family: "Noto Sans JP", "Yu Gothic", "YuGothic", "Hiragino Kaku Gothic ProN", "Hiragino Sans", sans-serif;
-		word-break: break-word;
-		overflow-wrap: break-word;
+	}
+
+	.blog-detail__body :global(h1),
+	.blog-detail__body :global(h2),
+	.blog-detail__body :global(h3),
+	.blog-detail__body :global(h4),
+	.blog-detail__body :global(h5),
+	.blog-detail__body :global(h6) {
+		font-family: "Noto Sans JP", sans-serif;
+		font-weight: 700;
+		color: #262626;
+		margin: 32px 0 16px;
 	}
 
 	.blog-detail__body :global(h1) {
-		font-size: 24px;
-		font-weight: 700;
-		margin: 40px 0 24px;
-		padding: 12px 0 12px 14px;
-		border-left: 4px solid #3b82f6;
-		background: linear-gradient(90deg, rgba(59, 130, 246, 0.1) 0%, rgba(59, 130, 246, 0.05) 50%, transparent 100%);
-		color: #1e40af;
-		border-radius: 0 6px 6px 0;
+		font-size: 28px;
 	}
 
 	.blog-detail__body :global(h2) {
-		font-size: 22px;
-		font-weight: 700;
-		margin: 36px 0 20px;
-		padding: 10px 0 10px 12px;
-		border-left: 3px solid #10b981;
-		background: linear-gradient(90deg, rgba(16, 185, 129, 0.08) 0%, rgba(16, 185, 129, 0.03) 50%, transparent 100%);
-		color: #065f46;
-		border-radius: 0 6px 6px 0;
+		font-size: 24px;
 	}
 
 	.blog-detail__body :global(h3) {
 		font-size: 20px;
-		font-weight: 600;
-		margin: 28px 0 14px;
-		padding: 6px 0 6px 8px;
-		border-left: 2px solid #f59e0b;
-		color: #92400e;
-	}
-
-	.blog-detail__body :global(h4) {
-		font-size: 18px;
-		font-weight: 600;
-		margin: 24px 0 12px;
-		color: #374151;
-	}
-
-	.blog-detail__body :global(h5) {
-		font-size: 16px;
-		font-weight: 600;
-		margin: 20px 0 10px;
-		color: #374151;
-	}
-
-	.blog-detail__body :global(h6) {
-		font-size: 15px;
-		font-weight: 600;
-		margin: 16px 0 8px;
-		color: #374151;
 	}
 
 	.blog-detail__body :global(p) {
-		margin: 24px 0;
-		text-align: justify;
-		text-justify: inter-ideograph;
+		margin: 16px 0;
 	}
 
 	.blog-detail__body :global(ul),
 	.blog-detail__body :global(ol) {
-		margin: 24px 0;
-		padding-left: 32px;
-		position: relative;
-	}
-
-	.blog-detail__body :global(ul) {
-		list-style: none;
-	}
-
-	.blog-detail__body :global(ul li):before {
-		content: "•";
-		color: #3b82f6;
-		font-weight: bold;
-		position: absolute;
-		left: 12px;
-		top: 0;
-		font-size: 1.2em;
-	}
-
-	.blog-detail__body :global(ol) {
-		counter-reset: item;
-		list-style: none;
-	}
-
-	.blog-detail__body :global(ol li):before {
-		counter-increment: item;
-		content: counter(item) ".";
-		color: #3b82f6;
-		font-weight: bold;
-		position: absolute;
-		left: 8px;
-		top: 0;
-		min-width: 20px;
+		margin: 16px 0;
+		padding-left: 24px;
 	}
 
 	.blog-detail__body :global(li) {
-		margin: 12px 0;
-		position: relative;
-		padding-left: 8px;
-	}
-
-	.blog-detail__body :global(li p) {
 		margin: 8px 0;
 	}
 
-	.blog-detail__body :global(li ul),
-	.blog-detail__body :global(li ol) {
-		margin: 12px 0;
-		padding-left: 24px;
+	.blog-detail__body :global(code) {
+		background-color: #f5f5f5;
+		padding: 2px 4px;
+		border-radius: 3px;
+		font-family:
+			"SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+		font-size: 0.9em;
+	}
+
+	.blog-detail__body :global(pre) {
+		background-color: #f5f5f5;
+		padding: 16px;
+		border-radius: 8px;
+		overflow-x: auto;
+		margin: 16px 0;
+	}
+
+	.blog-detail__body :global(pre code) {
+		background: none;
+		padding: 0;
+	}
+
+	.blog-detail__body :global(blockquote) {
+		border-left: 4px solid #e5e5e5;
+		padding-left: 16px;
+		margin: 16px 0;
+		color: #8c8c8c;
+		font-style: italic;
 	}
 
 	.blog-detail__body :global(a) {
 		color: #0066cc;
-		text-decoration: none;
-		transition: color 0.2s ease;
-	}
-
-	.blog-detail__body :global(a):hover {
-		color: #004499;
 		text-decoration: underline;
 	}
 
-	.blog-detail__body :global(blockquote) {
-		margin: 32px 0;
-		padding: 20px 24px;
-		border-left: 4px solid #6366f1;
-		background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(99, 102, 241, 0.02) 100%);
-		border-radius: 0 8px 8px 0;
-		color: #4c1d95;
-		font-style: italic;
-		position: relative;
-		box-shadow: 0 2px 8px rgba(99, 102, 241, 0.1);
+	.blog-detail__body :global(a:hover) {
+		color: #004499;
 	}
 
-	.blog-detail__body :global(blockquote):before {
-		content: '"';
-		font-size: 48px;
-		color: rgba(99, 102, 241, 0.3);
-		position: absolute;
-		top: -8px;
-		left: 16px;
-		font-family: Georgia, serif;
-		line-height: 1;
+	.blog-detail__back {
+		margin-top: 40px;
+		text-align: center;
 	}
 
-	.blog-detail__body :global(blockquote p) {
-		margin: 0;
-		padding-left: 20px;
-	}
-
-	/* marked-highlightの出力: <pre><code class="language-xxx">...</code></pre> */
-	.blog-detail__body :global(pre):has(code[class*="language-"]) {
-		margin: 40px 0;
-		padding: 0;
-		border-radius: 12px;
-		overflow: hidden;
-		box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
-		border: 1px solid rgba(148, 163, 184, 0.1);
-		position: relative;
-		background: #2d3748 !important;
-	}
-
-	/* フォールバック：通常のpreタグも対象に */
-	.blog-detail__body :global(pre) {
-		margin: 40px 0;
-		padding: 0;
-		border-radius: 12px;
-		overflow: hidden;
-		box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
-		border: 1px solid rgba(148, 163, 184, 0.1);
-		position: relative;
-		background: #2d3748 !important;
-	}
-
-	.blog-detail__body :global(pre):before {
-		content: "";
-		display: block;
-		height: 40px;
-		background: linear-gradient(90deg, #ef4444 0%, #f59e0b 33%, #10b981 66%);
-		position: relative;
-	}
-
-	/* コピーボタンのスタイル */
-	.code-block-header {
-		position: absolute;
-		top: 8px;
-		right: 12px;
-		z-index: 10;
-		pointer-events: auto;
-	}
-
-	.copy-button {
-		background: rgba(0, 0, 0, 0.8);
-		border: 1px solid rgba(255, 255, 255, 0.2);
-		border-radius: 6px;
-		color: #f1f5f9;
-		cursor: pointer;
-		font-size: 10px;
-		font-weight: 600;
-		padding: 4px 8px;
-		transition: all 0.2s ease;
+	.blog-detail__back-link {
 		display: inline-flex;
 		align-items: center;
-		justify-content: center;
-		gap: 4px;
-		min-width: 60px;
-		height: 26px;
-		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-		backdrop-filter: blur(8px);
-		-webkit-backdrop-filter: blur(8px);
-		position: relative;
-		overflow: hidden;
-		vertical-align: top;
+		gap: 8px;
+		color: #262626;
+		text-decoration: none;
+		padding: 12px 24px;
+		border: 1px solid #262626;
+		background-color: #ffffff;
+		transition: all 0.2s ease;
 	}
 
-	.copy-button:hover {
-		background: rgba(59, 130, 246, 0.9);
-		border-color: rgba(59, 130, 246, 0.6);
+	.blog-detail__back-link:hover {
+		background-color: #262626;
 		color: #ffffff;
-		transform: translateY(-1px);
-		box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
-	}
-
-	.copy-button:active {
-		transform: translateY(0);
-		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-	}
-
-	.copy-button.copied {
-		background: rgba(16, 185, 129, 0.9);
-		border-color: rgba(16, 185, 129, 0.6);
-		color: #ffffff;
-		box-shadow: 0 4px 8px rgba(16, 185, 129, 0.4);
-		transform: translateY(-1px);
-	}
-
-	.copy-icon {
-		width: 12px;
-		height: 12px;
-		flex-shrink: 0;
-		display: inline-block;
-		vertical-align: middle;
-		pointer-events: none;
-		max-width: 12px;
-		max-height: 12px;
-	}
-
-	.copy-text {
-		font-family: "Fira Code", "SF Mono", "Consolas", "Monaco", monospace;
-		font-size: 9px;
-		letter-spacing: 0.03em;
-		text-transform: uppercase;
-		font-weight: 600;
-		white-space: nowrap;
-		line-height: 1;
-		display: inline-block;
-		vertical-align: middle;
-		margin: 0;
-		padding: 0;
-	}
-
-	.blog-detail__body :global(pre) :global(code) {
-		display: block;
-		padding: 24px;
-		font-family: "Fira Code", "Consolas", "Monaco", monospace;
-		font-size: 14px;
-		line-height: 1.6;
-		overflow-x: auto;
-		background: transparent !important;
-		border-radius: 0;
-		font-feature-settings: "liga" 1, "calt" 1;
-		text-shadow: none;
-	}
-
-
-	/* インラインコード */
-	.blog-detail__body :global(code):not([class*="language-"]) {
-		font-family: "Fira Code", "Consolas", "Monaco", monospace;
-		font-size: 0.9em;
-		padding: 0.2em 0.6em;
-		background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(59, 130, 246, 0.08) 100%);
-		color: #6366f1;
-		border-radius: 6px;
-		border: 1px solid rgba(99, 102, 241, 0.2);
-		font-weight: 500;
-	}
-
-	/* インラインコードとpreタグ内コードの区別 */
-	.blog-detail__body :global(pre) :global(code) {
-		/* preタグ内のコードは上記のスタイルを適用 */
-	}
-
-	.blog-detail__body :global(img) {
-		width: 100%;
-		height: auto;
-		border-radius: 12px;
-		margin: 40px 0;
-		max-width: 100%;
-		box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-		transition: transform 0.3s ease, box-shadow 0.3s ease;
-	}
-
-	.blog-detail__body :global(img):hover {
-		transform: translateY(-2px);
-		box-shadow: 0 12px 32px rgba(0, 0, 0, 0.16);
-	}
-
-	.blog-detail__body :global(video) {
-		width: 100%;
-		height: auto;
-		border-radius: 12px;
-		margin: 40px 0;
-	}
-
-	.blog-detail__body :global(figure) {
-		margin: 40px 0;
-	}
-
-	.blog-detail__body :global(figcaption) {
-		margin-top: 12px;
-		text-align: center;
-		color: #8c8c8c;
-		font-size: 14px;
-	}
-
-	.blog-detail__body :global(hr) {
-		margin: 48px 0;
-		border: none;
-		height: 2px;
-		background: linear-gradient(90deg, transparent 0%, #e5e7eb 50%, transparent 100%);
-		position: relative;
-	}
-
-	.blog-detail__body :global(hr):after {
-		content: "❋";
-		position: absolute;
-		top: -8px;
-		left: 50%;
-		transform: translateX(-50%);
-		background: #ffffff;
-		color: #9ca3af;
-		padding: 0 12px;
-		font-size: 16px;
-	}
-
-	.blog-detail__body :global(table) {
-		width: 100%;
-		margin: 32px 0;
-		border-collapse: collapse;
-		border-radius: 8px;
-		overflow: hidden;
-		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-		border: 1px solid #e5e7eb;
-	}
-
-	.blog-detail__body :global(th),
-	.blog-detail__body :global(td) {
-		padding: 16px 20px;
-		border: none;
-		border-bottom: 1px solid #e5e7eb;
-		text-align: left;
-		vertical-align: top;
-	}
-
-	.blog-detail__body :global(th) {
-		background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-		font-weight: 700;
-		color: #374151;
-		text-transform: uppercase;
-		font-size: 0.875em;
-		letter-spacing: 0.05em;
-	}
-
-	.blog-detail__body :global(tbody tr):nth-child(even) {
-		background-color: #f9fafb;
-	}
-
-	.blog-detail__body :global(tbody tr):hover {
-		background-color: rgba(59, 130, 246, 0.05);
-		transition: background-color 0.2s ease;
-	}
-
-	.blog-detail__sidebar {
-		width: 280px;
-		flex-shrink: 0;
-	}
-
-	.blog-detail__toc-sticky {
-		position: sticky;
-		top: 128px;
-		z-index: 1;
-		margin-top: 16px;
-	}
-
-	@media (max-width: 1200px) {
-		.blog-detail__content {
-			max-width: 1000px;
-			gap: 40px;
-		}
-	}
-
-	@media (max-width: 1024px) {
-		.blog-detail__content {
-			flex-direction: column;
-			gap: 40px;
-		}
-
-		.blog-detail__main {
-			padding: 32px;
-		}
-
-		.blog-detail__sidebar {
-			width: 100%;
-		}
-
-		.blog-detail__title {
-			font-size: 32px;
-		}
-
-		.blog-detail__emoji {
-			font-size: 56px;
-		}
 	}
 
 	@media (max-width: 768px) {
 		.blog-detail {
-			padding: 20px 16px;
+			padding: 20px 10px;
 		}
 
-		.blog-detail__main {
-			padding: 32px 24px;
-			border-radius: 12px;
+		.blog-detail__container {
+			grid-template-columns: 1fr;
+			gap: 20px;
+		}
+
+		.blog-detail__sidebar {
+			order: -1;
+		}
+
+		.blog-detail__article {
+			padding: 20px;
 		}
 
 		.blog-detail__title {
-			font-size: 28px;
-			line-height: 1.3;
+			font-size: 24px;
 		}
 
 		.blog-detail__emoji {
-			font-size: 48px;
-		}
-
-		.blog-detail__body {
-			font-size: 15px;
-			line-height: 1.75;
-		}
-
-		.blog-detail__body :global(h1) {
-			font-size: 22px;
-			margin: 32px 0 20px;
-			padding: 10px 0 10px 12px;
-		}
-
-		.blog-detail__body :global(h2) {
-			font-size: 20px;
-			margin: 28px 0 16px;
-			padding: 8px 0 8px 10px;
-		}
-
-		.blog-detail__body :global(h3) {
-			font-size: 18px;
-			margin: 24px 0 12px;
-			padding: 6px 0 6px 6px;
-		}
-
-		.blog-detail__body :global(pre) {
-			margin: 24px -8px;
-			border-radius: 8px;
-		}
-
-		.blog-detail__body :global(pre) :global(code) {
-			padding: 16px;
-			font-size: 13px;
-		}
-
-		/* モバイル版コピーボタン調整 */
-		.copy-button {
-			font-size: 9px;
-			padding: 3px 6px;
-			gap: 3px;
-			height: 22px;
-			min-width: 50px;
-		}
-
-		.copy-icon {
-			width: 10px;
-			height: 10px;
-		}
-
-		.copy-text {
-			font-size: 8px;
-		}
-
-		.code-block-header {
-			top: 6px;
-			right: 8px;
-		}
-
-		.blog-detail__body :global(blockquote) {
-			margin: 24px -8px;
-			padding: 16px 20px;
-			border-radius: 0 8px 8px 0;
-		}
-
-		.blog-detail__body :global(table) {
-			font-size: 14px;
-			overflow-x: auto;
-			display: block;
-			white-space: nowrap;
-		}
-
-		.blog-detail__body :global(ul),
-		.blog-detail__body :global(ol) {
-			padding-left: 24px;
-		}
-
-		.blog-detail__meta {
-			flex-direction: column;
-			align-items: center;
-			gap: 12px;
+			font-size: 36px;
 		}
 
 		.blog-detail__dates {
 			flex-direction: column;
-			gap: 4px;
-			text-align: center;
+			gap: 8px;
 		}
-	}
-
-	/* スクロール進捗バー */
-	.reading-progress {
-		position: fixed;
-		top: 0;
-		left: 0;
-		width: 0%;
-		height: 3px;
-		background: linear-gradient(90deg, #3b82f6 0%, #10b981 50%, #f59e0b 100%);
-		z-index: 9999;
-		transition: width 0.1s ease;
-	}
-
-	/* スムーズスクロール */
-	html {
-		scroll-behavior: smooth;
-	}
-
-	/* アンカーリンクのオフセット調整 */
-	.blog-detail__body :global(h1[id]),
-	.blog-detail__body :global(h2[id]),
-	.blog-detail__body :global(h3[id]) {
-		scroll-margin-top: 100px;
-	}
-
-	/* 選択テキストのスタイル */
-	.blog-detail__body :global(::selection) {
-		background: rgba(59, 130, 246, 0.2);
-		color: #1e40af;
-	}
-
-	/* フォーカス時のアウトライン改善 */
-	.blog-detail__body :global(a):focus {
-		outline: 2px solid #3b82f6;
-		outline-offset: 2px;
-		border-radius: 4px;
 	}
 </style>
-
-<script>
-	// 読み進み進捗バーの実装
-	function updateReadingProgress() {
-		const article = document.querySelector('.blog-detail__article');
-		const progressBar = document.querySelector('.reading-progress');
-		
-		if (!article || !progressBar) return;
-		
-		const articleHeight = article.offsetHeight;
-		const articleTop = article.offsetTop;
-		const windowHeight = window.innerHeight;
-		const scrollTop = window.pageYOffset;
-		
-		const progress = Math.min(
-			Math.max((scrollTop - articleTop + windowHeight) / articleHeight, 0),
-			1
-		);
-		
-		progressBar.style.width = `${progress * 100}%`;
-	}
-
-	// コピーボタンの実装
-	function initCopyButtons() {
-		// 全てのpreタグを対象にする（:has()セレクターは使わない）
-		const codeBlocks = document.querySelectorAll('pre');
-		codeBlocks.forEach(addCopyButton);
-	}
-
-	function addCopyButton(block) {
-		// 既にボタンが追加されている場合はスキップ
-		if (block.querySelector('.code-block-header')) return;
-
-		// ヘッダーコンテナを作成
-		const header = document.createElement('div');
-		header.className = 'code-block-header';
-		
-		// コピーボタンを作成
-		const copyButton = document.createElement('button');
-		copyButton.className = 'copy-button';
-		copyButton.setAttribute('type', 'button');
-		copyButton.setAttribute('aria-label', 'Copy code to clipboard');
-		copyButton.innerHTML = `
-			<svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-				<rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-				<path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"></path>
-			</svg>
-			<span class="copy-text">Copy</span>
-		`;
-		
-		// コピー機能
-		copyButton.addEventListener('click', async (e) => {
-			e.preventDefault();
-			e.stopPropagation();
-			
-			// コードのテキストを取得
-			const codeElement = block.querySelector('code');
-			const text = codeElement ? codeElement.textContent || '' : block.textContent || '';
-			
-			console.log('コピーしようとしているテキスト:', text.substring(0, 50) + '...');
-			
-			try {
-				// Clipboard APIを使用
-				if (navigator.clipboard && window.isSecureContext) {
-					await navigator.clipboard.writeText(text);
-				} else {
-					// フォールバック: テキスト選択でコピー
-					const textArea = document.createElement('textarea');
-					textArea.value = text;
-					textArea.style.position = 'fixed';
-					textArea.style.left = '-9999px';
-					document.body.appendChild(textArea);
-					textArea.select();
-					document.execCommand('copy');
-					document.body.removeChild(textArea);
-				}
-				
-				// 成功時のフィードバック
-				copyButton.classList.add('copied');
-				const textSpan = copyButton.querySelector('.copy-text');
-				const originalText = textSpan.textContent;
-				textSpan.textContent = 'Copied!';
-				
-				// アイコンをチェックマークに変更
-				const icon = copyButton.querySelector('.copy-icon');
-				icon.innerHTML = `
-					<path d="M20 6L9 17l-5-5"></path>
-				`;
-				
-				console.log('コピー成功');
-				
-				// 2秒後に元に戻す
-				setTimeout(() => {
-					copyButton.classList.remove('copied');
-					textSpan.textContent = originalText;
-					icon.innerHTML = `
-						<rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-						<path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"></path>
-					`;
-				}, 2000);
-			} catch (err) {
-				console.error('コピーに失敗しました:', err);
-				
-				// エラー表示
-				const textSpan = copyButton.querySelector('.copy-text');
-				const originalText = textSpan.textContent;
-				textSpan.textContent = 'Failed';
-				copyButton.style.backgroundColor = 'rgba(239, 68, 68, 0.2)';
-				
-				setTimeout(() => {
-					textSpan.textContent = originalText;
-					copyButton.style.backgroundColor = '';
-				}, 2000);
-			}
-		});
-		
-		header.appendChild(copyButton);
-		
-		// ヘッダーをpreタグの先頭に挿入
-		block.style.position = 'relative';
-		block.insertBefore(header, block.firstChild);
-		
-		console.log('コピーボタンを追加しました:', block);
-	}
-
-	// 初期化
-	if (typeof window !== 'undefined') {
-		// 進捗バーの要素を作成
-		const progressBar = document.createElement('div');
-		progressBar.className = 'reading-progress';
-		document.body.appendChild(progressBar);
-
-		// イベントリスナーの追加
-		window.addEventListener('scroll', updateReadingProgress);
-		window.addEventListener('resize', updateReadingProgress);
-		
-		// コピーボタンの初期化を遅延実行
-		function initWithDelay() {
-			console.log('コピーボタンの初期化を開始');
-			initCopyButtons();
-			// 念のため500ms後にもう一度実行
-			setTimeout(() => {
-				console.log('遅延初期化を実行');
-				initCopyButtons();
-			}, 500);
-		}
-		
-		// DOMContentLoadedイベントでコピーボタンを初期化
-		if (document.readyState === 'loading') {
-			document.addEventListener('DOMContentLoaded', initWithDelay);
-		} else {
-			initWithDelay();
-		}
-		
-		// 初期実行
-		updateReadingProgress();
-	}
-</script>

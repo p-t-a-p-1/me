@@ -1,0 +1,247 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "created": "2025-01-27",
+    "projectName": "Astro Blog Extension",
+    "description": "個人ブログサイトの機能拡張プロジェクト"
+  },
+  "currentTag": "master",
+  "tags": {
+    "master": {
+      "name": "master",
+      "description": "メインの開発ブランチ",
+      "created": "2025-01-27",
+      "tasks": [
+        {
+          "id": "1",
+          "title": "SEO基本設定の実装",
+          "description": "メタタグ、構造化データ、Open Graphプロパティの設定",
+          "details": "- HTMLメタタグの追加（title, description, keywords）\n- Open Graph プロパティの設定\n- Twitter Cardの実装\n- 構造化データ（JSON-LD）の追加\n- サイトマップの自動生成\n- robots.txtの設定",
+          "status": "done",
+          "priority": "high",
+          "created": "2025-01-27",
+          "updated": "2025-01-27",
+          "testStrategy": "- Google Search Consoleでの検証\n- meta タグの表示確認\n- SNSでのリンクプレビュー確認",
+          "dependencies": [],
+          "subtasks": [
+                         {
+               "id": "1.1",
+               "title": "Layoutコンポーネントの基本メタタグ強化",
+               "description": "Layout.astroファイルにページごとの動的メタタグを実装",
+               "details": "✅ Layout.astroの包括的なSEO強化が完了しました！\n\n【実装完了項目】\n1. TypeScript型定義（LayoutProps）の追加\n2. サイト設定のデフォルト値（SITE_CONFIG）の定義\n3. 基本メタタグの強化：\n   - keywords, author, robots, theme-color\n   - viewport の initial-scale=1.0 追加\n4. canonical URL の自動生成\n5. Open Graph プロパティの完全実装\n6. Twitter Card の設定\n7. 構造化データ（JSON-LD）の実装\n8. 動的タイトル生成（「記事名 | サイト名」形式）\n\n【設計の特徴】\n- ページタイプ（website/article）に応じた構造化データ\n- デフォルト値とページ固有値の柔軟な切り替え\n- noIndex オプションによるSEO制御\n- OGP画像の自動URL生成\n\n【次のステップ】\n- デフォルトOGP画像（/ogp-default.png）の作成が必要\n- 本番デプロイ時のドメイン設定更新が必要\n\n【更新日時】2025-01-27",
+               "status": "done",
+               "created": "2025-01-27",
+               "updated": "2025-01-27"
+             },
+                         {
+               "id": "1.2", 
+               "title": "Open Graphプロパティの実装",
+               "description": "SNSでのリンクプレビュー最適化のためのOGP設定",
+               "details": "✅ Open Graphプロパティの実装が完了しました！\n\n【実装完了項目】\n- Layout.astroでの包括的なOGP実装\n- 全ページ対応（動的プロパティ値設定）\n\n【実装済みOGPメタタグ】\n- og:type（website/article の動的切り替え）\n- og:title（ページタイトル + サイト名）\n- og:description（ページ説明）\n- og:url（canonical URL）\n- og:site_name（サイト名）\n- og:image（1200x630px対応）\n- og:image:width / og:image:height\n- og:locale（ja_JP）\n\n【対象ページ】\n- ブログ記事ページ（ogType=\"article\"）\n- トップページ（ogType=\"website\"）\n- ブログ一覧ページ\n- Aboutページ\n- その他全ページ\n\n【残作業】\n- デフォルトOGP画像（/ogp-default.png）の作成\n\n【更新日時】2025-01-27",
+               "status": "done",
+               "created": "2025-01-27"
+             },
+             {
+               "id": "1.3",
+               "title": "Twitter Card設定",
+               "description": "Twitter専用のカード表示最適化",
+               "details": "✅ Twitter Card設定の実装が完了しました！\n\n【実装完了項目】\n- Layout.astroでの包括的なTwitter Card実装\n- 全ページ対応（動的プロパティ値設定）\n\n【実装済みTwitter Cardメタタグ】\n- twitter:card（summary_large_image）\n- twitter:site（@hakozaki_dev）\n- twitter:creator（@hakozaki_dev）\n- twitter:title（ページタイトル）\n- twitter:description（ページ説明）\n- twitter:image（1200x630px対応）\n\n【カード形式】\n- summary_large_image採用\n- 技術ブログに適した視覚的なプレゼンテーション\n- 大きな画像で注目を集める設計\n\n【確認予定項目】\n- Twitter Card Validator での確認\n- 実際のツイートでのプレビュー確認\n\n【設定値】\n- アカウント：@hakozaki_dev（本番時に実際のアカウントに変更）\n\n【残作業】\n- デフォルトTwitter Card画像の作成\n\n【更新日時】2025-01-27",
+               "status": "done", 
+               "created": "2025-01-27"
+             },
+             {
+               "id": "1.4",
+               "title": "構造化データ（JSON-LD）の実装",
+               "description": "検索エンジン向けの構造化データ設定",
+               "details": "✅ 構造化データ（JSON-LD）の実装が完了しました！\n\n【実装完了項目】\n- Layout.astroでの包括的な構造化データ実装\n- ページタイプに応じた動的スキーマ生成\n\n【実装済みスキーマ】\n\n1. **WebSiteスキーマ（website タイプ）**\n   - @type: WebSite\n   - name: サイト名\n   - url: サイトURL\n   - description: サイト説明\n   - inLanguage: ja-JP\n   - publisher: Organization情報\n\n2. **BlogPostingスキーマ（article タイプ）**\n   - @type: BlogPosting\n   - headline: 記事タイトル\n   - description: 記事要約\n   - datePublished: 公開日（動的設定）\n   - dateModified: 更新日（動的設定）\n   - author: Person スキーマ\n   - publisher: Organization スキーマ\n   - image: 記事画像またはデフォルト画像\n   - inLanguage: ja-JP\n\n3. **Personスキーマ（著者情報）**\n   - @type: Person\n   - name: 著者名\n   - description: 著者説明\n   - image: プロフィール画像URL\n\n4. **Organizationスキーマ（サイト運営者）**\n   - @type: Organization\n   - name: サイト名\n   - url: サイトURL\n   - logo: サイトロゴ\n\n【動的機能】\n- ogType=\"website\" → WebSiteスキーマ\n- ogType=\"article\" → BlogPostingスキーマ\n- 公開日・更新日の自動設定\n- 画像URLの動的生成\n\n【更新日時】2025-01-27",
+               "status": "done",
+               "created": "2025-01-27"
+             },
+                         {
+               "id": "1.5",
+               "title": "Astro Sitemapインテグレーション",
+               "description": "自動サイトマップ生成の設定",
+               "details": "✅ Astro Sitemapインテグレーションの実装が完了しました！\n\n【実装完了項目】\n1. 依存関係の追加\n   - @astrojs/sitemap パッケージのインストール完了\n\n2. astro.config.mjs の設定完了\n   - site: \"https://hakozaki.dev\" の設定\n   - sitemapインテグレーションの追加\n   - フィルター設定（404、adminページを除外）\n   - i18n設定（ja-JP対応）\n\n3. サイトマップ設定の最適化\n   - 除外ページの指定（/404, /adminを除外）\n   - 将来的なカスタムページ追加に対応\n   - 多言語対応の基盤設定\n\n【確認予定項目】\n- npm run buildまたはnpm run dev実行後\n- /sitemap.xmlでアクセス可能性の確認\n- 全ページが適切に含まれているかの確認\n\n【更新日時】2025-01-27",
+               "status": "done",
+               "created": "2025-01-27"
+             },
+                         {
+               "id": "1.6",
+               "title": "robots.txt の作成と設定",
+               "description": "検索エンジンクローラー向けの指示ファイル作成",
+               "details": "✅ robots.txtファイルの作成と設定が完了しました！\n\n【実装完了項目】\n1. ファイル作成\n   - /public/robots.txt を作成\n   - ルートドメインから /robots.txt でアクセス可能\n\n2. 設定内容\n   - User-agent: * (全てのクローラーに適用)\n   - Allow: / (全ページのクロールを許可)\n   - Sitemap: https://hakozaki.dev/sitemap.xml (サイトマップの場所指定)\n\n3. 将来の拡張性\n   - 除外ディレクトリの設定をコメントで準備\n   - クロール頻度調整の設定をコメントで準備\n\n【確認予定項目】\n- 本番デプロイ後の /robots.txt アクセス確認\n- Google Search Console での robots.txt テスト\n- サイトマップURLの正確性確認\n\n【注意事項】\n- 本番デプロイ時にドメインが正しく設定されていることを確認\n\n【更新日時】2025-01-27",
+               "status": "done",
+               "created": "2025-01-27"
+             }
+          ]
+        },
+        {
+          "id": "2", 
+          "title": "レスポンシブデザインの改善",
+          "description": "モバイルファーストデザインの実装と最適化",
+          "details": "- モバイル表示の検証と修正\n- タブレット表示の最適化\n- デスクトップ表示の改善\n- ブレークポイントの調整\n- フレックスボックス/グリッドレイアウトの最適化",
+          "status": "in-progress",
+          "priority": "high", 
+          "created": "2025-01-27",
+          "updated": "2025-01-27",
+          "testStrategy": "- 各デバイスでの表示確認\n- Lighthouse Mobile Scoreの測定\n- ブラウザ開発者ツールでの検証",
+          "dependencies": [],
+          "subtasks": [
+            {
+              "id": "2.1",
+              "title": "現在のレスポンシブ状況の詳細分析",
+              "description": "既存のCSS、ブレークポイント、レイアウト問題の特定",
+              "details": "✅ 現在のレスポンシブ状況の詳細分析が完了しました！\n\n【分析結果】\n\n**1. Layout.astro（基本レイアウト）**\n- 問題：モバイル対応が不十分\n- main要素が固定幅（max-width: 1280px）で設定\n- margin-top: 110px（ヘッダー高さ）が固定値\n- パディング設定がコメントアウト\n- レスポンシブブレークポイントなし\n\n**2. Header.astro（ヘッダー）**\n- 問題：モバイル表示で大きな課題\n- ナビゲーションがグリッド4列固定（grid-template-columns: repeat(4, 1fr)）\n- モバイルでハンバーガーメニューなし\n- 検索フォームとSNSリンクがモバイルで表示困難\n- 固定ヘッダーの高さ調整が必要\n\n**3. Footer.astro（フッター）**\n- 良好：基本的なレスポンシブ対応済み\n- 768px以下で適切な調整実装済み\n- 改善余地：タッチ操作最適化\n\n**4. ブログ記事ページ（[slug].astro）**\n- 問題：サイドバー付き2カラムレイアウト\n- flex表示でモバイル対応不足\n- gap: 86pxが大きすぎる\n- パディング48pxがモバイルで過大\n- レスポンシブブレークポイントなし\n\n**5. ブログ一覧ページ（index.astro）**\n- 良好：基本的なレスポンシブ実装済み\n- 1024px以下で1カラム切り替え\n- 768px以下でグリッド1列対応\n- 改善余地：パディング調整\n\n【主要な問題点】\n1. **ヘッダーのモバイル対応が最優先課題**\n2. **記事ページのレスポンシブ対応不足**\n3. **統一されたブレークポイント設計が必要**\n4. **フルードタイポグラフィ未実装**\n5. **タッチ操作の最適化不足**\n\n【更新日時】2025-01-27",
+              "status": "done",
+              "created": "2025-01-27"
+            },
+            {
+              "id": "2.2",
+              "title": "モバイルファーストCSS設計",
+              "description": "モバイル優先のCSS構造とブレークポイント設計",
+              "details": "✅ モバイルファーストCSS設計が完了しました！\n\n【実装完了項目】\n\n**1. CSS カスタムプロパティシステム**\n- ブレークポイント定義（640px, 768px, 1024px, 1280px）\n- レスポンシブスペーシングシステム（xs〜3xl）\n- コンテナ幅管理\n- ヘッダー高さのレスポンシブ設定\n\n**2. フルードタイポグラフィ**\n- clamp()関数でスケーラブルなフォントサイズ\n- xs（12-14px）からxl（36-48px）まで8段階\n- ビューポート幅に応じた自動調整\n\n**3. レスポンシブレイアウトシステム**\n- モバイル：ヘッダー高さ60px、パディング16px\n- タブレット：ヘッダー高さ80px、パディング24px\n- デスクトップ：ヘッダー高さ110px、パディング32px\n- 大画面：追加パディング64px\n\n**4. アクセシビリティ強化**\n- フォーカス管理（2px青色アウトライン）\n- タッチターゲット最小サイズ44px確保\n- プリント用スタイル対応\n\n**5. パフォーマンス最適化**\n- モバイルでボーダー削除\n- 段階的なスタイル適用\n- 不要な計算の削減\n\n【更新日時】2025-01-27",
+              "status": "done",
+              "created": "2025-01-27",
+              "updated": "2025-01-27",
+              "dependencies": ["2.1"]
+            },
+            {
+              "id": "2.3",
+              "title": "Headerコンポーネントのレスポンシブ改善",
+              "description": "ナビゲーションのモバイル対応とハンバーガーメニュー実装",
+              "details": "✅ Headerコンポーネントのレスポンシブ改善が完了しました！\n\n【実装完了項目】\n\n**1. ハンバーガーメニューシステム**\n- モバイル専用ハンバーガーボタン（44px×44px タッチ対応）\n- スムーズな3本線アニメーション（X字変形）\n- aria-expanded、aria-controls適切な実装\n- Escapeキー・リサイズ対応\n\n**2. レスポンシブナビゲーション**\n- モバイル：フルスクリーンオーバーレイメニュー\n- タブレット（768px+）：水平ナビゲーション自動切替\n- デスクトップ（1024px+）：フル機能表示\n- 大画面（1280px+）：追加パディング\n\n**3. アクセシビリティ強化**\n- ARIA属性完全対応（aria-label、aria-expanded、aria-controls）\n- キーボードナビゲーション（Tab、Enter、Escape）\n- フォーカス管理（メニュー開閉時の適切なフォーカス移動）\n- スクリーンリーダー対応（sr-only クラス）\n\n**4. 検索・SNS機能**\n- デスクトップ専用検索フォーム（フォーカス時ハイライト）\n- SNSリンク（Twitter、GitHub）\n- ホバーエフェクト・フォーカス対応\n\n**5. パフォーマンス最適化**\n- backdrop-filter によるガラス効果\n- CSS transitions による滑らかなアニメーション\n- prefers-reduced-motion 対応\n- プリント時レイアウト最適化\n\n【更新日時】2025-01-27",
+              "status": "done",
+              "created": "2025-01-27",
+              "updated": "2025-01-27",
+              "dependencies": ["2.2"]
+            },
+            {
+              "id": "2.4",
+              "title": "メインコンテンツエリアの最適化",
+              "description": "記事表示、一覧ページのレスポンシブレイアウト改善",
+              "details": "【対象ページ】\n- ブログ記事ページ（[slug].astro）\n- ブログ一覧ページ（index.astro）\n- タグ一覧ページ\n- Aboutページ\n\n【最適化項目】\n- 読みやすい行長の設定\n- 適切な余白とスペーシング\n- 画像のレスポンシブ対応\n- コードブロックのスクロール対応\n- カード型レイアウトの最適化",
+              "status": "in-progress",
+              "created": "2025-01-27",
+              "updated": "2025-01-27",
+              "dependencies": ["2.2"]
+            },
+            {
+              "id": "2.5",
+              "title": "Footerコンポーネントのモバイル最適化",
+              "description": "フッター情報のモバイル表示改善",
+              "details": "【最適化項目】\n- モバイルでのリンク配置\n- タッチしやすいボタンサイズ\n- 縦積みレイアウトの実装\n- SNSリンクの最適化\n- コピーライト表示の調整",
+              "status": "pending",
+              "created": "2025-01-27",
+              "dependencies": ["2.2"]
+            },
+            {
+              "id": "2.6",
+              "title": "パフォーマンステストとLighthouse最適化",
+              "description": "モバイルパフォーマンススコアの測定と改善",
+              "details": "【測定項目】\n- Lighthouse Mobile Score\n- Core Web Vitals\n- First Contentful Paint (FCP)\n- Largest Contentful Paint (LCP)\n- Cumulative Layout Shift (CLS)\n\n【最適化項目】\n- CSS最適化とminification\n- 不要なスタイルの除去\n- レンダリングブロッキングの解消\n- レイアウトシフトの防止",
+              "status": "pending",
+              "created": "2025-01-27",
+              "dependencies": ["2.3", "2.4", "2.5"]
+            }
+          ]
+        },
+        {
+          "id": "3",
+          "title": "基本検索機能の実装", 
+          "description": "Fuse.jsを使用したクライアントサイド検索の実装",
+          "details": "- Fuse.jsライブラリの導入\n- 検索インデックスの生成\n- 検索UIコンポーネントの作成\n- 検索結果表示コンポーネントの実装\n- キーワードハイライト機能",
+          "status": "pending",
+          "priority": "medium",
+          "created": "2025-01-27", 
+          "testStrategy": "- 各種検索キーワードでのテスト\n- レスポンス速度の測定\n- 検索精度の評価",
+          "dependencies": ["2"],
+          "subtasks": []
+        },
+        {
+          "id": "4",
+          "title": "コンテンツ整理と最適化",
+          "description": "既存のMarkdownコンテンツの整理とメタデータの強化",
+          "details": "- 記事のカテゴリ分類\n- タグの体系化と統一\n- フロントマターの標準化\n- 読了時間の算出と追加\n- 記事間の関連性分析",
+          "status": "pending", 
+          "priority": "medium",
+          "created": "2025-01-27",
+          "testStrategy": "- メタデータの一貫性確認\n- タグ分類の妥当性検証\n- 読了時間の精度確認",
+          "dependencies": [],
+          "subtasks": []
+        },
+        {
+          "id": "5",
+          "title": "高度な検索機能の実装",
+          "description": "フィルタリング、ソート、カテゴリ別検索の追加",
+          "details": "- タグベースフィルタリング\n- 日付範囲検索\n- カテゴリ別検索\n- ソート機能（日付、関連度、人気度）\n- 検索結果のページネーション",
+          "status": "pending",
+          "priority": "medium", 
+          "created": "2025-01-27",
+          "testStrategy": "- 各フィルタ機能のテスト\n- ソート精度の確認\n- 大量データでのパフォーマンス測定",
+          "dependencies": ["3", "4"],
+          "subtasks": []
+        },
+        {
+          "id": "6",
+          "title": "関連記事表示システム",
+          "description": "記事の類似度に基づく関連記事の自動表示",
+          "details": "- 類似度算出アルゴリズムの実装\n- 関連記事表示コンポーネントの作成\n- タグベースの関連性分析\n- コンテンツベースの類似度計算\n- 関連記事のランキング機能",
+          "status": "pending",
+          "priority": "low",
+          "created": "2025-01-27",
+          "testStrategy": "- 関連記事の妥当性評価\n- 表示速度の測定\n- ユーザビリティテスト",
+          "dependencies": ["4"],
+          "subtasks": []
+        },
+        {
+          "id": "7", 
+          "title": "目次自動生成機能",
+          "description": "Markdownヘッダーから目次を自動生成する機能",
+          "details": "- Markdown ASTからヘッダー抽出\n- 目次コンポーネントの作成\n- アンカーリンクの生成\n- スムーススクロール機能\n- 現在位置のハイライト",
+          "status": "pending",
+          "priority": "low",
+          "created": "2025-01-27",
+          "testStrategy": "- 目次の正確性確認\n- リンク動作の検証\n- スクロール動作のテスト",
+          "dependencies": [],
+          "subtasks": []
+        },
+        {
+          "id": "8",
+          "title": "ダークモード実装",
+          "description": "ライト/ダークテーマの切り替え機能",
+          "details": "- CSS カスタムプロパティの設定\n- テーマ切り替えコンポーネント\n- ローカルストレージでの設定保存\n- システム設定の自動検出\n- 全コンポーネントのダークモード対応",
+          "status": "pending",
+          "priority": "low", 
+          "created": "2025-01-27",
+          "testStrategy": "- テーマ切り替えの動作確認\n- 設定保存の永続性テスト\n- アクセシビリティの確認",
+          "dependencies": ["2"],
+          "subtasks": []
+        },
+        {
+          "id": "9",
+          "title": "ページネーション機能",
+          "description": "記事一覧のページ分割表示機能",
+          "details": "- ページネーションコンポーネントの作成\n- URLルーティングの実装\n- 前後ページナビゲーション\n- ページ番号表示\n- SEOフレンドリーなURL構造",
+          "status": "pending",
+          "priority": "medium",
+          "created": "2025-01-27",
+          "testStrategy": "- ページ遷移の動作確認\n- URL構造の検証\n- SEO影響の評価",
+          "dependencies": ["1"],
+          "subtasks": []
+        },
+        {
+          "id": "10",
+          "title": "画像最適化とWebP対応",
+          "description": "Astro Imageコンポーネントを使用した画像最適化",
+          "details": "- Astro Image コンポーネントの導入\n- WebP形式への自動変換\n- 遅延読み込みの実装\n- レスポンシブ画像の設定\n- 画像圧縮の最適化",
+          "status": "pending",
+          "priority": "medium",
+          "created": "2025-01-27",
+          "testStrategy": "- 画像読み込み速度の測定\n- ファイルサイズの確認\n- ブラウザ互換性のテスト",
+          "dependencies": [],
+          "subtasks": []
+        }
+      ]
+    }
+  }
+} 

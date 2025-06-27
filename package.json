@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@astrojs/markdown-remark": "^6.3.2",
+    "@astrojs/sitemap": "^3.4.1",
     "@types/react-syntax-highlighter": "^15.5.13",
     "astro": "^5.5.5",
     "cheerio": "^1.0.0",

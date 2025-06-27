@@ -1,0 +1,1384 @@
+{
+  "summary": {
+    "totalFiles": 48,
+    "processedFiles": 48,
+    "categories": {
+      "architecture": 1,
+      "general": 21,
+      "devops": 3,
+      "ui-library": 2,
+      "frontend": 15,
+      "backend": 3,
+      "learning": 2,
+      "cms": 1
+    },
+    "difficulties": {
+      "beginner": 10,
+      "intermediate": 37,
+      "advanced": 1
+    },
+    "averageReadingTime": 1,
+    "totalWordCount": 47462
+  },
+  "processedAt": "2025-06-26T15:10:08.257Z",
+  "files": [
+    {
+      "originalFile": "about-jamstack.md",
+      "hasDescription": true,
+      "hasCategory": false,
+      "hasReadingTime": false,
+      "hasDifficulty": false,
+      "wordCount": 958,
+      "tags": [
+        "JamStack"
+      ],
+      "enhanced": {
+        "title": "Jamstackについて",
+        "slug": "about-jamstack",
+        "description": "Jamstackの概要やメリットについて詳しく解説しています。",
+        "publishedAt": "2022-07-17T15:00:00.000Z",
+        "tags": [
+          "JamStack"
+        ],
+        "categories": [],
+        "emoji": "🎃",
+        "category": "architecture",
+        "readingTime": 2,
+        "difficulty": "beginner",
+        "wordCount": 958,
+        "lastOptimized": "2025-06-26T15:10:08.237Z"
+      },
+      "outputPath": "content/optimized/about-jamstack.md"
+    },
+    {
+      "originalFile": "ai-service-2025-02.md",
+      "hasDescription": false,
+      "hasCategory": false,
+      "hasReadingTime": false,
+      "hasDifficulty": false,
+      "wordCount": 1,
+      "tags": [],
+      "enhanced": {
+        "title": "【2025年2月時点】Webエンジニア向けの生成AIサービスまとめ（Eraser AI, Devin, Onlookなど）",
+        "slug": "ai-service-2025-02",
+        "publishedAt": "2025-02-20T15:00:00.000Z",
+        "tags": [],
+        "categories": [],
+        "emoji": "🐺",
+        "thumbnail": "https://storage.googleapis.com/p_6227542ad33be40018293aff/42529d89-0c95-440a-a8ca-ff84ed9d7dd6/ai.png",
+        "url": "https://ma-vericks.com/blog/ai-service-2025-02/",
+        "description": "この記事では、実践的な開発手法について詳しく解説しています。",
+        "category": "general",
+        "readingTime": 1,
+        "difficulty": "intermediate",
+        "wordCount": 1,
+        "lastOptimized": "2025-06-26T15:10:08.240Z"
+      },
+      "outputPath": "content/optimized/ai-service-2025-02.md"
+    },
+    {
+      "originalFile": "ameblo-php.md",
+      "hasDescription": false,
+      "hasCategory": false,
+      "hasReadingTime": false,
+      "hasDifficulty": false,
+      "wordCount": 1,
+      "tags": [],
+      "enhanced": {
+        "title": "【PHP】アメブロRSSでブログ記事を取得してサイトに埋め込む方法",
+        "slug": "ameblo-php",
+        "publishedAt": "2020-12-24T15:00:00.000Z",
+        "tags": [],
+        "categories": [],
+        "emoji": "🐺",
+        "thumbnail": "https://storage.googleapis.com/p_6227542ad33be40018293aff/c513e3fa-2b84-4182-ac8d-6fce86849063/ameblo-php.png",
+        "url": "https://ma-vericks.com/blog/ameblo-php/",
+        "description": "この記事では、実践的な開発手法について詳しく解説しています。",
+        "category": "general",
+        "readingTime": 1,
+        "difficulty": "intermediate",
+        "wordCount": 1,
+        "lastOptimized": "2025-06-26T15:10:08.240Z"
+      },
+      "outputPath": "content/optimized/ameblo-php.md"
+    },
+    {
+      "originalFile": "amplify-webp-nextjs.md",
+      "hasDescription": false,
+      "hasCategory": false,
+      "hasReadingTime": false,
+      "hasDifficulty": false,
+      "wordCount": 1,
+      "tags": [
+        "AWS Amplify"
+      ],
+      "enhanced": {
+        "title": "いつのまにかAWS AmplifyでWebP/AVIFがサポートされている…？",
+        "slug": "amplify-webp-nextjs",
+        "publishedAt": "2023-12-06T15:00:00.000Z",
+        "tags": [
+          "AWS Amplify"
+        ],
+        "categories": [],
+        "emoji": "🐺",
+        "thumbnail": "https://storage.googleapis.com/p_6227542ad33be40018293aff/3984de7f-5d2c-488d-88ca-05626ba18b42/amplify-webp-nextjs.png",
+        "url": "https://ma-vericks.com/blog/amplify-webp-nextjs/",
+        "description": "この記事では、実践的な開発手法について詳しく解説しています。",
+        "category": "devops",
+        "readingTime": 1,
+        "difficulty": "intermediate",
+        "wordCount": 1,
+        "lastOptimized": "2025-06-26T15:10:08.241Z"
+      },
+      "outputPath": "content/optimized/amplify-webp-nextjs.md"
+    },
+    {
+      "originalFile": "bookshelf-in-notion.md",
+      "hasDescription": false,
+      "hasCategory": false,
+      "hasReadingTime": false,
+      "hasDifficulty": false,
+      "wordCount": 1,
+      "tags": [],
+      "enhanced": {
+        "title": "手軽な読書アウトプットの場！Notionで管理する社内読書記録について",
+        "slug": "bookshelf-in-notion",
+        "publishedAt": "2023-05-15T15:00:00.000Z",
+        "tags": [],
+        "categories": [],
+        "emoji": "🐺",
+        "thumbnail": "https://storage.googleapis.com/p_6227542ad33be40018293aff/4e5d187e-980e-4b3f-bc07-d764551623b2/bookshelf-in-notion.png",
+        "url": "https://ma-vericks.com/blog/bookshelf-in-notion/",
+        "description": "この記事では、実践的な開発手法について詳しく解説しています。",
+        "category": "general",
+        "readingTime": 1,
+        "difficulty": "intermediate",
+        "wordCount": 1,
+        "lastOptimized": "2025-06-26T15:10:08.241Z"
+      },
+      "outputPath": "content/optimized/bookshelf-in-notion.md"
+    },
+    {
+      "originalFile": "chakraui-colorscheme.md",
+      "hasDescription": true,
+      "hasCategory": false,
+      "hasReadingTime": false,
+      "hasDifficulty": false,
+      "wordCount": 664,
+      "tags": [
+        "Chakra UI"
+      ],
+      "enhanced": {
+        "title": "ChakraUIのcolorSchemeの上書きについて",
+        "slug": "chakraui-colorscheme",
+        "description": "SwitchやRadioなど、Input要素のコンポーネントのcolorSchemeのカスタマイズ方法についてご紹介しています。",
+        "publishedAt": "2022-10-31T15:00:00.000Z",
+        "tags": [
+          "Chakra UI"
+        ],
+        "categories": [],
+        "emoji": "🎨",
+        "category": "ui-library",
+        "readingTime": 1,
+        "difficulty": "intermediate",
+        "wordCount": 664,
+        "lastOptimized": "2025-06-26T15:10:08.242Z"
+      },
+      "outputPath": "content/optimized/chakraui-colorscheme.md"
+    },
+    {
+      "originalFile": "deeplearning-for-general.md",
+      "hasDescription": false,
+      "hasCategory": false,
+      "hasReadingTime": false,
+      "hasDifficulty": false,
+      "wordCount": 1,
+      "tags": [],
+      "enhanced": {
+        "title": "G検定に合格したので難易度や合格率、勉強法についてご紹介します！",
+        "slug": "deeplearning-for-general",
+        "publishedAt": "2024-01-31T15:00:00.000Z",
+        "tags": [],
+        "categories": [],
+        "emoji": "🐺",
+        "thumbnail": "https://storage.googleapis.com/p_6227542ad33be40018293aff/07c0e676-e910-48c1-b335-ff22c4301dea/deeplearning-for-general.png",
+        "url": "https://ma-vericks.com/blog/deeplearning-for-general/",
+        "description": "この記事では、実践的な開発手法について詳しく解説しています。",
+        "category": "general",
+        "readingTime": 1,
+        "difficulty": "intermediate",
+        "wordCount": 1,
+        "lastOptimized": "2025-06-26T15:10:08.243Z"
+      },
+      "outputPath": "content/optimized/deeplearning-for-general.md"
+    },
+    {
+      "originalFile": "git-precommit-husky-lintstaged.md",
+      "hasDescription": false,
+      "hasCategory": false,
+      "hasReadingTime": false,
+      "hasDifficulty": false,
+      "wordCount": 1,
+      "tags": [],
+      "enhanced": {
+        "title": "【Git】コミット時のコードフォーマット、テストの自動化について",
+        "slug": "git-precommit-husky-lintstaged",
+        "publishedAt": "2023-12-13T15:00:00.000Z",
+        "tags": [],
+        "categories": [],
+        "emoji": "🐺",
+        "thumbnail": "https://storage.googleapis.com/p_6227542ad33be40018293aff/b85768d9-8d9c-412d-8789-70e4b278a5db/git-precommit-husky-lintstaged.jpg",
+        "url": "https://ma-vericks.com/blog/git-precommit-husky-lintstaged/",
+        "description": "この記事では、実践的な開発手法について詳しく解説しています。",
+        "category": "general",
+        "readingTime": 1,
+        "difficulty": "intermediate",
+        "wordCount": 1,
+        "lastOptimized": "2025-06-26T15:10:08.243Z"
+      },
+      "outputPath": "content/optimized/git-precommit-husky-lintstaged.md"
+    },
+    {
+      "originalFile": "github-copilot-workspace-tutorial.md",
+      "hasDescription": false,
+      "hasCategory": false,
+      "hasReadingTime": false,
+      "hasDifficulty": false,
+      "wordCount": 1,
+      "tags": [],
+      "enhanced": {
+        "title": "GitHub Copilot Workspaceを使ってみた！開発プロセスの新時代を体験",
+        "slug": "github-copilot-workspace-tutorial",
+        "publishedAt": "2024-12-13T15:00:00.000Z",
+        "tags": [],
+        "categories": [],
+        "emoji": "🐺",
+        "thumbnail": "https://storage.googleapis.com/p_6227542ad33be40018293aff/3a4c824c-28d1-433c-9fe1-7ed297ce9576/github-copilot-workspace-tutorial.png",
+        "url": "https://ma-vericks.com/blog/github-copilot-workspace-tutorial/",
+        "description": "この記事では、実践的な開発手法について詳しく解説しています。",
+        "category": "general",
+        "readingTime": 1,
+        "difficulty": "intermediate",
+        "wordCount": 1,
+        "lastOptimized": "2025-06-26T15:10:08.244Z"
+      },
+      "outputPath": "content/optimized/github-copilot-workspace-tutorial.md"
+    },
+    {
+      "originalFile": "heroku-postgresql-ssl.md",
+      "hasDescription": true,
+      "hasCategory": false,
+      "hasReadingTime": false,
+      "hasDifficulty": false,
+      "wordCount": 507,
+      "tags": [
+        "Heroku",
+        "PostgreSQL"
+      ],
+      "enhanced": {
+        "title": "HerokuのPostgreSQLにSSL接続する",
+        "slug": "heroku-postgresql-ssl",
+        "description": "error: no pg_hba.conf entry for host DB_HOST, user DB_USER, database DB, SSL offのエラー解決の記事です。",
+        "publishedAt": "2020-04-24T15:00:00.000Z",
+        "tags": [
+          "Heroku",
+          "PostgreSQL"
+        ],
+        "categories": [],
+        "emoji": "🐛",
+        "category": "devops",
+        "readingTime": 1,
+        "difficulty": "intermediate",
+        "wordCount": 507,
+        "lastOptimized": "2025-06-26T15:10:08.245Z"
+      },
+      "outputPath": "content/optimized/heroku-postgresql-ssl.md"
+    },
+    {
+      "originalFile": "nextjs-env.md",
+      "hasDescription": false,
+      "hasCategory": false,
+      "hasReadingTime": false,
+      "hasDifficulty": false,
+      "wordCount": 1,
+      "tags": [],
+      "enhanced": {
+        "title": "Next.jsの環境変数問題、dotenv-cliでOS（Mac/Windows）問わず解決！",
+        "slug": "nextjs-env",
+        "publishedAt": "2025-01-30T15:00:00.000Z",
+        "tags": [],
+        "categories": [],
+        "emoji": "🐺",
+        "thumbnail": "https://storage.googleapis.com/p_6227542ad33be40018293aff/df114308-7325-4fd0-ab95-a66f048b9844/nextjs-env.png",
+        "url": "https://ma-vericks.com/blog/nextjs-env/",
+        "description": "この記事では、実践的な開発手法について詳しく解説しています。",
+        "category": "general",
+        "readingTime": 1,
+        "difficulty": "intermediate",
+        "wordCount": 1,
+        "lastOptimized": "2025-06-26T15:10:08.245Z"
+      },
+      "outputPath": "content/optimized/nextjs-env.md"
+    },
+    {
+      "originalFile": "nextjs-typescript-chakraui.md",
+      "hasDescription": false,
+      "hasCategory": false,
+      "hasReadingTime": false,
+      "hasDifficulty": false,
+      "wordCount": 1,
+      "tags": [
+        "Chakra UI",
+        "React.js",
+        "Next.js",
+        "TypeScript"
+      ],
+      "enhanced": {
+        "title": "React.js/Next.js + TypeScript + ChakraUIの環境構築",
+        "slug": "nextjs-typescript-chakraui",
+        "publishedAt": "2022-11-14T15:00:00.000Z",
+        "tags": [
+          "Chakra UI",
+          "React.js",
+          "Next.js",
+          "TypeScript"
+        ],
+        "categories": [],
+        "emoji": "🐺",
+        "thumbnail": "https://storage.googleapis.com/p_6227542ad33be40018293aff/b70531b8-7640-4164-8ef8-ca757ea7a34e/nextjs-typescript-chakraui.png",
+        "url": "https://ma-vericks.com/blog/nextjs-typescript-chakraui/",
+        "description": "この記事では、実践的な開発手法について詳しく解説しています。",
+        "category": "ui-library",
+        "readingTime": 1,
+        "difficulty": "intermediate",
+        "wordCount": 1,
+        "lastOptimized": "2025-06-26T15:10:08.245Z"
+      },
+      "outputPath": "content/optimized/nextjs-typescript-chakraui.md"
+    },
+    {
+      "originalFile": "nocode-webgl-tool-unicornstudio.md",
+      "hasDescription": false,
+      "hasCategory": false,
+      "hasReadingTime": false,
+      "hasDifficulty": false,
+      "wordCount": 1,
+      "tags": [],
+      "enhanced": {
+        "title": "ノーコードでWebGLが作れるUnicorn.studioとは？実際にWebGL作ってみました",
+        "slug": "nocode-webgl-tool-unicornstudio",
+        "publishedAt": "2024-12-05T15:00:00.000Z",
+        "tags": [],
+        "categories": [],
+        "emoji": "🐺",
+        "thumbnail": "https://storage.googleapis.com/p_6227542ad33be40018293aff/787cf6b3-7925-4c4f-a8f3-eea2beff8fe3/nocode-webgl-tool-unicornstudio.png",
+        "url": "https://ma-vericks.com/blog/nocode-webgl-tool-unicornstudio/",
+        "description": "この記事では、実践的な開発手法について詳しく解説しています。",
+        "category": "general",
+        "readingTime": 1,
+        "difficulty": "intermediate",
+        "wordCount": 1,
+        "lastOptimized": "2025-06-26T15:10:08.246Z"
+      },
+      "outputPath": "content/optimized/nocode-webgl-tool-unicornstudio.md"
+    },
+    {
+      "originalFile": "nuxt-commands.md",
+      "hasDescription": true,
+      "hasCategory": false,
+      "hasReadingTime": false,
+      "hasDifficulty": false,
+      "wordCount": 2155,
+      "tags": [
+        "Nuxt.js"
+      ],
+      "enhanced": {
+        "title": "Nuxt.jsの初期コマンドについて",
+        "slug": "nuxt-commands",
+        "description": "Nuxtのプロジェクト構築時には以下のコマンドが叩けるようになってます。",
+        "publishedAt": "2022-07-10T15:00:00.000Z",
+        "tags": [
+          "Nuxt.js"
+        ],
+        "categories": [],
+        "emoji": "🍇",
+        "category": "frontend",
+        "readingTime": 2,
+        "difficulty": "beginner",
+        "wordCount": 2155,
+        "lastOptimized": "2025-06-26T15:10:08.246Z"
+      },
+      "outputPath": "content/optimized/nuxt-commands.md"
+    },
+    {
+      "originalFile": "nuxt-masonry-layout.md",
+      "hasDescription": false,
+      "hasCategory": false,
+      "hasReadingTime": false,
+      "hasDifficulty": false,
+      "wordCount": 1,
+      "tags": [
+        "Nuxt.js",
+        "Vue.js"
+      ],
+      "enhanced": {
+        "title": "【Nuxt.js】vue-masonryを使用して要素をタイル状に表示する",
+        "slug": "nuxt-masonry-layout",
+        "publishedAt": "2020-12-17T15:00:00.000Z",
+        "tags": [
+          "Nuxt.js",
+          "Vue.js"
+        ],
+        "categories": [],
+        "emoji": "🐺",
+        "thumbnail": "https://storage.googleapis.com/p_6227542ad33be40018293aff/348c8976-23e8-4d25-964f-bdaa530a94e4/nuxt-masonry-layout.gif",
+        "url": "https://ma-vericks.com/blog/nuxt-masonry-layout/",
+        "description": "この記事では、実践的な開発手法について詳しく解説しています。",
+        "category": "frontend",
+        "readingTime": 1,
+        "difficulty": "intermediate",
+        "wordCount": 1,
+        "lastOptimized": "2025-06-26T15:10:08.246Z"
+      },
+      "outputPath": "content/optimized/nuxt-masonry-layout.md"
+    },
+    {
+      "originalFile": "nuxt-scss.md",
+      "hasDescription": false,
+      "hasCategory": false,
+      "hasReadingTime": false,
+      "hasDifficulty": false,
+      "wordCount": 1,
+      "tags": [],
+      "enhanced": {
+        "title": "【Nuxt.js】新規プロジェクトからScss周りの環境構築（Node v16対応）",
+        "slug": "nuxt-scss",
+        "publishedAt": "2022-06-18T15:00:00.000Z",
+        "tags": [],
+        "categories": [],
+        "emoji": "🐺",
+        "thumbnail": "https://storage.googleapis.com/p_6227542ad33be40018293aff/0743ce4d-51fe-4325-a95c-0aff35b5e5f6/nuxt-scss.png",
+        "url": "https://ma-vericks.com/blog/nuxt-scss/",
+        "description": "この記事では、実践的な開発手法について詳しく解説しています。",
+        "category": "general",
+        "readingTime": 1,
+        "difficulty": "intermediate",
+        "wordCount": 1,
+        "lastOptimized": "2025-06-26T15:10:08.247Z"
+      },
+      "outputPath": "content/optimized/nuxt-scss.md"
+    },
+    {
+      "originalFile": "nuxt-storybook.md",
+      "hasDescription": false,
+      "hasCategory": false,
+      "hasReadingTime": false,
+      "hasDifficulty": false,
+      "wordCount": 1,
+      "tags": [
+        "Nuxt.js",
+        "AWS Amplify"
+      ],
+      "enhanced": {
+        "title": "NuxtにStorybookを導入する 〜環境構築から使い方、Amplifyデプロイまで〜",
+        "slug": "nuxt-storybook",
+        "publishedAt": "2021-07-18T15:00:00.000Z",
+        "tags": [
+          "Nuxt.js",
+          "AWS Amplify"
+        ],
+        "categories": [],
+        "emoji": "🐺",
+        "thumbnail": "https://storage.googleapis.com/p_6227542ad33be40018293aff/e3fbbce9-51e1-48a4-9dd1-e58f4440303c/nuxt-storybook.png",
+        "url": "https://ma-vericks.com/blog/nuxt-storybook/",
+        "description": "この記事では、実践的な開発手法について詳しく解説しています。",
+        "category": "frontend",
+        "readingTime": 1,
+        "difficulty": "beginner",
+        "wordCount": 1,
+        "lastOptimized": "2025-06-26T15:10:08.247Z"
+      },
+      "outputPath": "content/optimized/nuxt-storybook.md"
+    },
+    {
+      "originalFile": "nuxt-structure.md",
+      "hasDescription": true,
+      "hasCategory": false,
+      "hasReadingTime": false,
+      "hasDifficulty": false,
+      "wordCount": 2668,
+      "tags": [
+        "Nuxt.js"
+      ],
+      "enhanced": {
+        "title": "Nuxtのディレクトリ・ファイル構成について",
+        "slug": "nuxt-structure",
+        "description": "フレームワークを用いて開発を進める以上、 そのディレクトリ・ファイルがどのような役割を果たすかしっかり理解することが大切だと考えています。この記事では各ディレクトリ・ファイルがどのような役割を果たすか詳しく解説しています。",
+        "publishedAt": "2022-07-06T15:00:00.000Z",
+        "tags": [
+          "Nuxt.js"
+        ],
+        "categories": [],
+        "emoji": "✋",
+        "category": "frontend",
+        "readingTime": 5,
+        "difficulty": "beginner",
+        "wordCount": 2668,
+        "lastOptimized": "2025-06-26T15:10:08.248Z"
+      },
+      "outputPath": "content/optimized/nuxt-structure.md"
+    },
+    {
+      "originalFile": "nuxt-study-report.md",
+      "hasDescription": false,
+      "hasCategory": false,
+      "hasReadingTime": false,
+      "hasDifficulty": false,
+      "wordCount": 1,
+      "tags": [
+        "Nuxt.js",
+        "Vue.js"
+      ],
+      "enhanced": {
+        "title": "Vue.js/Nuxt勉強会を行いました",
+        "slug": "nuxt-study-report",
+        "publishedAt": "2022-06-27T15:00:00.000Z",
+        "tags": [
+          "Nuxt.js",
+          "Vue.js"
+        ],
+        "categories": [],
+        "emoji": "🐺",
+        "thumbnail": "https://storage.googleapis.com/p_6227542ad33be40018293aff/86ee01c7-a94a-4c0e-a98d-083b0148a8a3/nuxt-study-report.png",
+        "url": "https://ma-vericks.com/blog/nuxt-study-report/",
+        "description": "この記事では、実践的な開発手法について詳しく解説しています。",
+        "category": "frontend",
+        "readingTime": 1,
+        "difficulty": "intermediate",
+        "wordCount": 1,
+        "lastOptimized": "2025-06-26T15:10:08.248Z"
+      },
+      "outputPath": "content/optimized/nuxt-study-report.md"
+    },
+    {
+      "originalFile": "nuxt-wordpress-preview.md",
+      "hasDescription": false,
+      "hasCategory": false,
+      "hasReadingTime": false,
+      "hasDifficulty": false,
+      "wordCount": 1,
+      "tags": [
+        "Nuxt.js",
+        "WordPress"
+      ],
+      "enhanced": {
+        "title": "NuxtとWordPress でプレビュー機能を実装する",
+        "slug": "nuxt-wordpress-preview",
+        "publishedAt": "2022-10-02T15:00:00.000Z",
+        "tags": [
+          "Nuxt.js",
+          "WordPress"
+        ],
+        "categories": [],
+        "emoji": "🐺",
+        "thumbnail": "https://storage.googleapis.com/p_6227542ad33be40018293aff/b277f446-b598-45fb-9c3c-c561f5ff2032/nuxt-wordpress-preview.png",
+        "url": "https://ma-vericks.com/blog/nuxt-wordpress-preview/",
+        "description": "この記事では、実践的な開発手法について詳しく解説しています。",
+        "category": "frontend",
+        "readingTime": 1,
+        "difficulty": "intermediate",
+        "wordCount": 1,
+        "lastOptimized": "2025-06-26T15:10:08.248Z"
+      },
+      "outputPath": "content/optimized/nuxt-wordpress-preview.md"
+    },
+    {
+      "originalFile": "nuxt3-auth-page-permission.md",
+      "hasDescription": false,
+      "hasCategory": false,
+      "hasReadingTime": false,
+      "hasDifficulty": false,
+      "wordCount": 1,
+      "tags": [
+        "Nuxt.js"
+      ],
+      "enhanced": {
+        "title": "【Nuxt3】権限ごとのページアクセスの制御について（ログイン機能編）",
+        "slug": "nuxt3-auth-page-permission",
+        "publishedAt": "2023-12-10T15:00:00.000Z",
+        "tags": [
+          "Nuxt.js"
+        ],
+        "categories": [],
+        "emoji": "🐺",
+        "thumbnail": "https://storage.googleapis.com/p_6227542ad33be40018293aff/38c75ff4-88ca-44cf-be21-71794ea344c0/nuxt3-auth-page-permission.png",
+        "url": "https://ma-vericks.com/blog/nuxt3-auth-page-permission/",
+        "description": "この記事では、実践的な開発手法について詳しく解説しています。",
+        "category": "frontend",
+        "readingTime": 1,
+        "difficulty": "intermediate",
+        "wordCount": 1,
+        "lastOptimized": "2025-06-26T15:10:08.249Z"
+      },
+      "outputPath": "content/optimized/nuxt3-auth-page-permission.md"
+    },
+    {
+      "originalFile": "nuxt3-lottie-animation.md",
+      "hasDescription": false,
+      "hasCategory": false,
+      "hasReadingTime": false,
+      "hasDifficulty": false,
+      "wordCount": 1,
+      "tags": [],
+      "enhanced": {
+        "title": "【Nuxt 3】 Lottieを使ってリッチなアニメーションを表示（オープニング・ボタンアニメーション）",
+        "slug": "nuxt3-lottie-animation",
+        "publishedAt": "2024-02-28T15:00:00.000Z",
+        "tags": [],
+        "categories": [],
+        "emoji": "🐺",
+        "thumbnail": "https://storage.googleapis.com/p_6227542ad33be40018293aff/2d3b740b-2694-4e87-acf0-17ae492c3509/nuxt3-lottie-animation.png",
+        "url": "https://ma-vericks.com/blog/nuxt3-lottie-animation/",
+        "description": "この記事では、実践的な開発手法について詳しく解説しています。",
+        "category": "general",
+        "readingTime": 1,
+        "difficulty": "intermediate",
+        "wordCount": 1,
+        "lastOptimized": "2025-06-26T15:10:08.249Z"
+      },
+      "outputPath": "content/optimized/nuxt3-lottie-animation.md"
+    },
+    {
+      "originalFile": "nuxt3-page-permission-middleware.md",
+      "hasDescription": false,
+      "hasCategory": false,
+      "hasReadingTime": false,
+      "hasDifficulty": false,
+      "wordCount": 1,
+      "tags": [
+        "Nuxt.js"
+      ],
+      "enhanced": {
+        "title": "【Nuxt3】権限ごとのページアクセスの制御について（ページごと権限付与・ミドルウェア実装編）",
+        "slug": "nuxt3-page-permission-middleware",
+        "publishedAt": "2023-12-11T15:00:00.000Z",
+        "tags": [
+          "Nuxt.js"
+        ],
+        "categories": [],
+        "emoji": "🐺",
+        "thumbnail": "https://storage.googleapis.com/p_6227542ad33be40018293aff/86e301c2-9c42-42cb-a12a-f84ba71c0aae/nuxt3-page-permission-middleware.png",
+        "url": "https://ma-vericks.com/blog/nuxt3-page-permission-middleware/",
+        "description": "この記事では、実践的な開発手法について詳しく解説しています。",
+        "category": "frontend",
+        "readingTime": 1,
+        "difficulty": "intermediate",
+        "wordCount": 1,
+        "lastOptimized": "2025-06-26T15:10:08.249Z"
+      },
+      "outputPath": "content/optimized/nuxt3-page-permission-middleware.md"
+    },
+    {
+      "originalFile": "nuxt3-page-transition-animation.md",
+      "hasDescription": false,
+      "hasCategory": false,
+      "hasReadingTime": false,
+      "hasDifficulty": false,
+      "wordCount": 1,
+      "tags": [
+        "Nuxt.js"
+      ],
+      "enhanced": {
+        "title": "【Nuxt3】ページ遷移アニメーションの実装について（CSS, JS/GSAP編）",
+        "slug": "nuxt3-page-transition-animation",
+        "publishedAt": "2023-12-17T15:00:00.000Z",
+        "tags": [
+          "Nuxt.js"
+        ],
+        "categories": [],
+        "emoji": "🐺",
+        "thumbnail": "https://storage.googleapis.com/p_6227542ad33be40018293aff/409f1c74-c119-4a7c-b4b4-f91d8d2a988f/nuxt3-page-transition-animation.png",
+        "url": "https://ma-vericks.com/blog/nuxt3-page-transition-animation/",
+        "description": "この記事では、実践的な開発手法について詳しく解説しています。",
+        "category": "frontend",
+        "readingTime": 1,
+        "difficulty": "intermediate",
+        "wordCount": 1,
+        "lastOptimized": "2025-06-26T15:10:08.249Z"
+      },
+      "outputPath": "content/optimized/nuxt3-page-transition-animation.md"
+    },
+    {
+      "originalFile": "nuxt3-study-report.md",
+      "hasDescription": false,
+      "hasCategory": false,
+      "hasReadingTime": false,
+      "hasDifficulty": false,
+      "wordCount": 1,
+      "tags": [
+        "Nuxt.js"
+      ],
+      "enhanced": {
+        "title": "【Nuxt3】全6回の社内勉強会を行いました",
+        "slug": "nuxt3-study-report",
+        "publishedAt": "2023-12-04T15:00:00.000Z",
+        "tags": [
+          "Nuxt.js"
+        ],
+        "categories": [],
+        "emoji": "🐺",
+        "thumbnail": "https://storage.googleapis.com/p_6227542ad33be40018293aff/f3a12cbf-feb0-4dda-a6cb-3c931ea6556d/nuxt3-study-report.png",
+        "url": "https://ma-vericks.com/blog/nuxt3-study-report/",
+        "description": "この記事では、実践的な開発手法について詳しく解説しています。",
+        "category": "frontend",
+        "readingTime": 1,
+        "difficulty": "intermediate",
+        "wordCount": 1,
+        "lastOptimized": "2025-06-26T15:10:08.250Z"
+      },
+      "outputPath": "content/optimized/nuxt3-study-report.md"
+    },
+    {
+      "originalFile": "nuxt3-view-transitions-api.md",
+      "hasDescription": false,
+      "hasCategory": false,
+      "hasReadingTime": false,
+      "hasDifficulty": false,
+      "wordCount": 1,
+      "tags": [
+        "Nuxt.js"
+      ],
+      "enhanced": {
+        "title": "【Nuxt3】ページ遷移アニメーションの実装について（View Transitions API編）",
+        "slug": "nuxt3-view-transitions-api",
+        "publishedAt": "2023-12-18T15:00:00.000Z",
+        "tags": [
+          "Nuxt.js"
+        ],
+        "categories": [],
+        "emoji": "🐺",
+        "thumbnail": "https://storage.googleapis.com/p_6227542ad33be40018293aff/adecf4af-f10a-4b3b-8dfd-8e968570b978/nuxt3-view-transitions-api.png",
+        "url": "https://ma-vericks.com/blog/nuxt3-view-transitions-api/",
+        "description": "この記事では、実践的な開発手法について詳しく解説しています。",
+        "category": "frontend",
+        "readingTime": 1,
+        "difficulty": "intermediate",
+        "wordCount": 1,
+        "lastOptimized": "2025-06-26T15:10:08.250Z"
+      },
+      "outputPath": "content/optimized/nuxt3-view-transitions-api.md"
+    },
+    {
+      "originalFile": "nuxt3-vuetify-toast.md",
+      "hasDescription": false,
+      "hasCategory": false,
+      "hasReadingTime": false,
+      "hasDifficulty": false,
+      "wordCount": 1,
+      "tags": [
+        "Nuxt.js"
+      ],
+      "enhanced": {
+        "title": "【Nuxt3】Vuetify3 + Piniaで通知トーストの表示・単体テスト実装について",
+        "slug": "nuxt3-vuetify-toast",
+        "publishedAt": "2023-12-01T15:00:00.000Z",
+        "tags": [
+          "Nuxt.js"
+        ],
+        "categories": [],
+        "emoji": "🐺",
+        "thumbnail": "https://storage.googleapis.com/p_6227542ad33be40018293aff/4c961b46-c037-4086-b506-dd5aa72d6a37/nuxt3-vuetify-toast.png",
+        "url": "https://ma-vericks.com/blog/nuxt3-vuetify-toast/",
+        "description": "この記事では、実践的な開発手法について詳しく解説しています。",
+        "category": "frontend",
+        "readingTime": 1,
+        "difficulty": "intermediate",
+        "wordCount": 1,
+        "lastOptimized": "2025-06-26T15:10:08.250Z"
+      },
+      "outputPath": "content/optimized/nuxt3-vuetify-toast.md"
+    },
+    {
+      "originalFile": "nuxt3-vuetify-vitest.md",
+      "hasDescription": false,
+      "hasCategory": false,
+      "hasReadingTime": false,
+      "hasDifficulty": false,
+      "wordCount": 1,
+      "tags": [
+        "Nuxt.js"
+      ],
+      "enhanced": {
+        "title": "【Nuxt3】Vuetify3 + Vitestで単体テスト実行環境を構築",
+        "slug": "nuxt3-vuetify-vitest",
+        "publishedAt": "2023-10-30T15:00:00.000Z",
+        "tags": [
+          "Nuxt.js"
+        ],
+        "categories": [],
+        "emoji": "🐺",
+        "thumbnail": "https://storage.googleapis.com/p_6227542ad33be40018293aff/7589ea8f-138f-45e6-bffd-66df1e7b4b70/nuxt3-vuetify-vitest.png",
+        "url": "https://ma-vericks.com/blog/nuxt3-vuetify-vitest/",
+        "description": "この記事では、実践的な開発手法について詳しく解説しています。",
+        "category": "frontend",
+        "readingTime": 1,
+        "difficulty": "intermediate",
+        "wordCount": 1,
+        "lastOptimized": "2025-06-26T15:10:08.250Z"
+      },
+      "outputPath": "content/optimized/nuxt3-vuetify-vitest.md"
+    },
+    {
+      "originalFile": "pl-beginner.md",
+      "hasDescription": false,
+      "hasCategory": false,
+      "hasReadingTime": false,
+      "hasDifficulty": false,
+      "wordCount": 1,
+      "tags": [],
+      "enhanced": {
+        "title": "システム開発で初めてのPL（プロジェクトリーダー）、意識したことなど",
+        "slug": "pl-beginner",
+        "publishedAt": "2024-10-16T15:00:00.000Z",
+        "tags": [],
+        "categories": [],
+        "emoji": "🐺",
+        "thumbnail": "https://storage.googleapis.com/p_6227542ad33be40018293aff/bb4ac661-e9d4-4b1e-af69-1b7598812bc0/pl-beginner.jpg",
+        "url": "https://ma-vericks.com/blog/pl-beginner/",
+        "description": "この記事では、実践的な開発手法について詳しく解説しています。",
+        "category": "general",
+        "readingTime": 1,
+        "difficulty": "intermediate",
+        "wordCount": 1,
+        "lastOptimized": "2025-06-26T15:10:08.251Z"
+      },
+      "outputPath": "content/optimized/pl-beginner.md"
+    },
+    {
+      "originalFile": "python-brackjack.md",
+      "hasDescription": false,
+      "hasCategory": false,
+      "hasReadingTime": false,
+      "hasDifficulty": false,
+      "wordCount": 14113,
+      "tags": [
+        "Python"
+      ],
+      "enhanced": {
+        "title": "Pythonでトランプゲームのブラックジャックを実装してみた",
+        "slug": "python-brackjack",
+        "publishedAt": "2020-05-15T15:00:00.000Z",
+        "tags": [
+          "Python"
+        ],
+        "categories": [],
+        "emoji": "♣️",
+        "description": "今回はブラックジャックのメインゲーム機能を実装してみました。   実際にプログラムを書き、既存の要件からどう言った部分を自分だったら拡張するか？とか考えたりして色々勉強になったと思います！",
+        "category": "backend",
+        "readingTime": 4,
+        "difficulty": "beginner",
+        "wordCount": 14113,
+        "lastOptimized": "2025-06-26T15:10:08.251Z"
+      },
+      "outputPath": "content/optimized/python-brackjack.md"
+    },
+    {
+      "originalFile": "python-poker.md",
+      "hasDescription": false,
+      "hasCategory": false,
+      "hasReadingTime": false,
+      "hasDifficulty": false,
+      "wordCount": 13807,
+      "tags": [
+        "Python"
+      ],
+      "enhanced": {
+        "title": "Pythonでドラクエのポーカーを実装してみた",
+        "slug": "python-poker",
+        "publishedAt": "2020-05-25T15:00:00.000Z",
+        "tags": [
+          "Python"
+        ],
+        "categories": [],
+        "emoji": "♠️",
+        "description": "今回はドラクエのポーカーを実装してみたいと思います。",
+        "category": "backend",
+        "readingTime": 3,
+        "difficulty": "beginner",
+        "wordCount": 13807,
+        "lastOptimized": "2025-06-26T15:10:08.252Z"
+      },
+      "outputPath": "content/optimized/python-poker.md"
+    },
+    {
+      "originalFile": "python-trump.md",
+      "hasDescription": false,
+      "hasCategory": false,
+      "hasReadingTime": false,
+      "hasDifficulty": false,
+      "wordCount": 4155,
+      "tags": [
+        "Python"
+      ],
+      "enhanced": {
+        "title": "Pythonでトランプのカードゲームを実装してみた",
+        "slug": "python-trump",
+        "publishedAt": "2020-05-05T15:00:00.000Z",
+        "tags": [
+          "Python"
+        ],
+        "categories": [],
+        "emoji": "🃏",
+        "description": "## はじめに",
+        "category": "backend",
+        "readingTime": 2,
+        "difficulty": "beginner",
+        "wordCount": 4155,
+        "lastOptimized": "2025-06-26T15:10:08.253Z"
+      },
+      "outputPath": "content/optimized/python-trump.md"
+    },
+    {
+      "originalFile": "react-hook-book.md",
+      "hasDescription": true,
+      "hasCategory": false,
+      "hasReadingTime": false,
+      "hasDifficulty": false,
+      "wordCount": 560,
+      "tags": [
+        "読書メモ",
+        "React.js"
+      ],
+      "enhanced": {
+        "title": "基礎から学ぶ React/React Hooksを読んだ",
+        "slug": "react-hook-book",
+        "description": "基礎から学ぶ React/React Hooks を読んだ感想です。",
+        "publishedAt": "2022-11-07T15:00:00.000Z",
+        "tags": [
+          "読書メモ",
+          "React.js"
+        ],
+        "categories": [],
+        "emoji": "📚",
+        "category": "learning",
+        "readingTime": 1,
+        "difficulty": "intermediate",
+        "wordCount": 560,
+        "lastOptimized": "2025-06-26T15:10:08.253Z"
+      },
+      "outputPath": "content/optimized/react-hook-book.md"
+    },
+    {
+      "originalFile": "time-bugs.md",
+      "hasDescription": false,
+      "hasCategory": false,
+      "hasReadingTime": false,
+      "hasDifficulty": false,
+      "wordCount": 1,
+      "tags": [],
+      "enhanced": {
+        "title": "2025年問題、2038年問題など時刻処理に関わる年問題の原因や影響をまとめてみた",
+        "slug": "time-bugs",
+        "publishedAt": "2024-05-21T15:00:00.000Z",
+        "tags": [],
+        "categories": [],
+        "emoji": "🐺",
+        "thumbnail": "https://storage.googleapis.com/p_6227542ad33be40018293aff/d79ac195-853e-4309-aba4-e5156f43bb44/time-bugs.png",
+        "url": "https://ma-vericks.com/blog/time-bugs/",
+        "description": "この記事では、実践的な開発手法について詳しく解説しています。",
+        "category": "general",
+        "readingTime": 1,
+        "difficulty": "intermediate",
+        "wordCount": 1,
+        "lastOptimized": "2025-06-26T15:10:08.253Z"
+      },
+      "outputPath": "content/optimized/time-bugs.md"
+    },
+    {
+      "originalFile": "twitter-scraping.md",
+      "hasDescription": false,
+      "hasCategory": false,
+      "hasReadingTime": false,
+      "hasDifficulty": false,
+      "wordCount": 1,
+      "tags": [],
+      "enhanced": {
+        "title": "Twitter API無しでツイートのスクレイピング",
+        "slug": "twitter-scraping",
+        "publishedAt": "2020-11-03T15:00:00.000Z",
+        "tags": [],
+        "categories": [],
+        "emoji": "🐺",
+        "thumbnail": "https://storage.googleapis.com/p_6227542ad33be40018293aff/77e0a649-bd4b-4550-b560-70b53e3c52b6/twitter-scraping.png",
+        "url": "https://ma-vericks.com/blog/twitter-scraping/",
+        "description": "この記事では、実践的な開発手法について詳しく解説しています。",
+        "category": "general",
+        "readingTime": 1,
+        "difficulty": "intermediate",
+        "wordCount": 1,
+        "lastOptimized": "2025-06-26T15:10:08.254Z"
+      },
+      "outputPath": "content/optimized/twitter-scraping.md"
+    },
+    {
+      "originalFile": "typescript-react-nextjs.md",
+      "hasDescription": true,
+      "hasCategory": false,
+      "hasReadingTime": false,
+      "hasDifficulty": false,
+      "wordCount": 1010,
+      "tags": [
+        "読書メモ",
+        "TypeScript",
+        "React.js",
+        "Next.js"
+      ],
+      "enhanced": {
+        "title": "TypeScriptとReact/Next.jsでつくる 実践Webアプリケーション開発 を読んだ",
+        "slug": "typescript-react-nextjs",
+        "description": "TypeScriptとReact/Next.jsでつくる 実践Webアプリケーション開発 を読んだ感想です。",
+        "publishedAt": "2022-11-09T15:00:00.000Z",
+        "tags": [
+          "読書メモ",
+          "TypeScript",
+          "React.js",
+          "Next.js"
+        ],
+        "categories": [],
+        "emoji": "📚",
+        "category": "learning",
+        "readingTime": 2,
+        "difficulty": "intermediate",
+        "wordCount": 1010,
+        "lastOptimized": "2025-06-26T15:10:08.254Z"
+      },
+      "outputPath": "content/optimized/typescript-react-nextjs.md"
+    },
+    {
+      "originalFile": "unicornstudio-webgl-embed.md",
+      "hasDescription": false,
+      "hasCategory": false,
+      "hasReadingTime": false,
+      "hasDifficulty": false,
+      "wordCount": 1,
+      "tags": [],
+      "enhanced": {
+        "title": "ノーコードでWebGLが作れるUnicorn.studio、サイトにWebGLを埋め込む",
+        "slug": "unicornstudio-webgl-embed",
+        "publishedAt": "2024-12-06T15:00:00.000Z",
+        "tags": [],
+        "categories": [],
+        "emoji": "🐺",
+        "thumbnail": "https://storage.googleapis.com/p_6227542ad33be40018293aff/bcb7e076-44e8-410d-b97e-b4bb3a7d9a4e/unicornstudio-webgl-embed.png",
+        "url": "https://ma-vericks.com/blog/unicornstudio-webgl-embed/",
+        "description": "この記事では、実践的な開発手法について詳しく解説しています。",
+        "category": "general",
+        "readingTime": 1,
+        "difficulty": "intermediate",
+        "wordCount": 1,
+        "lastOptimized": "2025-06-26T15:10:08.254Z"
+      },
+      "outputPath": "content/optimized/unicornstudio-webgl-embed.md"
+    },
+    {
+      "originalFile": "vite-nuxt-vue.md",
+      "hasDescription": false,
+      "hasCategory": false,
+      "hasReadingTime": false,
+      "hasDifficulty": false,
+      "wordCount": 1,
+      "tags": [],
+      "enhanced": {
+        "title": "Viteを使ってVueやNuxtを動かしてみた",
+        "slug": "vite-nuxt-vue",
+        "publishedAt": "2022-06-16T15:00:00.000Z",
+        "tags": [],
+        "categories": [],
+        "emoji": "🐺",
+        "thumbnail": "https://storage.googleapis.com/p_6227542ad33be40018293aff/0beea9bd-48a4-4e4c-8d3c-faf54d430ce6/vite-nuxt-vue.png",
+        "url": "https://ma-vericks.com/blog/vite-nuxt-vue/",
+        "description": "この記事では、実践的な開発手法について詳しく解説しています。",
+        "category": "general",
+        "readingTime": 1,
+        "difficulty": "intermediate",
+        "wordCount": 1,
+        "lastOptimized": "2025-06-26T15:10:08.255Z"
+      },
+      "outputPath": "content/optimized/vite-nuxt-vue.md"
+    },
+    {
+      "originalFile": "vitepress.md",
+      "hasDescription": false,
+      "hasCategory": false,
+      "hasReadingTime": false,
+      "hasDifficulty": false,
+      "wordCount": 1,
+      "tags": [],
+      "enhanced": {
+        "title": "VitePressとは？基本的な使い方、デプロイ手順を解説します！",
+        "slug": "vitepress",
+        "publishedAt": "2024-03-30T15:00:00.000Z",
+        "tags": [],
+        "categories": [],
+        "emoji": "🐺",
+        "thumbnail": "https://storage.googleapis.com/p_6227542ad33be40018293aff/78902c38-093c-4402-982b-a576aa6fb87c/vitepress.jpg",
+        "url": "https://ma-vericks.com/blog/vitepress/",
+        "description": "この記事では、実践的な開発手法について詳しく解説しています。",
+        "category": "general",
+        "readingTime": 1,
+        "difficulty": "beginner",
+        "wordCount": 1,
+        "lastOptimized": "2025-06-26T15:10:08.255Z"
+      },
+      "outputPath": "content/optimized/vitepress.md"
+    },
+    {
+      "originalFile": "vue-movie.md",
+      "hasDescription": true,
+      "hasCategory": false,
+      "hasReadingTime": false,
+      "hasDifficulty": false,
+      "wordCount": 2890,
+      "tags": [
+        "Vue.js"
+      ],
+      "enhanced": {
+        "title": "Vue.jsで超簡易的な映画検索アプリを作ってみた",
+        "slug": "vue-movie",
+        "description": "Reactを使って映画検索アプリを作成する というものをVue.js（Vue CLI）で簡易的に作ってみたものです。",
+        "publishedAt": "2020-07-08T15:00:00.000Z",
+        "tags": [
+          "Vue.js"
+        ],
+        "categories": [],
+        "emoji": "🎥",
+        "category": "frontend",
+        "readingTime": 2,
+        "difficulty": "beginner",
+        "wordCount": 2890,
+        "lastOptimized": "2025-06-26T15:10:08.255Z"
+      },
+      "outputPath": "content/optimized/vue-movie.md"
+    },
+    {
+      "originalFile": "vue3-tanstackquery.md",
+      "hasDescription": false,
+      "hasCategory": false,
+      "hasReadingTime": false,
+      "hasDifficulty": false,
+      "wordCount": 1,
+      "tags": [
+        "Vue.js"
+      ],
+      "enhanced": {
+        "title": "Vue3 と Tanstack Query でのAPI結合について（useQuery編）",
+        "slug": "vue3-tanstackquery",
+        "publishedAt": "2022-12-23T06:00:00.000Z",
+        "tags": [
+          "Vue.js"
+        ],
+        "categories": [],
+        "emoji": "🐺",
+        "thumbnail": "https://storage.googleapis.com/p_6227542ad33be40018293aff/f047a541-b2dc-4ded-9b1f-e9b886e15f54/vue3-tanstackquery.png",
+        "url": "https://ma-vericks.com/blog/vue3-tanstackquery/",
+        "description": "この記事では、実践的な開発手法について詳しく解説しています。",
+        "category": "frontend",
+        "readingTime": 1,
+        "difficulty": "intermediate",
+        "wordCount": 1,
+        "lastOptimized": "2025-06-26T15:10:08.255Z"
+      },
+      "outputPath": "content/optimized/vue3-tanstackquery.md"
+    },
+    {
+      "originalFile": "web-engineer-feed.md",
+      "hasDescription": false,
+      "hasCategory": false,
+      "hasReadingTime": false,
+      "hasDifficulty": false,
+      "wordCount": 1,
+      "tags": [],
+      "enhanced": {
+        "title": "フロントエンドエンジニアの日々の情報収集について（まとめサイト、YouTube、ツールなど）",
+        "slug": "web-engineer-feed",
+        "publishedAt": "2024-12-20T15:00:00.000Z",
+        "tags": [],
+        "categories": [],
+        "emoji": "🐺",
+        "thumbnail": "https://storage.googleapis.com/p_6227542ad33be40018293aff/ea7ac682-ff13-46ec-b717-4e9ded33d8de/web-engineer-feed.png",
+        "url": "https://ma-vericks.com/blog/web-engineer-feed/",
+        "description": "この記事では、実践的な開発手法について詳しく解説しています。",
+        "category": "general",
+        "readingTime": 1,
+        "difficulty": "intermediate",
+        "wordCount": 1,
+        "lastOptimized": "2025-06-26T15:10:08.256Z"
+      },
+      "outputPath": "content/optimized/web-engineer-feed.md"
+    },
+    {
+      "originalFile": "webengineer-output.md",
+      "hasDescription": false,
+      "hasCategory": false,
+      "hasReadingTime": false,
+      "hasDifficulty": false,
+      "wordCount": 1,
+      "tags": [],
+      "enhanced": {
+        "title": "WEBエンジニアのための効果的なアウトプット方法",
+        "slug": "webengineer-output",
+        "publishedAt": "2024-04-29T15:00:00.000Z",
+        "tags": [],
+        "categories": [],
+        "emoji": "🐺",
+        "thumbnail": "https://storage.googleapis.com/p_6227542ad33be40018293aff/691bd579-2fd6-4834-96c6-0597f772673e/webengineer-output.png",
+        "url": "https://ma-vericks.com/blog/webengineer-output/",
+        "description": "この記事では、実践的な開発手法について詳しく解説しています。",
+        "category": "general",
+        "readingTime": 1,
+        "difficulty": "intermediate",
+        "wordCount": 1,
+        "lastOptimized": "2025-06-26T15:10:08.256Z"
+      },
+      "outputPath": "content/optimized/webengineer-output.md"
+    },
+    {
+      "originalFile": "webengineer-tech-blog.md",
+      "hasDescription": false,
+      "hasCategory": false,
+      "hasReadingTime": false,
+      "hasDifficulty": false,
+      "wordCount": 1,
+      "tags": [],
+      "enhanced": {
+        "title": "WEBエンジニアが技術ブログを書くことについて感じたこと",
+        "slug": "webengineer-tech-blog",
+        "publishedAt": "2023-12-21T15:00:00.000Z",
+        "tags": [],
+        "categories": [],
+        "emoji": "🐺",
+        "thumbnail": "https://storage.googleapis.com/p_6227542ad33be40018293aff/7381edad-3655-464c-a0cc-5904d5743168/webengineer-tech-blog.png",
+        "url": "https://ma-vericks.com/blog/webengineer-tech-blog/",
+        "description": "この記事では、実践的な開発手法について詳しく解説しています。",
+        "category": "general",
+        "readingTime": 1,
+        "difficulty": "intermediate",
+        "wordCount": 1,
+        "lastOptimized": "2025-06-26T15:10:08.256Z"
+      },
+      "outputPath": "content/optimized/webengineer-tech-blog.md"
+    },
+    {
+      "originalFile": "wordpress-astro-search.md",
+      "hasDescription": false,
+      "hasCategory": false,
+      "hasReadingTime": false,
+      "hasDifficulty": false,
+      "wordCount": 1,
+      "tags": [],
+      "enhanced": {
+        "title": "WordPressをヘッドレスCMS化しAstroでブログ構築！全文検索機能の実装方法を紹介",
+        "slug": "wordpress-astro-search",
+        "publishedAt": "2024-12-22T15:00:00.000Z",
+        "tags": [],
+        "categories": [],
+        "emoji": "🐺",
+        "thumbnail": "https://storage.googleapis.com/p_6227542ad33be40018293aff/12178fd1-23b0-48e9-a493-b1d54c0f63bf/astro-wp-search.jpg",
+        "url": "https://ma-vericks.com/blog/wordpress-astro-search/",
+        "description": "この記事では、実践的な開発手法について詳しく解説しています。",
+        "category": "general",
+        "readingTime": 1,
+        "difficulty": "intermediate",
+        "wordCount": 1,
+        "lastOptimized": "2025-06-26T15:10:08.256Z"
+      },
+      "outputPath": "content/optimized/wordpress-astro-search.md"
+    },
+    {
+      "originalFile": "wordpress-headlesscms.md",
+      "hasDescription": false,
+      "hasCategory": false,
+      "hasReadingTime": false,
+      "hasDifficulty": false,
+      "wordCount": 1,
+      "tags": [
+        "WordPress"
+      ],
+      "enhanced": {
+        "title": "WordPressをヘッドレスCMS化するときにfunctions.phpで対応したこと",
+        "slug": "wordpress-headlesscms",
+        "publishedAt": "2022-08-28T15:00:00.000Z",
+        "tags": [
+          "WordPress"
+        ],
+        "categories": [],
+        "emoji": "🐺",
+        "thumbnail": "https://storage.googleapis.com/p_6227542ad33be40018293aff/5afe6aff-827b-488a-ad53-726d5845af99/wordpress-headlesscms.png",
+        "url": "https://ma-vericks.com/blog/wordpress-headlesscms/",
+        "description": "この記事では、実践的な開発手法について詳しく解説しています。",
+        "category": "cms",
+        "readingTime": 1,
+        "difficulty": "intermediate",
+        "wordCount": 1,
+        "lastOptimized": "2025-06-26T15:10:08.257Z"
+      },
+      "outputPath": "content/optimized/wordpress-headlesscms.md"
+    },
+    {
+      "originalFile": "wsl2-docker.md",
+      "hasDescription": true,
+      "hasCategory": false,
+      "hasReadingTime": false,
+      "hasDifficulty": false,
+      "wordCount": 3939,
+      "tags": [
+        "Docker",
+        "WSL2"
+      ],
+      "enhanced": {
+        "title": "WSL2を使ってWindows10Homeでも快適なDocker環境を構築(Git・エディタも)",
+        "slug": "wsl2-docker",
+        "description": "wsl2というwindows上でLinux動作できる環境を利用してwin10Homeでも楽にdocker環境の構築を行いました。 IPアドレスなどVirtualBox+Vagrantで環境構築する場合は別途設定が必要だったのですが wsl2はホストマシンと同じなので楽でした",
+        "publishedAt": "2020-06-30T15:00:00.000Z",
+        "tags": [
+          "Docker",
+          "WSL2"
+        ],
+        "categories": [],
+        "emoji": "🐳",
+        "category": "devops",
+        "readingTime": 4,
+        "difficulty": "beginner",
+        "wordCount": 3939,
+        "lastOptimized": "2025-06-26T15:10:08.257Z"
+      },
+      "outputPath": "content/optimized/wsl2-docker.md"
+    },
+    {
+      "originalFile": "xserver-static-tutorial-.md",
+      "hasDescription": false,
+      "hasCategory": false,
+      "hasReadingTime": false,
+      "hasDifficulty": false,
+      "wordCount": 1,
+      "tags": [],
+      "enhanced": {
+        "title": "Xserver Staticでの静的コンテンツ、SSGやSPAのデプロイとGitHub Actionsによる自動化について",
+        "slug": "xserver-static-tutorial/",
+        "publishedAt": "2024-08-29T15:00:00.000Z",
+        "tags": [],
+        "categories": [],
+        "emoji": "🐺",
+        "thumbnail": "https://storage.googleapis.com/p_6227542ad33be40018293aff/6130fd94-2d2c-4f20-9d7b-35e3e71517db/xserver-static-tutorial.jpg",
+        "url": "https://ma-vericks.com/blog/xserver-static-tutorial/",
+        "description": "この記事では、実践的な開発手法について詳しく解説しています。",
+        "category": "general",
+        "readingTime": 1,
+        "difficulty": "advanced",
+        "wordCount": 1,
+        "lastOptimized": "2025-06-26T15:10:08.257Z"
+      },
+      "outputPath": "content/optimized/xserver-static-tutorial-.md"
+    }
+  ]
+}

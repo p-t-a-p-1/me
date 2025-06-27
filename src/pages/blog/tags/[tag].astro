@@ -1,75 +1,81 @@
 ---
+import { getCollection } from "astro:content";
 import BlogCard from "../../../components/BlogCard.astro";
 import BlogSidebar from "../../../components/BlogSidebar.astro";
-import Pager from "../../../components/Pager.astro";
 import Layout from "../../../layouts/Layout.astro";
-import {
-  getAllLocalTags,
-  getArticlesByTag,
-  mapToNewtArticle,
-} from "../../../lib/content";
 
 export async function getStaticPaths() {
-  const tags = await getAllLocalTags();
+	const allPosts = await getCollection("blog");
+	const publishedPosts = allPosts.filter((post) => post.data.publishedAt);
 
-  return tags.map((tag) => ({
-    params: { tag: tag.slug },
-    props: { tag },
-  }));
+	// すべてのタグを取得
+	const allTags = [
+		...new Set(publishedPosts.flatMap((post) => post.data.tags || [])),
+	];
+
+	return allTags.map((tag) => ({
+		params: { tag },
+		props: { tag },
+	}));
 }
 
 const { tag } = Astro.props;
 
-const localBlogs = await getArticlesByTag(tag.name);
-const blogs = localBlogs.map(mapToNewtArticle);
+// 特定のタグを含む記事を取得
+const allPosts = await getCollection("blog");
+const filteredPosts = allPosts
+	.filter((post) => post.data.publishedAt && post.data.tags?.includes(tag))
+	.sort((a, b) => {
+		const dateA = new Date(a.data.publishedAt || 0);
+		const dateB = new Date(b.data.publishedAt || 0);
+		return dateB.getTime() - dateA.getTime();
+	});
 
-// 空の配列を渡す（BlogSidebar内で全タグを取得する）
-const sidebarTags = [];
+// BlogCardで使用する形式に変換
+const blogs = filteredPosts.map((post) => ({
+	title: post.data.title,
+	emoji: { value: post.data.emoji || "📝" },
+	tags: post.data.tags || [],
+	slug: post.slug,
+	url: `/blog/${post.slug}`,
+	thumbnail: post.data.thumbnail || "",
+}));
 ---
 
-<Layout title={`${tag.name} | タグ`}>
-	<main class="tag-blogs">
-		<div class="tag-blogs__content">
-			<div class="tag-blogs__main">
-				<h1 class="tag-blogs__title">
-					<span class="tag-blogs__tag-name">#{tag.name}</span>
-					<span class="tag-blogs__tag-count">{blogs.length}記事</span>
-				</h1>
-				<div class="tag-blogs__grid">
-					{
-						blogs.map((blog) => (
-							<BlogCard
-								title={blog.title}
-								emoji={blog.emoji.value}
-								tags={blog.tags}
-								url={`/blog/${blog.slug}`}
-								slug={blog.slug}
-								thumbnail={blog.thumbnail?.src ?? ""}
-							/>
-						))
-					}
-				</div>
+<Layout title={`タグ: ${tag} - BLOG`}>
+	<main class="tag-detail">
+		<div class="tag-detail__container">
+			<div class="tag-detail__content">
+				<header class="tag-detail__header">
+					<h1 class="tag-detail__title">#{tag}</h1>
+					<p class="tag-detail__description">
+						{filteredPosts.length}件の記事があります
+					</p>
+				</header>
+
 				{
-					blogs.length === 0 && (
-						<div class="tag-blogs__empty">
+					filteredPosts.length > 0 ? (
+						<div class="tag-detail__grid">
+							{blogs.map((blog) => (
+								<BlogCard
+									title={blog.title}
+									emoji={blog.emoji.value}
+									tags={blog.tags}
+									slug={blog.slug}
+									url={blog.url}
+									thumbnail={blog.thumbnail}
+								/>
+							))}
+						</div>
+					) : (
+						<div class="tag-detail__empty">
 							<p>このタグの記事はまだありません。</p>
 						</div>
 					)
 				}
-				<div class="tag-blogs__pager">
-					<!-- <Pager
-						currentPage={currentPage}
-						totalPages={totalPages}
-						onPrevious={currentPage > 1
-							? `/blog/tags/${tag}/page/${currentPage - 1}`
-							: undefined}
-						onNext={currentPage < totalPages
-							? `/blog/tags/${tag}/page/${currentPage + 1}`
-							: undefined}
-					/> -->
-				</div>
-				<div class="tag-blogs__back">
-					<a href="/blog/tags" class="tag-blogs__back-link">
+
+				<div class="tag-detail__back">
+					<a href="/blog" class="tag-detail__back-link">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
 							width="24"
@@ -83,148 +89,112 @@ const sidebarTags = [];
 						>
 							<path d="M19 12H5M5 12L12 19M5 12L12 5"></path>
 						</svg>
-						<span>タグ一覧へ戻る</span>
+						<span>ブログ一覧へ戻る</span>
 					</a>
 				</div>
 			</div>
-			<div class="tag-blogs__sidebar">
-				<BlogSidebar tags={sidebarTags} />
-			</div>
+			<aside class="tag-detail__sidebar">
+				<BlogSidebar />
+			</aside>
 		</div>
 	</main>
 </Layout>
 
 <style>
-	.tag-blogs {
+	.tag-detail {
 		padding: 40px 20px;
-		background-color: #fafafa;
 	}
 
-	.tag-blogs__content {
-		max-width: 1080px;
+	.tag-detail__container {
+		max-width: 1200px;
 		margin: 0 auto;
 		display: grid;
-		grid-template-columns: 1fr 280px;
+		grid-template-columns: 1fr 300px;
 		gap: 40px;
 	}
 
-	.tag-blogs__main {
-		display: flex;
-		flex-direction: column;
-		gap: 40px;
+	.tag-detail__content {
+		overflow: hidden;
 	}
 
-	.tag-blogs__title {
-		font-size: 2rem;
-		font-weight: bold;
-		position: sticky;
-		top: 0;
-		background-color: #ffffff;
-		padding: 20px;
-		z-index: 10;
-		margin: 0;
-		display: flex;
-		align-items: center;
-		gap: 12px;
-		border-radius: 8px;
-		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+	.tag-detail__header {
+		text-align: center;
+		margin-bottom: 40px;
 	}
 
-	.tag-blogs__tag-name {
+	.tag-detail__title {
+		font-family: "Noto Sans JP", sans-serif;
+		font-size: 32px;
+		font-weight: 700;
 		color: #262626;
+		margin: 0 0 16px;
 	}
 
-	.tag-blogs__tag-count {
-		font-size: 1rem;
-		font-weight: 500;
+	.tag-detail__description {
 		color: #8c8c8c;
-		background-color: #f5f5f5;
-		padding: 4px 12px;
-		border-radius: 50px;
+		font-size: 16px;
+		margin: 0;
 	}
 
-	.tag-blogs__grid {
+	.tag-detail__grid {
 		display: grid;
 		grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
 		gap: 20px;
+		margin-bottom: 40px;
 	}
 
-	.tag-blogs__empty {
-		background-color: #ffffff;
-		padding: 40px;
+	.tag-detail__empty {
 		text-align: center;
-		border-radius: 8px;
-		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+		padding: 60px 20px;
+		color: #8c8c8c;
+		font-size: 16px;
 	}
 
-	.tag-blogs__empty p {
-		color: #595959;
-		font-size: 1.1rem;
+	.tag-detail__sidebar {
+		position: relative;
 	}
 
-	.tag-blogs__pager {
-		margin-top: 20px;
+	.tag-detail__back {
+		text-align: center;
 	}
 
-	.tag-blogs__back {
-		margin: 20px 0;
-	}
-
-	.tag-blogs__back-link {
+	.tag-detail__back-link {
 		display: inline-flex;
 		align-items: center;
 		gap: 8px;
-		color: #595959;
-		text-decoration: none;
-		transition: all 0.2s ease;
-		padding: 8px 16px;
-		border-radius: 6px;
-		background-color: #f5f5f5;
-	}
-
-	.tag-blogs__back-link:hover {
 		color: #262626;
-		background-color: #e5e5e5;
-		transform: translateX(-4px);
+		text-decoration: none;
+		padding: 12px 24px;
+		border: 1px solid #262626;
+		background-color: #ffffff;
+		transition: all 0.2s ease;
 	}
 
-	.tag-blogs__sidebar {
-		position: sticky;
-		top: 100px;
-		height: fit-content;
-	}
-
-	@media (max-width: 1024px) {
-		.tag-blogs__content {
-			grid-template-columns: 1fr;
-		}
-
-		.tag-blogs__sidebar {
-			order: -1;
-			position: static;
-		}
-
-		.tag-blogs__title {
-			position: static;
-		}
+	.tag-detail__back-link:hover {
+		background-color: #262626;
+		color: #ffffff;
 	}
 
 	@media (max-width: 768px) {
-		.tag-blogs {
+		.tag-detail {
 			padding: 20px 10px;
 		}
 
-		.tag-blogs__main {
+		.tag-detail__container {
+			grid-template-columns: 1fr;
 			gap: 20px;
 		}
 
-		.tag-blogs__grid {
-			grid-template-columns: 1fr;
+		.tag-detail__sidebar {
+			order: -1;
 		}
 
-		.tag-blogs__title {
-			font-size: 1.5rem;
-			padding: 16px;
+		.tag-detail__title {
+			font-size: 24px;
+		}
+
+		.tag-detail__grid {
+			grid-template-columns: 1fr;
 		}
 	}
 </style>

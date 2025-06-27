@@ -1,0 +1,410 @@
+---
+import SearchBox from "../components/SearchBox.astro";
+import Layout from "../layouts/Layout.astro";
+
+// URL パラメータから初期検索クエリを取得
+const url = Astro.url;
+const initialQuery = url.searchParams.get("q") || "";
+const initialCategory = url.searchParams.get("category") || "";
+const initialTag = url.searchParams.get("tag") || "";
+const initialDifficulty = url.searchParams.get("difficulty") || "";
+
+// ページメタデータ
+const title = initialQuery ? `"${initialQuery}" の検索結果` : "記事検索";
+
+const description = initialQuery
+	? `"${initialQuery}" に関する記事を検索した結果です。`
+	: "ブログ記事を検索できます。タイトル、説明、タグ、カテゴリから記事を見つけることができます。";
+
+const pageType = "website";
+---
+
+<Layout
+	title={title}
+	description={description}
+	pageType={pageType}
+	keywords={["検索", "ブログ", "記事", "プログラミング", "技術"]}
+>
+	<main class="search-page">
+		<div class="container">
+			<!-- ページヘッダー -->
+			<header class="page-header">
+				<h1 class="page-title">🔍 記事検索</h1>
+				<p class="page-description">
+					技術記事を簡単に検索できます。キーワード、カテゴリ、タグ、難易度で絞り込みが可能です。
+				</p>
+			</header>
+
+			<!-- 検索コンポーネント -->
+			<section class="search-section">
+				<SearchBox
+					initialQuery={initialQuery}
+					showFilters={true}
+					className="main-search"
+				/>
+			</section>
+
+			<!-- 検索のヒント -->
+			<section class="search-tips">
+				<h2 class="tips-title">検索のヒント</h2>
+				<div class="tips-grid">
+					<div class="tip-item">
+						<h3>🎯 キーワード検索</h3>
+						<p>
+							記事のタイトル、説明、タグから検索できます。複数のキーワードを入力すると、より精密な検索が可能です。
+						</p>
+					</div>
+
+					<div class="tip-item">
+						<h3>📂 カテゴリフィルター</h3>
+						<p>
+							Frontend、Backend、DevOps、Generalなど、技術分野別に記事を絞り込めます。
+						</p>
+					</div>
+
+					<div class="tip-item">
+						<h3>📊 難易度フィルター</h3>
+						<p>
+							初級・中級・上級で記事の難易度を選択できます。学習レベルに合わせてお選びください。
+						</p>
+					</div>
+
+					<div class="tip-item">
+						<h3>🏷️ タグ検索</h3>
+						<p>
+							React、Vue、Node.js、TypeScriptなど、具体的な技術タグで検索できます。
+						</p>
+					</div>
+				</div>
+			</section>
+
+			<!-- 人気のカテゴリ -->
+			<section class="popular-categories">
+				<h2 class="section-title">人気のカテゴリ</h2>
+				<div class="category-links">
+					<a href="/search?category=frontend" class="category-link frontend">
+						🎨 Frontend
+					</a>
+					<a href="/search?category=backend" class="category-link backend">
+						⚙️ Backend
+					</a>
+					<a href="/search?category=devops" class="category-link devops">
+						🚀 DevOps
+					</a>
+					<a href="/search?category=general" class="category-link general">
+						📚 General
+					</a>
+					<a href="/search?category=mobile" class="category-link mobile">
+						📱 Mobile
+					</a>
+					<a href="/search?category=ai" class="category-link ai"> 🤖 AI/ML </a>
+				</div>
+			</section>
+
+			<!-- 人気のタグ -->
+			<section class="popular-tags">
+				<h2 class="section-title">人気のタグ</h2>
+				<div class="tag-cloud">
+					<a href="/search?tag=React" class="tag-link size-lg">React</a>
+					<a href="/search?tag=Vue" class="tag-link size-md">Vue</a>
+					<a href="/search?tag=TypeScript" class="tag-link size-lg"
+						>TypeScript</a
+					>
+					<a href="/search?tag=Node.js" class="tag-link size-md">Node.js</a>
+					<a href="/search?tag=JavaScript" class="tag-link size-xl"
+						>JavaScript</a
+					>
+					<a href="/search?tag=CSS" class="tag-link size-md">CSS</a>
+					<a href="/search?tag=HTML" class="tag-link size-sm">HTML</a>
+					<a href="/search?tag=Next.js" class="tag-link size-lg">Next.js</a>
+					<a href="/search?tag=Nuxt" class="tag-link size-md">Nuxt</a>
+					<a href="/search?tag=Python" class="tag-link size-md">Python</a>
+					<a href="/search?tag=Docker" class="tag-link size-sm">Docker</a>
+					<a href="/search?tag=AWS" class="tag-link size-sm">AWS</a>
+				</div>
+			</section>
+		</div>
+	</main>
+</Layout>
+
+<style>
+	.search-page {
+		min-height: 100vh;
+		padding: 2rem 0;
+		background: white;
+	}
+
+	.container {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 0 1rem;
+	}
+
+	/* ページヘッダー */
+	.page-header {
+		text-align: center;
+		margin-bottom: 3rem;
+	}
+
+	.page-title {
+		font-size: clamp(2rem, 5vw, 3rem);
+		font-weight: 700;
+		color: #262626;
+		margin-bottom: 1rem;
+		font-family: "Noto Sans JP", sans-serif;
+	}
+
+	.page-description {
+		font-size: 1.125rem;
+		color: #64748b;
+		max-width: 600px;
+		margin: 0 auto;
+		line-height: 1.6;
+	}
+
+	/* 検索セクション */
+	.search-section {
+		margin-bottom: 4rem;
+		padding: 2rem;
+		background: white;
+		border: 1px solid #262626;
+	}
+
+	/* 検索のヒント */
+	.search-tips {
+		margin-bottom: 4rem;
+	}
+
+	.tips-title {
+		font-size: 1.5rem;
+		font-weight: 600;
+		color: #262626;
+		margin-bottom: 1.5rem;
+		text-align: center;
+		font-family: "Noto Sans JP", sans-serif;
+	}
+
+	.tips-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+		gap: 1.5rem;
+	}
+
+	.tip-item {
+		padding: 1.5rem;
+		background: white;
+		border: 1px solid #e5e5e5;
+		transition: transform 0.2s ease;
+	}
+
+	.tip-item:hover {
+		transform: translateY(-2px);
+	}
+
+	.tip-item h3 {
+		font-size: 1.125rem;
+		font-weight: 600;
+		color: #262626;
+		margin-bottom: 0.75rem;
+		font-family: "Noto Sans JP", sans-serif;
+	}
+
+	.tip-item p {
+		color: #64748b;
+		line-height: 1.6;
+	}
+
+	/* 人気のカテゴリ */
+	.popular-categories {
+		margin-bottom: 4rem;
+	}
+
+	.section-title {
+		font-size: 1.5rem;
+		font-weight: 600;
+		color: #262626;
+		margin-bottom: 1.5rem;
+		text-align: center;
+		font-family: "Noto Sans JP", sans-serif;
+	}
+
+	.category-links {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+		gap: 1rem;
+	}
+
+	.category-link {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 1rem 1.5rem;
+		background: white;
+		border-radius: 12px;
+		text-decoration: none;
+		color: #1e293b;
+		font-weight: 500;
+		box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+		transition: all 0.2s ease;
+	}
+
+	.category-link:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+	}
+
+	.category-link.frontend:hover {
+		background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+		color: white;
+	}
+
+	.category-link.backend:hover {
+		background: linear-gradient(135deg, #10b981, #047857);
+		color: white;
+	}
+
+	.category-link.devops:hover {
+		background: linear-gradient(135deg, #f59e0b, #d97706);
+		color: white;
+	}
+
+	.category-link.general:hover {
+		background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+		color: white;
+	}
+
+	.category-link.mobile:hover {
+		background: linear-gradient(135deg, #ec4899, #be185d);
+		color: white;
+	}
+
+	.category-link.ai:hover {
+		background: linear-gradient(135deg, #6366f1, #4f46e5);
+		color: white;
+	}
+
+	/* 人気のタグ */
+	.popular-tags {
+		margin-bottom: 2rem;
+	}
+
+	.tag-cloud {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem;
+		justify-content: center;
+	}
+
+	.tag-link {
+		padding: 0.5rem 1rem;
+		background: white;
+		border: 2px solid #e2e8f0;
+		border-radius: 25px;
+		text-decoration: none;
+		color: #475569;
+		font-weight: 500;
+		transition: all 0.2s ease;
+	}
+
+	.tag-link:hover {
+		border-color: #3b82f6;
+		color: #3b82f6;
+		transform: scale(1.05);
+	}
+
+	.tag-link.size-xl {
+		font-size: 1.125rem;
+		padding: 0.75rem 1.5rem;
+	}
+
+	.tag-link.size-lg {
+		font-size: 1rem;
+		padding: 0.625rem 1.25rem;
+	}
+
+	.tag-link.size-md {
+		font-size: 0.875rem;
+		padding: 0.5rem 1rem;
+	}
+
+	.tag-link.size-sm {
+		font-size: 0.75rem;
+		padding: 0.375rem 0.75rem;
+	}
+
+	/* レスポンシブ */
+	@media (max-width: 768px) {
+		.search-page {
+			padding: 1rem 0;
+		}
+
+		.search-section {
+			margin: 0 -1rem 3rem;
+			border-radius: 0;
+		}
+
+		.tips-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.category-links {
+			grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+		}
+
+		.tag-cloud {
+			justify-content: flex-start;
+		}
+	}
+</style>
+
+<script>
+	// URL パラメータに基づいて初期フィルターを設定
+	document.addEventListener("DOMContentLoaded", () => {
+		const urlParams = new URLSearchParams(window.location.search);
+
+		// カテゴリフィルターを設定
+		const category = urlParams.get("category");
+		if (category) {
+			const categoryFilter = document.getElementById(
+				"category-filter"
+			) as HTMLSelectElement;
+			if (categoryFilter) {
+				categoryFilter.value = category;
+				// フィルター変更イベントを発火
+				categoryFilter.dispatchEvent(new Event("change"));
+			}
+		}
+
+		// タグフィルターを設定
+		const tag = urlParams.get("tag");
+		if (tag) {
+			const tagFilter = document.getElementById(
+				"tag-filter"
+			) as HTMLSelectElement;
+			if (tagFilter) {
+				// タグフィルターにオプションが読み込まれるまで待機
+				const checkTagFilter = () => {
+					if (tagFilter.options.length > 1) {
+						tagFilter.value = tag;
+						tagFilter.dispatchEvent(new Event("change"));
+					} else {
+						setTimeout(checkTagFilter, 100);
+					}
+				};
+				checkTagFilter();
+			}
+		}
+
+		// 難易度フィルターを設定
+		const difficulty = urlParams.get("difficulty");
+		if (difficulty) {
+			const difficultyFilter = document.getElementById(
+				"difficulty-filter"
+			) as HTMLSelectElement;
+			if (difficultyFilter) {
+				difficultyFilter.value = difficulty;
+				difficultyFilter.dispatchEvent(new Event("change"));
+			}
+		}
+	});
+</script>

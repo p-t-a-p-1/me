@@ -1,58 +1,48 @@
 ---
-import TagListItem from "../../../components/TagListItem.astro";
+import { getCollection } from "astro:content";
+import BlogSidebar from "../../../components/BlogSidebar.astro";
 import Layout from "../../../layouts/Layout.astro";
-import { getAllLocalTags, getAllLocalArticles } from "../../../lib/content";
 
-// タグとそれに関連する記事数を取得
-const tags = await getAllLocalTags();
-const articles = await getAllLocalArticles();
+// すべての記事を取得
+const allPosts = await getCollection("blog");
 
-// タグごとの記事数をカウント
-const tagCounts: Record<string, number> = {};
-for (const article of articles) {
-  if (article.tags) {
-    for (const tagName of article.tags) {
-      tagCounts[tagName] = (tagCounts[tagName] || 0) + 1;
-    }
-  }
-}
+// 公開済みの記事のみをフィルタリング
+const publishedPosts = allPosts.filter((post) => post.data.publishedAt);
 
-// カラーバリエーション用の配列
-const colorVariants = [
-  "#4299E1", // ブルー
-  "#48BB78", // グリーン
-  "#ED8936", // オレンジ
-  "#9F7AEA", // パープル
-  "#F56565", // レッド
-  "#38B2AC", // ティール
-  "#ECC94B", // イエロー
-  "#667EEA", // インディゴ
-  "#ED64A6", // ピンク
-];
-
-// タグに色を割り当て
-const tagColors: Record<string, string> = {};
-tags.forEach((tag, index) => {
-  if (tag.name) {
-    tagColors[tag.name] = colorVariants[index % colorVariants.length];
-  }
+// タグごとの記事数を計算
+const tagCounts = new Map<string, number>();
+publishedPosts.forEach((post) => {
+	if (post.data.tags) {
+		post.data.tags.forEach((tag) => {
+			tagCounts.set(tag, (tagCounts.get(tag) || 0) + 1);
+		});
+	}
 });
+
+// タグを記事数順にソート
+const sortedTags = Array.from(tagCounts.entries()).sort((a, b) => b[1] - a[1]);
 ---
 
-<Layout title="タグ一覧">
-	<main class="tags">
-		<div class="tags__content">
-			<h1 class="tags__title">タグ一覧</h1>
-			<p class="tags__description">
-				ブログの記事は以下のタグで分類されています
-			</p>
-
-			<div class="tags__box">
-				<div class="tags__header">
-					<div class="tags__header-title">
-						<span>タグ</span>
-					</div>
-					<div class="tags__search">
+<Layout title="タグ一覧 - BLOG">
+	<main class="tag-list">
+		<div class="tag-list__container">
+			<div class="tag-list__content">
+				<header class="tag-list__header">
+					<h1 class="tag-list__title">タグ一覧</h1>
+					<p class="tag-list__description">記事のタグから探す</p>
+				</header>
+				<div class="tag-list__grid">
+					{
+						sortedTags.map(([tag, count]) => (
+							<a href={`/blog/tags/${tag}`} class="tag-list__item">
+								<div class="tag-list__tag-name">#{tag}</div>
+								<div class="tag-list__count">{count}件の記事</div>
+							</a>
+						))
+					}
+				</div>
+				<div class="tag-list__back">
+					<a href="/blog" class="tag-list__back-link">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
 							width="24"
@@ -60,263 +50,142 @@ tags.forEach((tag, index) => {
 							viewBox="0 0 24 24"
 							fill="none"
 							stroke="currentColor"
-							stroke-width="1"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
 						>
-							<path
-								d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z"
-							></path>
-							<path d="M21 21L16.65 16.65"></path>
+							<path d="M19 12H5M5 12L12 19M5 12L12 5"></path>
 						</svg>
-						<input
-							type="text"
-							class="tags__search-input"
-							placeholder="タグを検索"
-							id="tagSearchInput"
-						/>
-					</div>
+						<span>ブログ一覧へ戻る</span>
+					</a>
 				</div>
-
-				<div class="tags__list" id="tagList">
-					{
-						tags.map((tag) => (
-							<div
-								class="tag-list-wrapper"
-								data-tag-name={tag.name.toLowerCase()}
-							>
-								<a href={`/blog/tags/${tag.slug}`} class="tag-list-item">
-									<span class="tag-list-item__name">{tag.name}</span>
-									<span class="tag-list-item__count">
-										{tagCounts[tag.name] || 0}{" "}
-										記事
-									</span>
-								</a>
-							</div>
-						))
-					}
-				</div>
-				<a href="/blog" class="tags__back">
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						width="24"
-						height="24"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="2"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-					>
-						<path d="M19 12H5M5 12L12 19M5 12L12 5"></path>
-					</svg>
-					<span>ブログ一覧へ戻る</span>
-				</a>
 			</div>
+			<aside class="tag-list__sidebar">
+				<BlogSidebar />
+			</aside>
 		</div>
 	</main>
 </Layout>
 
-<script>
-	const searchInput = document.getElementById(
-		"tagSearchInput"
-	) as HTMLInputElement;
-	const tagList = document.getElementById("tagList");
-	const tagItems = tagList?.querySelectorAll(".tag-list-wrapper") ?? [];
-
-	let searchTimeout: number | undefined;
-
-	searchInput?.addEventListener("input", (e) => {
-		// Clear previous timeout
-		if (searchTimeout) {
-			clearTimeout(searchTimeout);
-		}
-
-		// Debounce search to improve performance
-		searchTimeout = setTimeout(() => {
-			const searchTerm = searchInput.value.toLowerCase().trim();
-
-			tagItems.forEach((item) => {
-				const tagName = item.getAttribute("data-tag-name") || "";
-				if (tagName.includes(searchTerm)) {
-					(item as HTMLElement).style.display = "block";
-				} else {
-					(item as HTMLElement).style.display = "none";
-				}
-			});
-		}, 150) as unknown as number;
-	});
-</script>
-
 <style>
-	.tags {
-		padding: 60px 20px;
-		background-color: #fafafa;
+	.tag-list {
+		padding: 40px 20px;
 	}
 
-	.tags__content {
-		max-width: 800px;
+	.tag-list__container {
+		max-width: 1200px;
 		margin: 0 auto;
+		display: grid;
+		grid-template-columns: 1fr 300px;
+		gap: 40px;
 	}
 
-	.tags__title {
-		font-size: 2.5rem;
-		font-weight: 700;
-		margin-bottom: 16px;
-		color: #262626;
-		text-align: center;
-	}
-
-	.tags__description {
-		text-align: center;
-		color: #595959;
-		margin-bottom: 48px;
-		font-size: 1.1rem;
-	}
-
-	.tags__box {
-		display: flex;
-		flex-direction: column;
-		gap: 1px;
-		padding: 1px;
-		background-color: #000000;
-		border-radius: 4px;
+	.tag-list__content {
 		overflow: hidden;
 	}
 
-	.tags__header {
-		display: flex;
-		flex-direction: column;
+	.tag-list__header {
+		text-align: center;
+		margin-bottom: 40px;
 	}
 
-	.tags__header-title {
-		display: flex;
-		align-items: center;
-		padding: 8px 10px;
-		background-color: #f5f5f5;
+	.tag-list__title {
 		font-family: "Noto Sans JP", sans-serif;
-		font-size: 14px;
-		line-height: 1.3;
-		letter-spacing: 0.02em;
+		font-size: 32px;
+		font-weight: 700;
+		color: #262626;
+		margin: 0 0 16px;
+	}
+
+	.tag-list__description {
 		color: #8c8c8c;
+		font-size: 16px;
+		margin: 0;
 	}
 
-	.tags__search {
-		display: flex;
-		align-items: center;
-		gap: 4px;
-		padding: 10px;
+	.tag-list__grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+		gap: 20px;
+		margin-bottom: 40px;
+	}
+
+	.tag-list__item {
 		background-color: #ffffff;
-		color: #bfbfbf;
-	}
-
-	.tags__search-input {
-		flex: 1;
-		border: none;
-		background: none;
-		font-family: "Noto Sans JP", sans-serif;
-		font-weight: 700;
-		font-size: 14px;
-		line-height: 1.55;
-		letter-spacing: 0.02em;
+		border: 1px solid #e5e5e5;
+		padding: 20px;
+		border-radius: 8px;
+		text-decoration: none;
 		color: #262626;
-	}
-
-	.tags__search-input::placeholder {
-		color: #bfbfbf;
-	}
-
-	.tags__search-input:focus {
-		outline: none;
-	}
-
-	.tags__list {
+		transition: all 0.2s ease;
 		display: flex;
 		flex-direction: column;
-		gap: 2px;
-		padding: 4px;
-		background-color: #ffffff;
-		max-height: 600px;
-		overflow-y: auto;
-	}
-
-	.tag-list-wrapper {
-		transition: opacity 0.2s ease;
-	}
-
-	.tag-list-item {
-		display: flex;
 		align-items: center;
-		justify-content: space-between;
-		padding: 10px 12px;
-		text-decoration: none;
-		box-shadow: inset 0px -1px 0px 0px rgba(196, 196, 196, 0.3);
-		transition: background-color 0.2s ease;
+		text-align: center;
 	}
 
-	.tag-list-item:hover {
-		background-color: #f5f5f5;
+	.tag-list__item:hover {
+		border-color: #262626;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 	}
 
-	.tag-list-item__name {
-		font-family: "Noto Sans JP", sans-serif;
-		font-weight: 700;
+	.tag-list__tag-name {
+		font-size: 18px;
+		font-weight: 600;
+		margin-bottom: 8px;
+	}
+
+	.tag-list__count {
+		color: #8c8c8c;
 		font-size: 14px;
-		line-height: 1.55;
-		letter-spacing: 0.02em;
-		color: #262626;
 	}
 
-	.tag-list-item__count {
-		font-family: "Noto Sans JP", sans-serif;
-		font-weight: 700;
-		font-size: 12px;
-		line-height: 1.45;
-		letter-spacing: 0.03em;
-		color: #bfbfbf;
-		text-align: right;
+	.tag-list__sidebar {
+		position: relative;
 	}
 
-	.tags__back {
-		display: flex;
+	.tag-list__back {
+		text-align: center;
+	}
+
+	.tag-list__back-link {
+		display: inline-flex;
 		align-items: center;
 		gap: 8px;
-		padding: 10px;
-		background-color: #ffffff;
-		text-decoration: none;
-		font-family: "Noto Sans JP", sans-serif;
-		font-weight: 700;
-		font-size: 14px;
-		line-height: 1.55;
-		letter-spacing: 0.02em;
 		color: #262626;
-		transition: background-color 0.2s ease;
+		text-decoration: none;
+		padding: 12px 24px;
+		border: 1px solid #262626;
+		background-color: #ffffff;
+		transition: all 0.2s ease;
 	}
 
-	.tags__back:hover {
-		background-color: #f5f5f5;
+	.tag-list__back-link:hover {
+		background-color: #262626;
+		color: #ffffff;
 	}
 
 	@media (max-width: 768px) {
-		.tags {
-			padding: 40px 16px;
+		.tag-list {
+			padding: 20px 10px;
 		}
 
-		.tags__title {
-			font-size: 2rem;
-			margin-bottom: 12px;
+		.tag-list__container {
+			grid-template-columns: 1fr;
+			gap: 20px;
 		}
 
-		.tags__description {
-			margin-bottom: 32px;
-		}
-	}
-
-	@media (max-width: 480px) {
-		.tags__title {
-			font-size: 1.5rem;
+		.tag-list__sidebar {
+			order: -1;
 		}
 
-		.tags__description {
-			font-size: 1rem;
+		.tag-list__title {
+			font-size: 24px;
+		}
+
+		.tag-list__grid {
+			grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+			gap: 15px;
 		}
 	}
 </style>

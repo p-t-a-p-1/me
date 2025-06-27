@@ -1,0 +1,753 @@
+---
+/**
+ * 検索ボックスコンポーネント
+ * リアルタイム検索、フィルター機能、結果表示
+ */
+
+export interface Props {
+	placeholder?: string;
+	initialQuery?: string;
+	showFilters?: boolean;
+	className?: string;
+}
+
+const {
+	placeholder = "記事を検索...",
+	initialQuery = "",
+	showFilters = true,
+	className = "",
+} = Astro.props;
+---
+
+<div class={`search-container ${className}`}>
+	<!-- 検索フォーム -->
+	<div class="search-form">
+		<div class="search-input-wrapper">
+			<input
+				type="text"
+				id="search-input"
+				class="search-input"
+				placeholder={placeholder}
+				value={initialQuery}
+				autocomplete="off"
+				role="searchbox"
+				aria-label="記事を検索"
+				aria-describedby="search-help"
+			/>
+			<button type="button" class="search-button" aria-label="検索実行">
+				<svg
+					width="20"
+					height="20"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2"
+				>
+					<circle cx="11" cy="11" r="8"></circle>
+					<path d="m21 21-4.35-4.35"></path>
+				</svg>
+			</button>
+			<button
+				type="button"
+				class="clear-button"
+				id="clear-search"
+				aria-label="検索をクリア"
+				style="display: none;"
+			>
+				<svg
+					width="16"
+					height="16"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2"
+				>
+					<line x1="18" y1="6" x2="6" y2="18"></line>
+					<line x1="6" y1="6" x2="18" y2="18"></line>
+				</svg>
+			</button>
+		</div>
+
+		<div class="search-help" id="search-help">
+			記事のタイトル、説明、タグから検索できます
+		</div>
+	</div>
+
+	<!-- フィルター -->
+	{
+		showFilters && (
+			<div class="search-filters" id="search-filters">
+				<div class="filter-group">
+					<label for="category-filter" class="filter-label">
+						カテゴリ
+					</label>
+					<select id="category-filter" class="filter-select">
+						<option value="">すべて</option>
+					</select>
+				</div>
+
+				<div class="filter-group">
+					<label for="difficulty-filter" class="filter-label">
+						難易度
+					</label>
+					<select id="difficulty-filter" class="filter-select">
+						<option value="">すべて</option>
+						<option value="beginner">初級</option>
+						<option value="intermediate">中級</option>
+						<option value="advanced">上級</option>
+					</select>
+				</div>
+
+				<div class="filter-group">
+					<label for="tag-filter" class="filter-label">
+						タグ
+					</label>
+					<select id="tag-filter" class="filter-select">
+						<option value="">すべて</option>
+					</select>
+				</div>
+
+				<button type="button" class="filter-reset" id="reset-filters">
+					フィルターをリセット
+				</button>
+			</div>
+		)
+	}
+
+	<!-- 検索結果 -->
+	<div class="search-results" id="search-results" style="display: none;">
+		<div class="search-stats" id="search-stats"></div>
+		<div class="results-list" id="results-list"></div>
+		<div
+			class="load-more-wrapper"
+			id="load-more-wrapper"
+			style="display: none;"
+		>
+			<button type="button" class="load-more-button" id="load-more">
+				さらに読み込む
+			</button>
+		</div>
+	</div>
+
+	<!-- ローディング状態 -->
+	<div class="search-loading" id="search-loading" style="display: none;">
+		<div class="loading-spinner"></div>
+		<p>検索中...</p>
+	</div>
+
+	<!-- エラー表示 -->
+	<div class="search-error" id="search-error" style="display: none;">
+		<p>検索でエラーが発生しました。再度お試しください。</p>
+	</div>
+</div>
+
+<style>
+	.search-container {
+		width: 100%;
+		max-width: 800px;
+		margin: 0 auto;
+	}
+
+	/* 検索フォーム */
+	.search-form {
+		margin-bottom: 1.5rem;
+	}
+
+	.search-input-wrapper {
+		position: relative;
+		display: flex;
+		align-items: center;
+		background: white;
+		border: 1px solid #262626;
+		padding: 0.75rem 1rem;
+		transition: all 0.2s ease;
+	}
+
+	.search-input-wrapper:focus-within {
+		border-color: #262626;
+	}
+
+	.search-input {
+		flex: 1;
+		border: none;
+		outline: none;
+		font-size: 1rem;
+		background: transparent;
+		font-family: "Noto Sans JP", sans-serif;
+	}
+
+	.search-input::placeholder {
+		color: #9ca3af;
+	}
+
+	.search-button,
+	.clear-button {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border: none;
+		background: none;
+		color: #6b7280;
+		cursor: pointer;
+		padding: 0.25rem;
+		border-radius: 4px;
+		transition: color 0.2s ease;
+	}
+
+	.search-button:hover,
+	.clear-button:hover {
+		color: #3b82f6;
+	}
+
+	.clear-button {
+		margin-left: 0.5rem;
+	}
+
+	.search-help {
+		margin-top: 0.5rem;
+		font-size: 0.875rem;
+		color: #6b7280;
+	}
+
+	/* フィルター */
+	.search-filters {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 1rem;
+		padding: 1rem;
+		background: #f5f5f5;
+		margin-bottom: 1.5rem;
+	}
+
+	.filter-group {
+		display: flex;
+		flex-direction: column;
+		gap: 0.25rem;
+		min-width: 120px;
+	}
+
+	.filter-label {
+		font-size: 0.875rem;
+		font-weight: 500;
+		color: #262626;
+		font-family: "Noto Sans JP", sans-serif;
+	}
+
+	.filter-select {
+		padding: 0.5rem;
+		border: 1px solid #262626;
+		background: white;
+		font-size: 0.875rem;
+		font-family: "Noto Sans JP", sans-serif;
+	}
+
+	.filter-reset {
+		align-self: flex-end;
+		padding: 0.5rem 1rem;
+		background: #262626;
+		color: white;
+		border: none;
+		font-size: 0.875rem;
+		cursor: pointer;
+		transition: background-color 0.2s ease;
+		font-family: "Noto Sans JP", sans-serif;
+	}
+
+	.filter-reset:hover {
+		background: #404040;
+	}
+
+	/* 検索結果 */
+	.search-results {
+		margin-top: 1.5rem;
+	}
+
+	.search-stats {
+		margin-bottom: 1rem;
+		padding: 0.75rem;
+		background: #f0f9ff;
+		border-radius: 6px;
+		font-size: 0.875rem;
+		color: #0369a1;
+	}
+
+	.results-list {
+		display: grid;
+		gap: 1rem;
+	}
+
+	.result-item {
+		padding: 1.5rem;
+		border: 1px solid #262626;
+		background: white;
+		transition: all 0.2s ease;
+		text-decoration: none;
+		color: inherit;
+	}
+
+	.result-item:hover {
+		border-color: #262626;
+		transform: translateY(-1px);
+	}
+
+	.result-title {
+		font-size: 1.25rem;
+		font-weight: 600;
+		margin-bottom: 0.5rem;
+		color: #262626;
+		font-family: "Noto Sans JP", sans-serif;
+	}
+
+	.result-description {
+		color: #6b7280;
+		margin-bottom: 1rem;
+		line-height: 1.5;
+	}
+
+	.result-meta {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 1rem;
+		align-items: center;
+		font-size: 0.875rem;
+		color: #6b7280;
+	}
+
+	.result-tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+	}
+
+	.result-tag {
+		padding: 0.25rem 0.5rem;
+		background: #f3f4f6;
+		border-radius: 4px;
+		font-size: 0.75rem;
+		color: #374151;
+	}
+
+	.load-more-wrapper {
+		text-align: center;
+		margin-top: 2rem;
+	}
+
+	.load-more-button {
+		padding: 0.75rem 1.5rem;
+		background: #3b82f6;
+		color: white;
+		border: none;
+		border-radius: 6px;
+		cursor: pointer;
+		transition: background-color 0.2s ease;
+	}
+
+	.load-more-button:hover {
+		background: #2563eb;
+	}
+
+	/* ローディング */
+	.search-loading {
+		text-align: center;
+		padding: 2rem;
+		color: #6b7280;
+	}
+
+	.loading-spinner {
+		width: 32px;
+		height: 32px;
+		border: 3px solid #f3f4f6;
+		border-top: 3px solid #3b82f6;
+		border-radius: 50%;
+		animation: spin 1s linear infinite;
+		margin: 0 auto 1rem;
+	}
+
+	@keyframes spin {
+		to {
+			transform: rotate(360deg);
+		}
+	}
+
+	/* エラー表示 */
+	.search-error {
+		padding: 1rem;
+		background: #fef2f2;
+		border: 1px solid #fecaca;
+		border-radius: 6px;
+		color: #dc2626;
+		text-align: center;
+	}
+
+	/* レスポンシブ */
+	@media (max-width: 768px) {
+		.search-filters {
+			flex-direction: column;
+		}
+
+		.filter-group {
+			min-width: auto;
+		}
+
+		.result-meta {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 0.5rem;
+		}
+	}
+</style>
+
+<script>
+	// 検索機能の実装
+	class SearchWidget {
+		private searchInput: HTMLInputElement;
+		private searchButton: HTMLButtonElement;
+		private clearButton: HTMLButtonElement;
+		private categoryFilter: HTMLSelectElement;
+		private difficultyFilter: HTMLSelectElement;
+		private tagFilter: HTMLSelectElement;
+		private resetFilters: HTMLButtonElement;
+		private searchResults: HTMLElement;
+		private searchStats: HTMLElement;
+		private resultsList: HTMLElement;
+		private loadMoreWrapper: HTMLElement;
+		private loadMoreButton: HTMLButtonElement;
+		private searchLoading: HTMLElement;
+		private searchError: HTMLElement;
+
+		private currentQuery = "";
+		private currentFilters = { category: "", difficulty: "", tag: "" };
+		private currentOffset = 0;
+		private hasMore = false;
+		private searchTimeout: number | null = null;
+
+		constructor() {
+			this.initializeElements();
+			this.bindEvents();
+			this.loadFilterOptions();
+		}
+
+		private initializeElements() {
+			this.searchInput = document.getElementById(
+				"search-input"
+			) as HTMLInputElement;
+			this.searchButton = document.querySelector(
+				".search-button"
+			) as HTMLButtonElement;
+			this.clearButton = document.getElementById(
+				"clear-search"
+			) as HTMLButtonElement;
+			this.categoryFilter = document.getElementById(
+				"category-filter"
+			) as HTMLSelectElement;
+			this.difficultyFilter = document.getElementById(
+				"difficulty-filter"
+			) as HTMLSelectElement;
+			this.tagFilter = document.getElementById(
+				"tag-filter"
+			) as HTMLSelectElement;
+			this.resetFilters = document.getElementById(
+				"reset-filters"
+			) as HTMLButtonElement;
+			this.searchResults = document.getElementById(
+				"search-results"
+			) as HTMLElement;
+			this.searchStats = document.getElementById("search-stats") as HTMLElement;
+			this.resultsList = document.getElementById("results-list") as HTMLElement;
+			this.loadMoreWrapper = document.getElementById(
+				"load-more-wrapper"
+			) as HTMLElement;
+			this.loadMoreButton = document.getElementById(
+				"load-more"
+			) as HTMLButtonElement;
+			this.searchLoading = document.getElementById(
+				"search-loading"
+			) as HTMLElement;
+			this.searchError = document.getElementById("search-error") as HTMLElement;
+		}
+
+		private bindEvents() {
+			// リアルタイム検索
+			this.searchInput.addEventListener("input", () => {
+				this.currentQuery = this.searchInput.value.trim();
+				this.updateClearButton();
+				this.debounceSearch();
+			});
+
+			// 検索ボタン
+			this.searchButton.addEventListener("click", () => {
+				this.performSearch(true);
+			});
+
+			// クリアボタン
+			this.clearButton.addEventListener("click", () => {
+				this.clearSearch();
+			});
+
+			// フィルター変更
+			[this.categoryFilter, this.difficultyFilter, this.tagFilter].forEach(
+				(filter) => {
+					filter.addEventListener("change", () => {
+						this.updateFilters();
+						this.performSearch(true);
+					});
+				}
+			);
+
+			// フィルターリセット
+			this.resetFilters.addEventListener("click", () => {
+				this.resetAllFilters();
+			});
+
+			// さらに読み込む
+			this.loadMoreButton.addEventListener("click", () => {
+				this.performSearch(false);
+			});
+
+			// Enterキーで検索
+			this.searchInput.addEventListener("keydown", (e) => {
+				if (e.key === "Enter") {
+					e.preventDefault();
+					this.performSearch(true);
+				}
+			});
+		}
+
+		private updateClearButton() {
+			if (this.currentQuery) {
+				this.clearButton.style.display = "flex";
+			} else {
+				this.clearButton.style.display = "none";
+			}
+		}
+
+		private debounceSearch() {
+			if (this.searchTimeout) {
+				clearTimeout(this.searchTimeout);
+			}
+
+			this.searchTimeout = window.setTimeout(() => {
+				if (this.currentQuery.length >= 2 || this.currentQuery.length === 0) {
+					this.performSearch(true);
+				}
+			}, 300);
+		}
+
+		private updateFilters() {
+			this.currentFilters = {
+				category: this.categoryFilter.value,
+				difficulty: this.difficultyFilter.value,
+				tag: this.tagFilter.value,
+			};
+		}
+
+		private clearSearch() {
+			this.searchInput.value = "";
+			this.currentQuery = "";
+			this.updateClearButton();
+			this.resetAllFilters();
+			this.hideResults();
+		}
+
+		private resetAllFilters() {
+			this.categoryFilter.value = "";
+			this.difficultyFilter.value = "";
+			this.tagFilter.value = "";
+			this.updateFilters();
+			this.performSearch(true);
+		}
+
+		private async loadFilterOptions() {
+			try {
+				const response = await fetch("/api/search.json");
+				const data = await response.json();
+
+				if (data.success && data.stats) {
+					this.populateFilterOptions(data.stats);
+				}
+			} catch (error) {
+				console.error("Failed to load filter options:", error);
+			}
+		}
+
+		private populateFilterOptions(stats: any) {
+			// カテゴリオプション
+			stats.categories?.forEach((category: string) => {
+				const option = document.createElement("option");
+				option.value = category;
+				option.textContent = category;
+				this.categoryFilter.appendChild(option);
+			});
+
+			// タグオプション
+			stats.tags?.forEach((tag: string) => {
+				const option = document.createElement("option");
+				option.value = tag;
+				option.textContent = tag;
+				this.tagFilter.appendChild(option);
+			});
+		}
+
+		private async performSearch(reset: boolean = false) {
+			if (reset) {
+				this.currentOffset = 0;
+			}
+
+			// 検索クエリまたはフィルターがない場合は結果を隠す
+			if (
+				!this.currentQuery &&
+				!Object.values(this.currentFilters).some((v) => v)
+			) {
+				this.hideResults();
+				return;
+			}
+
+			this.showLoading();
+			this.hideError();
+
+			try {
+				const params = new URLSearchParams();
+
+				if (this.currentQuery) params.set("q", this.currentQuery);
+				if (this.currentFilters.category)
+					params.set("category", this.currentFilters.category);
+				if (this.currentFilters.difficulty)
+					params.set("difficulty", this.currentFilters.difficulty);
+				if (this.currentFilters.tag) params.set("tag", this.currentFilters.tag);
+
+				params.set("offset", this.currentOffset.toString());
+				params.set("limit", "10");
+
+				const response = await fetch(`/api/search.json?${params}`);
+				const data = await response.json();
+
+				if (data.success) {
+					this.displayResults(data, reset);
+				} else {
+					throw new Error(data.message || "Search failed");
+				}
+			} catch (error) {
+				console.error("Search error:", error);
+				this.showError();
+			} finally {
+				this.hideLoading();
+			}
+		}
+
+		private displayResults(data: any, reset: boolean) {
+			const { results, stats } = data;
+
+			if (reset) {
+				this.resultsList.innerHTML = "";
+			}
+
+			// 統計情報を更新
+			this.updateStats(stats);
+
+			// 結果を表示
+			results.forEach((post: any) => {
+				const resultElement = this.createResultElement(post);
+				this.resultsList.appendChild(resultElement);
+			});
+
+			// ページネーション更新
+			this.hasMore = stats.hasMore;
+			this.currentOffset = stats.offset + results.length;
+			this.updateLoadMore();
+
+			this.showResults();
+		}
+
+		private createResultElement(post: any): HTMLElement {
+			const article = document.createElement("article");
+			article.className = "result-item";
+
+			const link = document.createElement("a");
+			link.href = `/blog/${post.slug}`;
+			link.style.textDecoration = "none";
+			link.style.color = "inherit";
+
+			link.innerHTML = `
+        <h3 class="result-title">
+          ${post.emoji ? post.emoji + " " : ""}${post.title}
+        </h3>
+        <p class="result-description">${post.description}</p>
+        <div class="result-meta">
+          <span>📂 ${post.category}</span>
+          <span>⏱️ ${post.readingTime}分</span>
+          <span>📊 ${post.difficulty}</span>
+          <span>📅 ${new Date(post.publishedAt).toLocaleDateString("ja-JP")}</span>
+        </div>
+        <div class="result-tags">
+          ${post.tags.map((tag: string) => `<span class="result-tag">${tag}</span>`).join("")}
+        </div>
+      `;
+
+			article.appendChild(link);
+			return article;
+		}
+
+		private updateStats(stats: any) {
+			const { total, query, filters } = stats;
+			let statsText = `${total}件の記事が見つかりました`;
+
+			if (query) {
+				statsText += ` - "${query}"`;
+			}
+
+			const activeFilters = Object.entries(filters).filter(
+				([_, value]) => value
+			);
+			if (activeFilters.length > 0) {
+				const filterTexts = activeFilters.map(([key, value]) => {
+					const labels: Record<string, string> = {
+						category: "カテゴリ",
+						difficulty: "難易度",
+						tag: "タグ",
+					};
+					return `${labels[key]}: ${value}`;
+				});
+				statsText += ` (フィルター: ${filterTexts.join(", ")})`;
+			}
+
+			this.searchStats.textContent = statsText;
+		}
+
+		private updateLoadMore() {
+			if (this.hasMore) {
+				this.loadMoreWrapper.style.display = "block";
+			} else {
+				this.loadMoreWrapper.style.display = "none";
+			}
+		}
+
+		private showResults() {
+			this.searchResults.style.display = "block";
+		}
+
+		private hideResults() {
+			this.searchResults.style.display = "none";
+		}
+
+		private showLoading() {
+			this.searchLoading.style.display = "block";
+		}
+
+		private hideLoading() {
+			this.searchLoading.style.display = "none";
+		}
+
+		private showError() {
+			this.searchError.style.display = "block";
+		}
+
+		private hideError() {
+			this.searchError.style.display = "none";
+		}
+	}
+
+	// DOMContentLoaded後に初期化
+	document.addEventListener("DOMContentLoaded", () => {
+		new SearchWidget();
+	});
+</script>

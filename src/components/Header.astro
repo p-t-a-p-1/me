@@ -74,38 +74,28 @@
 				</a>
 			</div>
 			<div class="header__right">
-				<form class="header__search-form">
-					<div class="header__search-container">
-						<input
-							type="search"
-							class="header__search-input"
-							placeholder="Search..."
-							aria-label="Search"
-						/>
-						<button type="submit" class="header__search-button">
-							<svg
-								width="24"
-								height="24"
-								viewBox="0 0 24 24"
-								fill="none"
-								xmlns="http://www.w3.org/2000/svg"
-							>
-								<path
-									d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z"
-									stroke="#262626"
-									stroke-width="2"
-									stroke-linecap="round"
-									stroke-linejoin="round"></path>
-								<path
-									d="M21 21L16.65 16.65"
-									stroke="#262626"
-									stroke-width="2"
-									stroke-linecap="round"
-									stroke-linejoin="round"></path>
-							</svg>
-						</button>
-					</div>
-				</form>
+				<a href="/search" class="header__search-link" aria-label="検索ページへ">
+					<svg
+						width="24"
+						height="24"
+						viewBox="0 0 24 24"
+						fill="none"
+						xmlns="http://www.w3.org/2000/svg"
+					>
+						<path
+							d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z"
+							stroke="#262626"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"></path>
+						<path
+							d="M21 21L16.65 16.65"
+							stroke="#262626"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"></path>
+					</svg>
+				</a>
 				<a
 					href="https://x.com/hako_mavs"
 					class="header__x"
@@ -328,6 +318,25 @@
 	}
 
 	.header__search-button:hover svg path {
+		stroke: #ffffff;
+	}
+
+	.header__search-link {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 6px;
+		border: 1px solid #262626;
+		background: #ffffff;
+		transition: all 0.2s ease-in-out;
+		text-decoration: none;
+	}
+
+	.header__search-link:hover {
+		background-color: #262626;
+	}
+
+	.header__search-link:hover svg path {
 		stroke: #ffffff;
 	}
 

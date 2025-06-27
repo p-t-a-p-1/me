@@ -1,0 +1,178 @@
+[
+  {
+    "id": "frontend",
+    "name": "フロントエンド",
+    "slug": "frontend",
+    "description": "React、Vue、Next.js、Nuxt.jsなどのフロントエンド技術",
+    "color": "#3B82F6",
+    "icon": "🎨",
+    "count": 15,
+    "subcategories": [
+      {
+        "id": "react-ecosystem",
+        "name": "React エコシステム",
+        "slug": "react-ecosystem",
+        "description": "React、Next.js、TypeScriptなど",
+        "tags": ["React.js", "Next.js", "TypeScript"]
+      },
+      {
+        "id": "vue-ecosystem",
+        "name": "Vue エコシステム",
+        "slug": "vue-ecosystem",
+        "description": "Vue.js、Nuxt.jsなど",
+        "tags": ["Vue.js", "Nuxt.js"]
+      }
+    ]
+  },
+  {
+    "id": "backend",
+    "name": "バックエンド",
+    "slug": "backend",
+    "description": "Python、サーバーサイド開発技術",
+    "color": "#10B981",
+    "icon": "⚙️",
+    "count": 3,
+    "subcategories": [
+      {
+        "id": "python-development",
+        "name": "Python開発",
+        "slug": "python-development",
+        "description": "Pythonを使ったアプリケーション開発",
+        "tags": ["Python"]
+      }
+    ]
+  },
+  {
+    "id": "devops",
+    "name": "DevOps・インフラ",
+    "slug": "devops",
+    "description": "Docker、デプロイ、CI/CD、クラウドサービス",
+    "color": "#F59E0B",
+    "icon": "🚀",
+    "count": 3,
+    "subcategories": [
+      {
+        "id": "containerization",
+        "name": "コンテナ技術",
+        "slug": "containerization",
+        "description": "Docker、WSL2など",
+        "tags": ["Docker", "WSL2"]
+      },
+      {
+        "id": "cloud-services",
+        "name": "クラウドサービス",
+        "slug": "cloud-services",
+        "description": "AWS Amplify、Herokuなど",
+        "tags": ["AWS Amplify", "Heroku"]
+      }
+    ]
+  },
+  {
+    "id": "ui-library",
+    "name": "UIライブラリ",
+    "slug": "ui-library",
+    "description": "Chakra UI、コンポーネントライブラリ",
+    "color": "#8B5CF6",
+    "icon": "🎭",
+    "count": 2,
+    "subcategories": [
+      {
+        "id": "component-libraries",
+        "name": "コンポーネントライブラリ",
+        "slug": "component-libraries",
+        "description": "Chakra UIなどのUIコンポーネント",
+        "tags": ["Chakra UI"]
+      }
+    ]
+  },
+  {
+    "id": "architecture",
+    "name": "アーキテクチャ",
+    "slug": "architecture",
+    "description": "JamStack、設計パターン、システム構成",
+    "color": "#EF4444",
+    "icon": "🏗️",
+    "count": 1,
+    "subcategories": [
+      {
+        "id": "modern-architecture",
+        "name": "モダンアーキテクチャ",
+        "slug": "modern-architecture",
+        "description": "JamStackなどのモダンな開発アーキテクチャ",
+        "tags": ["JamStack"]
+      }
+    ]
+  },
+  {
+    "id": "database",
+    "name": "データベース",
+    "slug": "database",
+    "description": "PostgreSQL、データベース設計・運用",
+    "color": "#6366F1",
+    "icon": "🗄️",
+    "count": 0,
+    "subcategories": [
+      {
+        "id": "relational-db",
+        "name": "リレーショナルDB",
+        "slug": "relational-db",
+        "description": "PostgreSQL、MySQLなど",
+        "tags": ["PostgreSQL"]
+      }
+    ]
+  },
+  {
+    "id": "cms",
+    "name": "CMS・コンテンツ管理",
+    "slug": "cms",
+    "description": "WordPress、ヘッドレスCMS",
+    "color": "#14B8A6",
+    "icon": "📝",
+    "count": 1,
+    "subcategories": [
+      {
+        "id": "headless-cms",
+        "name": "ヘッドレスCMS",
+        "slug": "headless-cms",
+        "description": "WordPressのヘッドレス化など",
+        "tags": ["WordPress"]
+      }
+    ]
+  },
+  {
+    "id": "learning",
+    "name": "学習・読書",
+    "slug": "learning",
+    "description": "読書メモ、技術学習、キャリア",
+    "color": "#F97316",
+    "icon": "📚",
+    "count": 2,
+    "subcategories": [
+      {
+        "id": "reading-notes",
+        "name": "読書ノート",
+        "slug": "reading-notes",
+        "description": "技術書や専門書の読書メモ",
+        "tags": ["読書メモ"]
+      }
+    ]
+  },
+  {
+    "id": "general",
+    "name": "その他・一般",
+    "slug": "general",
+    "description": "その他の技術記事、ツール紹介など",
+    "color": "#6B7280",
+    "icon": "💡",
+    "count": 21,
+    "subcategories": [
+      {
+        "id": "tools-utilities",
+        "name": "ツール・ユーティリティ",
+        "slug": "tools-utilities",
+        "description": "開発ツール、便利なサービス紹介",
+        "tags": []
+      }
+    ]
+  }
+]
