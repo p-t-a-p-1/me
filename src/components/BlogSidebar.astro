@@ -1,52 +1,36 @@
 ---
-import { getCollection } from "astro:content";
+import { type LocalTag, getAllLocalArticles, getAllLocalTags } from "../lib/content";
+import TagListItem from "./TagListItem.astro";
 
-// すべての記事を取得
-const allPosts = await getCollection("blog");
+// サイドバー用に全タグを取得
+const allTags = await getAllLocalTags();
 
-// 公開済みの記事のみをフィルタリング
-const publishedPosts = allPosts
-	.filter((post) => post.data.publishedAt)
-	.sort((a, b) => {
-		const dateA = new Date(a.data.publishedAt || 0);
-		const dateB = new Date(b.data.publishedAt || 0);
-		return dateB.getTime() - dateA.getTime();
-	});
+// 記事一覧を取得してタグごとのカウントを計算
+const articles = await getAllLocalArticles();
 
-// 最新記事（上位5件）
-const recentPosts = publishedPosts.slice(0, 5);
-
-// タグ一覧を取得
-const allTags = [
-	...new Set(allPosts.flatMap((post) => post.data.tags || [])),
-].sort();
+// タグごとの記事数をカウント
+const tagCounts: Record<string, number> = {};
+for (const article of articles) {
+  if (article.tags) {
+    for (const tagName of article.tags) {
+      tagCounts[tagName] = (tagCounts[tagName] || 0) + 1;
+    }
+  }
+}
 ---
 
 <aside class="blog-sidebar">
 	<div class="blog-sidebar__section">
-		<h3 class="blog-sidebar__title">最新記事</h3>
-		<ul class="blog-sidebar__list">
-			{
-				recentPosts.map((post) => (
-					<li class="blog-sidebar__item">
-						<a href={`/blog/${post.slug}`} class="blog-sidebar__link">
-							<span class="blog-sidebar__emoji">{post.data.emoji || "📝"}</span>
-							<span class="blog-sidebar__text">{post.data.title}</span>
-						</a>
-					</li>
-				))
-			}
-		</ul>
-	</div>
-
-	<div class="blog-sidebar__section">
 		<h3 class="blog-sidebar__title">タグ</h3>
 		<div class="blog-sidebar__tags">
 			{
-				allTags.map((tag) => (
-					<a href={`/blog/tags/${tag}`} class="blog-sidebar__tag">
-						#{tag}
-					</a>
+				allTags.map((tag: LocalTag) => (
+					<div class="tag-list-wrapper" data-tag-name={tag.name.toLowerCase()}>
+						<TagListItem
+							tag={tag}
+							count={tagCounts[tag.name] ? tagCounts[tag.name] : 0}
+						/>
+					</div>
 				))
 			}
 		</div>

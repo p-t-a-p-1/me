@@ -1,6 +1,6 @@
-import path from "path";
+import node_fs from "node:fs/promises";
+import node_path from "node:path";
 import { fileURLToPath } from "node:url";
-import fs from "fs/promises";
 import matter from "gray-matter";
 import { marked } from "marked";
 import { markedHighlight } from "marked-highlight";
@@ -14,52 +14,30 @@ import "prismjs/components/prism-scss.js";
 import "prismjs/components/prism-json.js";
 import "prismjs/components/prism-bash.js";
 import "prismjs/components/prism-python.js";
+import type { Article, Tag } from "./newt";
 
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = node_path.dirname(__filename);
 
-const CONTENT_DIR = path.join(__dirname, "../../content/exported");
-const TAGS_FILE = path.join(__dirname, "../../content/tags.json");
+const CONTENT_DIR = node_path.join(__dirname, "../../content/exported");
+const TAGS_FILE = node_path.join(__dirname, "../../content/tags.json");
 
 // Markedの設定
-marked.use(markedHighlight({
-  highlight(code, lang) {
-    if (lang && Prism.languages[lang]) {
-      return Prism.highlight(code, Prism.languages[lang], lang);
-    }
-    return code;
-  }
-}));
+marked.use(
+  markedHighlight({
+    highlight(code, lang) {
+      if (lang && Prism.languages[lang]) {
+        return Prism.highlight(code, Prism.languages[lang], lang);
+      }
+      return code;
+    },
+  }),
+);
 
-export interface Tag {
+export interface LocalTag {
   id: string;
   name: string;
   slug: string;
-}
-
-export interface Article {
-  title: string;
-  url: string;
-  slug: string;
-  meta: {
-    title: string;
-    description: string;
-    ogImage: {
-      src: string;
-    };
-  };
-  body: string;
-  author: string;
-  categories: string[];
-  emoji: {
-    type: string;
-    value: string;
-  };
-  pDate: string;
-  tags: Tag[];
-  thumbnail: {
-    src: string;
-  };
 }
 
 export interface LocalArticle {
@@ -75,14 +53,14 @@ export interface LocalArticle {
 
 export async function getAllLocalArticles(): Promise<LocalArticle[]> {
   try {
-    const files = await fs.readdir(CONTENT_DIR);
+    const files = await node_fs.readdir(CONTENT_DIR);
     const markdownFiles = files.filter((file) => file.endsWith(".md"));
 
     const articles: LocalArticle[] = [];
 
     for (const file of markdownFiles) {
-      const filePath = path.join(CONTENT_DIR, file);
-      const fileContent = await fs.readFile(filePath, "utf-8");
+      const filePath = node_path.join(CONTENT_DIR, file);
+      const fileContent = await node_fs.readFile(filePath, "utf-8");
       const { data: frontmatter, content: body } = matter(fileContent);
 
       // PrismハイライトでMarkdownをHTMLに変換
@@ -93,7 +71,7 @@ export async function getAllLocalArticles(): Promise<LocalArticle[]> {
 
       articles.push({
         title: frontmatter.title || "",
-        slug: frontmatter.slug || path.basename(file, ".md"),
+        slug: frontmatter.slug || node_path.basename(file, ".md"),
         emoji: frontmatter.emoji || "",
         date: frontmatter.publishedAt || frontmatter.date || "",
         url: frontmatter.url || "",
@@ -127,9 +105,9 @@ export async function getLocalArticleBySlug(
   }
 }
 
-export async function getAllLocalTags(): Promise<Tag[]> {
+export async function getAllLocalTags(): Promise<LocalTag[]> {
   try {
-    const tagsContent = await fs.readFile(TAGS_FILE, "utf-8");
+    const tagsContent = await node_fs.readFile(TAGS_FILE, "utf-8");
     return JSON.parse(tagsContent);
   } catch (error) {
     console.error("タグの読み込みエラー:", error);
