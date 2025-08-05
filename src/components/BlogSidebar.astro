@@ -1,6 +1,6 @@
 ---
 import type { ComponentProps } from "astro/types";
-import { Article, Tag, newtClient } from "../lib/newt";
+import { Tag, getAllLocalArticles, getAllLocalTags } from "../lib/content";
 import TagListItem from "./TagListItem.astro";
 
 interface Props {
@@ -10,28 +10,17 @@ interface Props {
 const { tags } = Astro.props;
 
 // サイドバー用に全タグを取得
-const { items: allTags } = await newtClient.getContents<Tag>({
-  appUid: "meBlog",
-  modelUid: "tag",
-});
+const allTags = await getAllLocalTags();
 
 // 記事一覧を取得してタグごとのカウントを計算
-const { items: articles } = await newtClient.getContents<Article>({
-  appUid: "meBlog",
-  modelUid: "article",
-  query: {
-    select: ["tags"],
-  },
-});
+const articles = await getAllLocalArticles();
 
 // タグごとの記事数をカウント
 const tagCounts: Record<string, number> = {};
 for (const article of articles) {
   if (article.tags) {
-    for (const tag of article.tags) {
-      if (tag._id) {
-        tagCounts[tag._id] = (tagCounts[tag._id] || 0) + 1;
-      }
+    for (const tagName of article.tags) {
+      tagCounts[tagName] = (tagCounts[tagName] || 0) + 1;
     }
   }
 }
@@ -70,7 +59,7 @@ for (const article of articles) {
 					<div class="tag-list-wrapper" data-tag-name={tag.name.toLowerCase()}>
 						<TagListItem
 							tag={tag}
-							count={tag._id && tagCounts[tag._id] ? tagCounts[tag._id] : 0}
+							count={tagCounts[tag.name] ? tagCounts[tag.name] : 0}
 						/>
 					</div>
 				))
